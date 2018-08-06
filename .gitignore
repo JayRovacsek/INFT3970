@@ -332,3 +332,5 @@ Documentation/distributed_system.aux
 Documentation/distributed_system.fdb_latexmk
 Documentation/distributed_system.toc
 Documentation/distributed_system.synctex.gz
+Documentation/distributed_system.fls
+Documentation/distributed_system.out
