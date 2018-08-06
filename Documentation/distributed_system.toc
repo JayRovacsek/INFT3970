@@ -8,7 +8,7 @@
 \contentsline {subsection}{\numberline {1.5}Project Services}{3}{subsection.1.5}
 \contentsline {subsubsection}{\numberline {1.5.1}Database Service}{3}{subsubsection.1.5.1}
 \contentsline {subsubsection}{\numberline {1.5.2}User Management Service}{3}{subsubsection.1.5.2}
-\contentsline {subsubsection}{\numberline {1.5.3}Logging Service}{3}{subsubsection.1.5.3}
+\contentsline {subsubsection}{\numberline {1.5.3}Logging Service}{4}{subsubsection.1.5.3}
 \contentsline {subsubsection}{\numberline {1.5.4}Error Handling Service}{4}{subsubsection.1.5.4}
 \contentsline {subsubsection}{\numberline {1.5.5}Web Service}{4}{subsubsection.1.5.5}
 \contentsline {subsection}{\numberline {1.6}Arguements for this project}{5}{subsection.1.6}
