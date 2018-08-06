@@ -19,7 +19,8 @@
     \renewcommand\maketitlehookd{\vfill\null}
 
     \graphicspath{ {Resources/} }
-    \title{INFT3970 Major Project Scope Document}
+    \title{INFT3970 Major Project Scope Document \protect\\
+    Distributed Monitoring System using Embedded Devices}
     \author{
         Jay Rovacsek
         \texttt{c3146220@uon.edu.au}\\
@@ -70,6 +71,7 @@
             \item Orientation/Tilt (x, y, z) of devices
             \item Rain Sensor
             \item Vibration
+            \item CO\textsuperscript{2} Sensors
         \end{itemize}
 
         \pagebreak
@@ -116,6 +118,38 @@
             The Error handling service would log errors from either data pushed by end devices or the websystem itself,
             the logs would include stack-trace material, cause for logging, associated user data and timestamps.
 
+            \subsubsection{Web Service}
+            The web service should include all elements required to report a user-account's associated data
+            for selected periods. This should also allow the update of an account, or deletion of an account.
+            Included requiremets of this service will include but are not limited to:
+            \begin{itemize}
+                \item Adding or Removing a device from an account
+                \item Visualisation of data associated with an account
+                \item Login / Logout functionailty
+                \item Downloadable payload of data associated with an account in various formats
+            \end{itemize}
+
+            \newpage
+
+            \subsection{Arguements for this project}
+            A number of arguements for this project include but are not limited to:
+            \begin{itemize}
+                \item Numerous potential metrics to measure that could prove to be interesting
+                \item Interesting field for multiple team members
+                \item Varied required services that would allow allocation of tasks to prove easy
+            \end{itemize}
+
+            \subsection{Arguements against this project}
+            A number of arguements against this project include but are not limited to:
+            \begin{itemize}
+                \item Steep learning curve for low level device programming
+                \item Multiple required services to interface with such basic devices
+                \item Requirements of the real world 
+                \begin{itemize}
+                    \item Do people need / want / require this?
+                    \item Could people implement this easily themselves?
+                \end{itemize}
+            \end{itemize}
     \newpage
 
     \begin{thebibliography}
