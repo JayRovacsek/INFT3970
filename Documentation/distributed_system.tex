@@ -32,8 +32,10 @@
     colorlinks=true,
     linkcolor=blue,
     filecolor=magenta,      
-    urlcolor=cyan,
-    }   
+    urlcolor=blue,
+    citecolor=red,
+    linktoc=section,
+    }
     \pagenumbering{arabic}
 
     \begin{document}
@@ -41,6 +43,8 @@
     \begin{titlingpage}
         \maketitle
     \end{titlingpage}
+    \newpage
+    \tableofcontents
     \newpage
     
     \section{Project Scope Document}
@@ -71,13 +75,13 @@
             \item Orientation/Tilt (x, y, z) of devices
             \item Rain Sensor
             \item Vibration
-            \item CO\textsuperscript{2} Sensors
+            \item CO\textsuperscript{2} levels
         \end{itemize}
 
         \pagebreak
 
         \subsection{Project Infastructure}
-        Proposed hardware for the project would run on a mixture of ESP8266 or
+        Proposed hardware for the project would run on a mixture of ESP8266\cite{ESP8266} or
         RaspberryPi like boards, made highly available of recent for reasonable prices.
         \\
         Back-end hardware is proposed as any system that can host a number of services related
@@ -85,12 +89,35 @@
         achieved by a database. Given the nature of open-source databases we can confidently assume either
         cloud hosting or localised hosting of a system is a non-concern.
 
+        \subsubsection{ESP8266 as the proposed device}
+        The ESP8266\cite{ESP8266} would appear to be a highly suitable board fro the project, having
+        a number of off-spin boards created based on the original schematic, a high avilability of the
+        device and low barriers to entry with the board being programmable from and Windows, OSX or UNIX-like
+        host that can interface with USB type B.
+        \par
+        IDE is completely open to interpretation for the device, only requiring the ability for the IDE to flash
+        the device's memory of USB-to-serial-tty or compilabile assets can be directly flashed with utilities such
+        as GNU's dd utility or a number of utilities that are both open source and free such as NodeMCUFlasher\cite{NodeMCU}, or
+        ArduinoIDE\cite{ArduinoIDE} of which, all are cross platform (dd available on windows hosts via Cygwin).
+        \par
+        The ESP8266\cite{ESP8266} is supported heavily with development within the 'maker' world, the extensibility
+        of such devices are only limited by existence of peripheral devices in which to interface with.
+        A large number of tutorials, how-to's and professionally compiled examples exist also\cite{ESP8266-How-To}
+
+        \subsubsection{Raspberry Pi as th proposed device}
+        The Raspberry Pi\cite{RaspberryPi} also would suit as a very capable board which is extremely well supported 
+        by the 'marker' space. Benefits of the Pi over the ESP are an ability to develop in higher level languages
+        such as Python, Bash and Java. The Pi also boasts a processing power in the range of 10-20x more powerful than the 
+        ESP, uses a quad core processor and can support onboard GPU processing.
+        \\
+
+
         \subsection{Project Services}
             \subsubsection{Database Service}
             The database service would be a simple API callable via a http post request, it would sit behind 
             and MVC style application, allowing us to setup unique routes to define request types, or it could
             be a post of some json data which would define the table to be inserted into.
-            \\
+            \par
             The later of these suggestions are less desirable as the devices could be reflashed to act 
             negatively against the service host which likely would be centralised and not self-hosted in the
             deployed product.
@@ -110,7 +137,7 @@
             The logging service would need to act as middleware between the devices and the database and 
             potentially require some level of parsing of data and verification of data. Failing either of the
             parsing or authentication, the Logging service should push errors to the Error Management service.
-            \\
+            \par
             Without errors occuring, the logging service should pass data required to the database service which
             would perform required tasks to store such data.
 
@@ -126,9 +153,10 @@
                 \item Adding or Removing a device from an account
                 \item Visualisation of data associated with an account
                 \item Login / Logout functionailty
-                \item Downloadable payload of data associated with an account in various formats
+                \item Downloadable payload of data associated with an account in various formats (XML/json/csv)?
             \end{itemize}
-
+            \par\noindent
+            
             \newpage
 
             \subsection{Arguements for this project}
@@ -156,6 +184,16 @@
         \raggedright
         \bibitem{Particle}
             \url{https://www.particle.io/}
-        \end{thebibliography}
+        \bibitem{ESP8266-How-To}
+            \url{http://esp8266.net/}
+        \bibitem{ESP8266}
+            \url{https://randomnerdtutorials.com/home-automation-using-esp8266/}
+        \bibitem{NodeMCU}
+            \url{https://github.com/nodemcu/nodemcu-flasher}
+        \bibitem{ArduinoIDE}
+            \url{https://create.arduino.cc/editor}
+        \bibitem{RaspberryPi}
+            \url{https://www.raspberrypi.org/}
+    \end{thebibliography}
 
     \end{document}  
