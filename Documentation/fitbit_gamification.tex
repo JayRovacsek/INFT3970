@@ -1,0 +1,212 @@
+\documentclass{article}
+    \usepackage{url}
+    \usepackage[margin=1.0in]{geometry}
+    \usepackage{cite}
+    \usepackage{amssymb}
+    \usepackage{enumerate}
+    \usepackage{enumitem}
+    \usepackage{graphicx}
+    \usepackage{xcolor}
+    \usepackage{pdfpages}
+    \usepackage{hyperref}
+    \usepackage{listings}
+    \usepackage{fancybox}
+    \usepackage{lstautogobble}
+    \usepackage{titling}
+    \usepackage{pdflscape}
+    \usepackage[nottoc,notlot,notlof]{tocbibind}
+    \renewcommand\maketitlehooka{\null\mbox{}\vfill}
+    \renewcommand\maketitlehookd{\vfill\null}
+
+    \graphicspath{ {Resources/} }
+    \title{INFT3970 Major Project Scope Document \protect\\
+    Gamification of exercise using Fitbit data}
+    \author{
+        Jay Rovacsek
+        \texttt{c3146220@uon.edu.au}
+    }
+    \date{\today}
+    \hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=magenta,      
+    urlcolor=blue,
+    citecolor=red,
+    linktoc=section,
+    }
+    \pagenumbering{arabic}
+
+    \begin{document}
+
+    \begin{titlingpage}
+        \maketitle
+    \end{titlingpage}
+    \newpage
+    \tableofcontents
+    \newpage
+    
+    \section{Project Scope Document}
+        \subsection{Introduction}
+        The basic concept of this project would be to create a program that gamifies the use of 
+        devices such as the fitbit and promotes exercise while supplying useful datapoints to 
+        researchers for insight into habbits and trends common in individuals who partake in 
+        semi-regular or regular exercise. 
+        \subsection{Target Audience}
+        The proposed target audience for this project is any individual whom is interested in using
+        a fitbit while also exercising a level of casual to competitive nature in the sense of 
+        gaming or competing against fellow users of the device.
+        \par
+        Further information will be required from Geoff as to the design required and limitations of 
+        the project, otherwise it is assumed that mostly free-reign over the project will be allowed.
+        \subsection{Metrics}
+        Proposed metrics to be monitored include:
+        \begin{itemize}
+            \item Step metrics, with a view to use;
+            \begin{itemize}
+                \item Average step distance (subject to data available)
+            \end{itemize}
+            \item Heart-beat metrics, with a view to use;
+            \begin{itemize}
+                \item Lowest and Highest recorded BPM
+                \item Average BPM
+            \end{itemize}
+            \item Both Step and Heartbeat to include;
+            \begin{itemize}
+                \item Per Minute
+                \item Per Hour
+                \item Per Day
+                \item Per Week
+                \item Per Month
+            \end{itemize}
+            \item Other metrics to include:
+            \begin{itemize}
+                \item Continuous days played
+                \item Distance travelled (Cap to be discussed/determined)
+                \item Greatest North/South movement pattern
+                \item Greatest East/West movement pattern
+                \item Greatest Spread of location data recorded for various periods
+                \item Achievements via Country visit?
+            \end{itemize}
+        \end{itemize}
+        Further metrics could be measured, based on ability to access data such as geolocation,
+        sleep data, activity of user social interactions and potentially more.
+
+        \pagebreak
+
+        \subsection{Project Infastructure}
+        Proposed hardware for the project would require a number of fitbit, failing the ability to
+        locate a number of fitbit, we could script data generation based on expected data ranges and 
+        a number of example data structures to mimic the API generated data.
+        \par
+        The required framework to create the application in is Unity, this allows us to assume we can 
+        develop mostly on the Windows platform, use of the mono framework\cite{Mono} would allow us to generate
+        an application that could run natively on OSX/UNIX like systems also.
+        \\
+        Back-end requirements would include a database to store data related to an account, this is 
+        proposed to be a single instance that would run global collection of the data and allow access
+        only to data on a per user basis. This furthermore allows data-mining of the accounts used,
+        allowing generation of both better services and benifit to service provider in the form of
+        data for analytics.
+
+        \subsection{Considerations of game genres}
+        Game genres that the project could cover include a large number of potential candidate genres, however
+        for simplicity of the project and to ease the issue of paradox of choice\cite{Paradox-Of-Choice}
+        \\
+        A suggested shortlist of game genres that would be well suited to this project include;
+        \begin{itemize}
+            \item Platformer
+            \item RPG
+            \item Racing
+            \item Horror
+        \end{itemize}
+
+        \subsubsection{Platformer}
+        A platformer could include the above metrics leading to skewed drop rate of select items from 
+        "lootable" objects, decreased enemy count and increased control over player character.
+        \\
+        A platformer would prove to be a safe game to go with, a "retro" themed approach would work well 
+        as we have no digital media majors within the group but are certain we could manage asset generation
+        at a basic level.
+
+        \subsubsection{RPG}
+        An RPG could include all of the Platformer features and easily extend to include features such as;
+        \begin{itemize}
+            \item Extra lives
+            \item Fast travel abilities
+            \item Increased player power
+            \item Daily rewards or randomised loot from select tiers of metrics.
+        \end{itemize}
+
+        \subsubsection{Racing}
+        A Racing game could include usable boots, bonuses and ability to unlock higher tiers of vehicle 
+        based on either overall progress in metrics or some alike mechanic.
+
+        \subsubsection{Horror}
+        A Horror game could avoid repeated user play requirements by instead requiring the user to wear the fitbit
+        while participating in the game. Modifiers to the game could include increased level brightness for decreased 
+        heart-rate or a number of interesting mechanics that would be best scoped out after the project is locked into
+        choice by all members.
+        
+        \subsection{Project Services}
+            \subsubsection{Database Service}
+            A simple RESTful API, data collection on game time played, user choices, user data and all of the 
+            associated data that would be collected from the fitbit would be stored by this service.
+
+            \subsubsection{User Management Service}
+            A user management serice would be required to allow players to have repeatable or incrementally
+            improvable interactions with the solution, data analytics would also be applicable against users
+            who opt in/out of the service accordingly after some level of anonymization (or is it anonymisation?) of data.
+
+            \subsubsection{Logging Service}
+            The logging service would need to act as middleware between the devices and the database and 
+            potentially require some level of parsing of data and verification of data. Failing either of the
+            parsing or authentication, the Logging service should push errors to the Error Management service.
+            \par
+            Without errors occuring, the logging service should pass data required to the database service which
+            would perform required tasks to store such data.
+
+            \subsubsection{Error Handling Service}
+            The Error handling service would log errors from either data pushed by end devices or the websystem itself,
+            the logs would include stack-trace material, cause for logging, associated user data and timestamps.
+
+            \subsubsection{Web Service}
+            The web service should include all elements required to report a user-account's associated data
+            for selected periods. This should also allow the update of an account, or deletion of an account.
+            Included requiremets of this service will include but are not limited to:
+            \begin{itemize}
+                \item Adding or Removing a device from an account
+                \item Visualisation of data associated with an account
+                \item Login / Logout functionailty
+                \item Downloadable payload of data associated with an account in various formats (XML/json/csv)?
+                \item Game status of user
+            \end{itemize}
+            
+            \subsection{Arguements for this project}
+            A number of arguements for this project include but are not limited to:
+            \begin{itemize}
+                \item Numerous potential metrics to measure that could prove to be interesting
+                \item Interesting field for multiple team members
+                \item Varied required services that would allow allocation of tasks to prove easy
+            \end{itemize}
+
+            \subsection{Arguements against this project}
+            A number of arguements against this project include but are not limited to:
+            \begin{itemize}
+                \item Potential scope creep to become hard to avoid
+                \item Multiple required services to interface with such basic devices
+                \item Requirements of the real world 
+                \begin{itemize}
+                    \item Do people need / want / require this?
+                    \item Could people implement this easily themselves?
+                \end{itemize}
+            \end{itemize}
+
+    \begin{thebibliography}
+        \raggedright
+        \bibitem{Paradox-Of-Choice}
+            \url{https://books.google.com/books?id=zutxr7rGc_QC&vq=barry+schwartz+paradox+contents}
+        \bibitem{Mono}
+            \url{https://www.mono-project.com/}
+    \end{thebibliography}
+
+    \end{document}  

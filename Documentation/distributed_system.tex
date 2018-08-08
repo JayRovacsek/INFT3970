@@ -30,7 +30,7 @@
     \date{\today}
     \hypersetup{
     colorlinks=true,
-    linkcolor=blue,
+    linkcolor=black,
     filecolor=magenta,      
     urlcolor=blue,
     citecolor=red,
@@ -109,7 +109,7 @@
 
         \subsubsection{Raspberry Pi as th proposed device}
         The Raspberry Pi\cite{RaspberryPi} also would suit as a very capable board which is extremely well supported 
-        by the 'marker' space. Benefits of the Pi over the ESP are an ability to develop in higher level languages
+        by the 'maker' space. Benefits of the Pi over the ESP are an ability to develop in higher level languages
         such as Python, Bash and Java. The Pi also boasts a processing power in the range of 10-20x more powerful than the 
         ESP, uses a quad core processor and can support onboard GPU processing.
         \\
@@ -121,13 +121,7 @@
 
         \subsection{Project Services}
             \subsubsection{Database Service}
-            The database service would be a simple API callable via a http post request, it would sit behind 
-            and MVC style application, allowing us to setup unique routes to define request types, or it could
-            be a post of some json data which would define the table to be inserted into.
-            \par
-            The later of these suggestions are less desirable as the devices could be reflashed to act 
-            negatively against the service host which likely would be centralised and not self-hosted in the
-            deployed product.
+            The database service would be a simple RESTful API.
 
             \subsubsection{User Management Service}
             A user management serice would be required to ensure security of an individuals privacy.
