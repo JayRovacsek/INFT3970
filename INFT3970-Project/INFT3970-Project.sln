@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2047
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "INFT3970-Project", "INFT3970-Project\INFT3970-Project.csproj", "{63E98A9D-AF90-495F-A47A-1C0C64471A5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "INFT3970Project", "INFT3970-Project\INFT3970Project.csproj", "{63E98A9D-AF90-495F-A47A-1C0C64471A5B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
