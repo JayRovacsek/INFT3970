@@ -7,7 +7,7 @@ namespace INFT3970Project.Models
 {
     public class TemperatureModel
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public double Temperature { get; set; }
         public DateTime Timestamp { get; set; }
     }
