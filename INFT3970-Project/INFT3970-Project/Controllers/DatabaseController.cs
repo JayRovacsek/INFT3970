@@ -18,59 +18,26 @@ namespace INFT3970Project.Controllers
         private DatabaseHelper _databaseHelper;
 
         /// <summary>
-        /// Implementation of method to query for all temperatures
+        /// Implementation of method to create a record async via post request
         /// </summary>
-        /// <typeparam name="TemperatureModel"></typeparam>
-        /// <returns></returns>
-        public IEnumerable<TemperatureModel> QueryAllTemperatures<TemperatureModel>()
+        /// <param name="temperatureModel"></param>
+        [Route("api/Database/CreateTemperature")]
+        [HttpPost]
+        public void CreateRecord(TemperatureModel temperatureModel)
         {
-            using (_databaseHelper = new DatabaseHelper())
-            {
-                _databaseHelper.connection.Open();
-                var stringBuilder = new StringBuilder();
-                var query = stringBuilder.ToString();
-                // DO SOME QUERIES
-                var result = _databaseHelper.connection.Query<TemperatureModel>(query);
-                return result;
-            }
+            _databaseHelper.CreateRecord(temperatureModel);
         }
 
         /// <summary>
-        /// Implementation of method to query for single temperature by Guid
+        /// Implementation of method to test working status
         /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
-        public TemperatureModel QuerySingleTemperatures(Guid? Id)
+        /// <param name="temperatureModel"></param>
+        [Route("api/Database/Test")]
+        [HttpPost]
+        public void CreateRecord(string test)
         {
-            using (_databaseHelper = new DatabaseHelper())
-            {
-                _databaseHelper.connection.Open();
-                var stringBuilder = new StringBuilder();
-                var query = stringBuilder.ToString();
-                // DO SOME QUERIES
-                var result = _databaseHelper.connection.Query<TemperatureModel>(query).FirstOrDefault();
-                return result;
-            }
+            Console.WriteLine(test);
         }
 
-        /// <summary>
-        /// Implementation of method to query for temperatures between two datetime
-        /// </summary>
-        /// <typeparam name="TemperatureModel"></typeparam>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <returns></returns>
-        public IEnumerable<TemperatureModel> QueryDateRangeTemperatures<TemperatureModel>(DateTime startDate, DateTime endDate)
-        {
-            using (_databaseHelper = new DatabaseHelper())
-            {
-                _databaseHelper.connection.Open();
-                var stringBuilder = new StringBuilder();
-                var query = stringBuilder.ToString();
-                // DO SOME QUERIES
-                var results = _databaseHelper.connection.Query<TemperatureModel>(query);
-                return results;
-            }
-        }
     }
 }
