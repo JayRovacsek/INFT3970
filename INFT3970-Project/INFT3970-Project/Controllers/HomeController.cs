@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using INFT3970_Project.Models;
 
-namespace INFT3970_Project.Controllers
+namespace INFT3970Project.Controllers
 {
     public class HomeController : Controller
     {

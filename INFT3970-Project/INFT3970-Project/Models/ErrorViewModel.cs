@@ -1,6 +1,6 @@
 using System;
 
-namespace INFT3970_Project.Models
+namespace INFT3970Project.Models
 {
     public class ErrorViewModel
     {
