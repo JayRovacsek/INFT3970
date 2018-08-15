@@ -1,0 +1,17 @@
+\BOOKMARK [1][-]{section.1}{Project Scope Document}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Introduction}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{Target Audience}{section.1}% 3
+\BOOKMARK [2][-]{subsection.1.3}{Metrics}{section.1}% 4
+\BOOKMARK [2][-]{subsection.1.4}{Project Infastructure}{section.1}% 5
+\BOOKMARK [2][-]{subsection.1.5}{Considerations of game genres}{section.1}% 6
+\BOOKMARK [3][-]{subsubsection.1.5.1}{Platformer}{subsection.1.5}% 7
+\BOOKMARK [3][-]{subsubsection.1.5.2}{RPG}{subsection.1.5}% 8
+\BOOKMARK [3][-]{subsubsection.1.5.3}{Racing}{subsection.1.5}% 9
+\BOOKMARK [3][-]{subsubsection.1.5.4}{Horror}{subsection.1.5}% 10
+\BOOKMARK [2][-]{subsection.1.6}{Project Services}{section.1}% 11
+\BOOKMARK [3][-]{subsubsection.1.6.1}{Database Service}{subsection.1.6}% 12
+\BOOKMARK [3][-]{subsubsection.1.6.2}{User Management Service}{subsection.1.6}% 13
+\BOOKMARK [3][-]{subsubsection.1.6.3}{Logging Service}{subsection.1.6}% 14
+\BOOKMARK [3][-]{subsubsection.1.6.4}{Error Handling Service}{subsection.1.6}% 15
+\BOOKMARK [3][-]{subsubsection.1.6.5}{Web Service}{subsection.1.6}% 16
+\BOOKMARK [1][-]{section*.2}{References}{}% 17

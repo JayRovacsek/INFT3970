@@ -1,0 +1,161 @@
+\documentclass{article}
+    \usepackage{url}
+    \usepackage[margin=1.0in]{geometry}
+    \usepackage{cite}
+    \usepackage{amssymb}
+    \usepackage{enumerate}
+    \usepackage{enumitem}
+    \usepackage{graphicx}
+    \usepackage{xcolor}
+    \usepackage{pdfpages}
+    \usepackage{hyperref}
+    \usepackage{listings}
+    \usepackage{fancybox}
+    \usepackage{lstautogobble}
+    \usepackage{titling}
+    \usepackage{pdflscape}
+    \usepackage[nottoc,notlot,notlof]{tocbibind}
+    \renewcommand\maketitlehooka{\null\mbox{}\vfill}
+    \renewcommand\maketitlehookd{\vfill\null}
+
+    \graphicspath{ {Resources/} }
+    \title{INFT3970 Major Project Scope Document \protect\\
+    Distributed Monitoring System using Embedded Devices}
+    \author{
+        Jay Rovacsek
+        \texttt{c3146220@uon.edu.au}\\
+        Dean Morton
+        \texttt{c3252227@uon.edu.au}\\
+        Josh Brown
+        \texttt{c3283797@uon.edu.au}\\
+        Jacob Litherland
+        \texttt{c3263482@uon.edu.au}\\
+        Lee Marron
+        \texttt{c3263482@uon.edu.au}\\
+        Edward Lonsdale
+        \texttt{c3252144@uon.edu.au}
+    }
+    \date{\today}
+    \hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=magenta,      
+    urlcolor=blue,
+    citecolor=red,
+    linktoc=section,
+    }
+    \pagenumbering{arabic}
+
+    \begin{document}
+
+    \begin{titlingpage}
+        \maketitle
+    \end{titlingpage}
+    \newpage
+    \tableofcontents
+    \newpage
+    
+    \section{Executive Summary}
+        \subsection{Background}
+            Riding the wave of "IoT Revolution" \cite{Forbes}, this project will develop
+            a low cost, easily deployable IoT product in any setting.
+            \\
+            IoT or \textit{The Internet of Things} has proven to be an explosive trend within
+            the consumer electronics markets. Never before have such small versatile devices been
+            available for general consumption, leading to an estimated combined business and
+            consumer spending value in excess of \$6 \textit{trillion} dollars globally in 2018 \cite{Forbes}
+            \\
+            For the vast majority of consumers, both corporate and end-customer \cite{Mckinsey}, a large 
+            movement toward both minimisation of waste and optimisation of spending is occuring
+            on a global scale in the developed world, with the developing world rapidly following 
+            this trend also \cite{SunNews}.
+            \\
+            Citing this movement, it would only be logical to create a simple to use set of devices 
+            that allow for the monitoring and therefore optimisation of such measurables.
+
+        \subsection{Overview and Purpose}
+            The concept of this project is to create a distributed system in which small 
+            devices are used to monitor, log and analyse a number of select metrics from a 
+            multitude of potential data points.
+            \\
+            The purpose of the project is to deliver a viable product that could be replicated
+            for a reasonable price for both end-user and business alike. We believe the market to
+            be on a precipice of further explosive growth, with the consumer market partially
+            realised, but far from tapped by curent offerings.
+            \subsubsection{Metrics}
+                The metrics measured included will be: 
+                \begin{itemize}
+                    \item Temperature
+                    \item Humidity
+                    \item Motion
+                \end{itemize}
+                We anticipate further development on the project to be viable post submission date,
+                however realise the limitations of the current timeframe.
+                \par
+                Metrics measured would be viewable on a users dashboard, with data being able to be
+                scoped to multiple filter requirements such as time, select edge cases or specific 
+                locations.
+                \\
+                The end-goal being an ability for users to better determine inefficient or bad decisions
+                they may make unwittingly in regards to home or business heating, coupled with the 
+                impact of room utilisation.
+
+    \section{Project Objectives}
+        Within the timeframe still available to this project, we aim to develop and deploy a number of 
+        IoT devices\cite{ESP8266} to a home enviroment or two and to track heat, humidity and motion of the
+        dwelling to better understand the potential correlations of room use, heating and potential 
+        inefficiencies created in areas such as 'High Traffic' spots (Loungerooms and Hallways)
+        \\
+        Optimally we ain to couple this with a mapping of the dwelling, allowing a more intuitive expression 
+        of the data collected.
+        \par
+        We intend on using student subscriptions to leverage Azure for both website hosting and databasing 
+        coupled with a small budget of roughly \$100-\$200 to purchase all required equipment which currently
+        is expected to be:
+        \begin{itemize}
+            \item ESP8266 boards
+            \item DHT11 Temperature and Humidity sensors\cite{DHT11}
+            \item XC-4444 PIR Motion sensors\cite{XC-4444}
+            \item Various required breadboards / generic electronics items
+        \end{itemize}
+
+        Overall goals of the project\\
+        Remember Objectives must be SMART!\\
+        Answers What, When, \& How Much
+
+        \subsection{Deliverables}
+            Expected outcomes of the project\\
+            A list of specifications
+
+        \subsection{Milestones}
+
+            Is always “The Schedule”\\
+            Assigns the major segments of project with time estimation
+
+    
+    \section{Technical Requirements}
+
+        Majority of product/service has the “requirements”\\
+        More details than deliverables.
+
+    \section{Limitations}
+        “Limitation” of the project\\
+        Managing expectation, not over-promising
+
+    \begin{thebibliography}{9}
+        \raggedright
+        \bibitem{Forbes}
+            \url{https://www.forbes.com/sites/danielnewman/2017/12/19/the-top-8-iot-trends-for-2018/}
+        \bibitem{Mckinsey}
+            \url{https://www.mckinsey.com/business-functions/digital-mckinsey/our-insights/the-internet-of-things-the-value-of-digitizing-the-physical-world}
+        \bibitem{SunNews}
+            \url{http://sunnewsonline.com/china-is-worlds-largest-renewable-energy-producer-consumer/}
+        \bibitem{ESP8266}
+            \url{http://esp8266.net/}
+        \bibitem{XC-4444}
+            \url{https://www.jaycar.com.au/medias/sys_master/images/9105858396190/XC4444-dataSheetMain.pdf}
+        \bibitem{DHT11}
+            \url{https://www.jaycar.com.au/medias/sys_master/images/9091897786398/XC4520-dataSheetMain.zip}
+    \end{thebibliography}
+
+    \end{document}
