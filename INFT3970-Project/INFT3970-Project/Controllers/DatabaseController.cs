@@ -23,6 +23,7 @@ namespace INFT3970Project.Controllers
         /// </summary>
         /// <param name="temperatureModel"></param>
         [HttpPost]
+        [Route("Create")]
         public IActionResult Create([FromBody] object model)
         {
             _databaseHelper.CreateRecord(model);
