@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using INFT3970Project.Helpers;
 using INFT3970Project.Models;
 using System.Text;
+using System.Net.Http;
 
 namespace INFT3970Project.Controllers
 {
@@ -15,29 +16,17 @@ namespace INFT3970Project.Controllers
     [Route("api/Database")]
     public class DatabaseController : Controller
     {
-        private DatabaseHelper _databaseHelper;
+        private DatabaseHelper _databaseHelper = new DatabaseHelper();
 
         /// <summary>
         /// Implementation of method to create a record async via post request
         /// </summary>
         /// <param name="temperatureModel"></param>
-        [Route("api/Database/CreateTemperature")]
         [HttpPost]
-        public void CreateRecord(TemperatureModel temperatureModel)
+        public IActionResult Create([FromBody] object model)
         {
-            _databaseHelper.CreateRecord(temperatureModel);
+            _databaseHelper.CreateRecord(model);
+            return null;
         }
-
-        /// <summary>
-        /// Implementation of method to test working status
-        /// </summary>
-        /// <param name="temperatureModel"></param>
-        [Route("api/Database/Test")]
-        [HttpPost]
-        public void CreateRecord(string test)
-        {
-            Console.WriteLine(test);
-        }
-
     }
 }

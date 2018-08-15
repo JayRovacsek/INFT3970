@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace INFT3970Project.Models
 {
-    public class HumidityModel
+    public class HumidityModel : MasterModel
     {
     }
 }

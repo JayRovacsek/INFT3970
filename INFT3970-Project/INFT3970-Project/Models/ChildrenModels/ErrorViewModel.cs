@@ -2,7 +2,7 @@ using System;
 
 namespace INFT3970Project.Models
 {
-    public class ErrorViewModel
+    public class ErrorViewModel : MasterModel
     {
         public string RequestId { get; set; }
 
