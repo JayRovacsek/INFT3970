@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using INFT3970Project.Entities;
 using INFT3970Project.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -15,12 +14,13 @@ namespace INFT3970Project.Helpers
 {
     public class DatabaseHelper : IDisposable
     {
-        private readonly IOptions<ServiceSettings> _serviceSettings;
+        private readonly IOptions<ConnectionStrings> _connectionStrings;
         public IDbConnection Connection { get; set; }
 
-        public DatabaseHelper()
+        public DatabaseHelper(IOptions<ConnectionStrings> connectionStrings) 
         {
-            Connection = new SqlConnection(_serviceSettings.Value.AzureConnectionString);
+            _connectionStrings = connectionStrings;
+            Connection = new SqlConnection(_connectionStrings.Value.AzureConnectionString);
         }
 
         public void Dispose()
@@ -51,7 +51,7 @@ namespace INFT3970Project.Helpers
             object castModel = DetermineModel(model);
 
 
-            using (var _databaseHelper = new DatabaseHelper())
+            using (var _databaseHelper = new DatabaseHelper(_connectionStrings))
             {
                 _databaseHelper.Connection.Open();
                 var stringBuilder = new StringBuilder();
@@ -71,7 +71,7 @@ namespace INFT3970Project.Helpers
         /// <returns></returns>
         public IEnumerable<TemperatureModel> QueryAllTemperatures<TemperatureModel>()
         {
-            using (var _databaseHelper = new DatabaseHelper())
+            using (var _databaseHelper = new DatabaseHelper(_connectionStrings))
             {
                 _databaseHelper.Connection.Open();
                 var stringBuilder = new StringBuilder();
@@ -89,7 +89,7 @@ namespace INFT3970Project.Helpers
         /// <returns></returns>
         public TemperatureModel QuerySingleTemperatures(Guid? Id)
         {
-            using (var _databaseHelper = new DatabaseHelper())
+            using (var _databaseHelper = new DatabaseHelper(_connectionStrings))
             {
                 _databaseHelper.Connection.Open();
                 var stringBuilder = new StringBuilder();
@@ -109,7 +109,7 @@ namespace INFT3970Project.Helpers
         /// <returns></returns>
         public IEnumerable<TemperatureModel> QueryDateRangeTemperatures<TemperatureModel>(DateTime startDate, DateTime endDate)
         {
-            using (var _databaseHelper = new DatabaseHelper())
+            using (var _databaseHelper = new DatabaseHelper(_connectionStrings))
             {
                 _databaseHelper.Connection.Open();
                 var stringBuilder = new StringBuilder();
