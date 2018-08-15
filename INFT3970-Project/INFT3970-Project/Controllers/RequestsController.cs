@@ -11,5 +11,6 @@ namespace INFT3970Project.Controllers
     [Route("api/Requests")]
     public class RequestsController : Controller
     {
+
     }
 }
