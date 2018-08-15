@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 
 namespace INFT3970Project.Models
 {
-    public class TemperatureModel
+    public class TemperatureModel : MasterModel
     {
-        public int Id { get; set; }
         public double Temperature { get; set; }
-        public DateTime Timestamp { get; set; }
     }
 }

@@ -16,11 +16,11 @@ namespace INFT3970Project.Helpers
     public class DatabaseHelper : IDisposable
     {
         private readonly IOptions<ServiceSettings> _serviceSettings;
-        public IDbConnection connection { get; set; }
+        public IDbConnection Connection { get; set; }
 
         public DatabaseHelper()
         {
-            connection = new SqlConnection(_serviceSettings.Value.AzureConnectionString);
+            Connection = new SqlConnection(_serviceSettings.Value.AzureConnectionString);
         }
 
         public void Dispose()
@@ -28,15 +28,36 @@ namespace INFT3970Project.Helpers
             throw new NotImplementedException();
         }
 
-        public async void CreateRecord(TemperatureModel temperatureModel)
+        private MasterModel DetermineModel(object model)
         {
+            if (model is TemperatureModel)
+            {
+                return (TemperatureModel)model;
+            }
+            else if (model is HumidityModel)
+            {
+                return (HumidityModel)model;
+            }
+            else if (model is MotionSensorModel)
+            {
+                return (MotionSensorModel)model;
+            }
+
+            return null;
+        }
+
+        public async void CreateRecord(object model)
+        {
+            object castModel = DetermineModel(model);
+
+
             using (var _databaseHelper = new DatabaseHelper())
             {
-                _databaseHelper.connection.Open();
+                _databaseHelper.Connection.Open();
                 var stringBuilder = new StringBuilder();
                 var query = stringBuilder.ToString();
                 // DO SOME QUERIES
-                var result = _databaseHelper.connection.ExecuteAsync(query);
+                var result = _databaseHelper.Connection.ExecuteAsync(query);
 
                 await result;
             }
@@ -52,11 +73,11 @@ namespace INFT3970Project.Helpers
         {
             using (var _databaseHelper = new DatabaseHelper())
             {
-                _databaseHelper.connection.Open();
+                _databaseHelper.Connection.Open();
                 var stringBuilder = new StringBuilder();
                 var query = stringBuilder.ToString();
                 // DO SOME QUERIES
-                var result = _databaseHelper.connection.Query<TemperatureModel>(query);
+                var result = _databaseHelper.Connection.Query<TemperatureModel>(query);
                 return result;
             }
         }
@@ -70,11 +91,11 @@ namespace INFT3970Project.Helpers
         {
             using (var _databaseHelper = new DatabaseHelper())
             {
-                _databaseHelper.connection.Open();
+                _databaseHelper.Connection.Open();
                 var stringBuilder = new StringBuilder();
                 var query = stringBuilder.ToString();
                 // DO SOME QUERIES
-                var result = _databaseHelper.connection.Query<TemperatureModel>(query).FirstOrDefault();
+                var result = _databaseHelper.Connection.Query<TemperatureModel>(query).FirstOrDefault();
                 return result;
             }
         }
@@ -90,11 +111,11 @@ namespace INFT3970Project.Helpers
         {
             using (var _databaseHelper = new DatabaseHelper())
             {
-                _databaseHelper.connection.Open();
+                _databaseHelper.Connection.Open();
                 var stringBuilder = new StringBuilder();
                 var query = stringBuilder.ToString();
                 // DO SOME QUERIES
-                var results = _databaseHelper.connection.Query<TemperatureModel>(query);
+                var results = _databaseHelper.Connection.Query<TemperatureModel>(query);
                 return results;
             }
         }

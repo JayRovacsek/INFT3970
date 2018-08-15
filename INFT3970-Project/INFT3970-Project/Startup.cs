@@ -24,7 +24,6 @@ namespace INFT3970_Project
         {
             services.AddMvc();
             services.Configure<ServiceSettings>(Configuration.GetSection("ServiceSettings"));
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
