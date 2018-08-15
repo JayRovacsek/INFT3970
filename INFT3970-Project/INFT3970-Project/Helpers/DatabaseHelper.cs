@@ -38,9 +38,9 @@ namespace INFT3970Project.Helpers
             {
                 return (HumidityModel)model;
             }
-            else if (model is MotionSensorModel)
+            else if (model is MotionModel)
             {
-                return (MotionSensorModel)model;
+                return (MotionModel)model;
             }
 
             return null;
