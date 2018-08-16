@@ -20,6 +20,7 @@ namespace INFT3970_Project
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .UseUrls("http://*:49987")
                 .Build();
     }
 }
