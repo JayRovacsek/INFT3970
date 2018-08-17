@@ -10,6 +10,7 @@ using INFT3970Project.Models;
 using System.Text;
 using System.Net.Http;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 
 namespace INFT3970Project.Controllers
 {
@@ -17,8 +18,14 @@ namespace INFT3970Project.Controllers
     [Route("api/Database")]
     public class DatabaseController : Controller
     {
-        private static IOptions<ConnectionStrings> connectionStrings;
-        private DatabaseHelper _databaseHelper = new DatabaseHelper(connectionStrings);
+        private readonly IConfiguration configuration;
+        private DatabaseHelper _databaseHelper;
+
+        public DatabaseController(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+            _databaseHelper = new DatabaseHelper(configuration.GetConnectionString("AzureConnectionString").ToString());
+        }
 
         /// <summary>
         /// Implementation of method to create a record async via post request
