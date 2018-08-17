@@ -17,9 +17,12 @@ namespace INFT3970_Project
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}json", optional: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            var connectionStrings = new ConnectionStrings();
+            Configuration.GetSection("ConnectionStrings").Bind(connectionStrings);
         }
 
         public IConfiguration Configuration { get; set; }

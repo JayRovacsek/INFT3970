@@ -9,18 +9,19 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace INFT3970Project.Helpers
 {
     public class DatabaseHelper : IDisposable
     {
-        private readonly IOptions<ConnectionStrings> _connectionStrings;
+        private readonly string _connectionString;
         public IDbConnection Connection { get; set; }
 
-        public DatabaseHelper(IOptions<ConnectionStrings> connectionStrings) 
+        public DatabaseHelper(string connectionString) 
         {
-            _connectionStrings = connectionStrings;
-            Connection = new SqlConnection(_connectionStrings.Value.AzureConnectionString);
+            _connectionString = connectionString;
+            Connection = new SqlConnection(_connectionString);
         }
 
         public void Dispose()
@@ -28,35 +29,19 @@ namespace INFT3970Project.Helpers
             throw new NotImplementedException();
         }
 
-        private MasterModel DetermineModel(object model)
-        {
-            if (model is TemperatureModel)
-            {
-                return (TemperatureModel)model;
-            }
-            else if (model is HumidityModel)
-            {
-                return (HumidityModel)model;
-            }
-            else if (model is MotionModel)
-            {
-                return (MotionModel)model;
-            }
-
-            return null;
-        }
-
         public async void CreateRecord(object model)
         {
-            object castModel = DetermineModel(model);
+            TemperatureModel castModel = JsonConvert.DeserializeObject<TemperatureModel>(model.ToString());
 
-
-            using (var _databaseHelper = new DatabaseHelper(_connectionStrings))
+            using (var _databaseHelper = new DatabaseHelper(_connectionString))
             {
-                _databaseHelper.Connection.Open();
+                //_databaseHelper.Connection.Open();
                 var stringBuilder = new StringBuilder();
+                stringBuilder.Append($@"INSERT INTO a
+                                        VALUES {castModel.Id},
+                                               {castModel.Temperature},
+                                               {castModel.Timestamp}");
                 var query = stringBuilder.ToString();
-                // DO SOME QUERIES
                 var result = _databaseHelper.Connection.ExecuteAsync(query);
 
                 await result;
@@ -71,7 +56,7 @@ namespace INFT3970Project.Helpers
         /// <returns></returns>
         public IEnumerable<TemperatureModel> QueryAllTemperatures<TemperatureModel>()
         {
-            using (var _databaseHelper = new DatabaseHelper(_connectionStrings))
+            using (var _databaseHelper = new DatabaseHelper(_connectionString))
             {
                 _databaseHelper.Connection.Open();
                 var stringBuilder = new StringBuilder();
@@ -89,7 +74,7 @@ namespace INFT3970Project.Helpers
         /// <returns></returns>
         public TemperatureModel QuerySingleTemperatures(Guid? Id)
         {
-            using (var _databaseHelper = new DatabaseHelper(_connectionStrings))
+            using (var _databaseHelper = new DatabaseHelper(_connectionString))
             {
                 _databaseHelper.Connection.Open();
                 var stringBuilder = new StringBuilder();
@@ -109,7 +94,7 @@ namespace INFT3970Project.Helpers
         /// <returns></returns>
         public IEnumerable<TemperatureModel> QueryDateRangeTemperatures<TemperatureModel>(DateTime startDate, DateTime endDate)
         {
-            using (var _databaseHelper = new DatabaseHelper(_connectionStrings))
+            using (var _databaseHelper = new DatabaseHelper(_connectionString))
             {
                 _databaseHelper.Connection.Open();
                 var stringBuilder = new StringBuilder();
