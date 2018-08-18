@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using INFT3970Project.Helpers;
 using INFT3970Project.Models;
@@ -30,8 +31,10 @@ namespace INFT3970Project.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("Create")]
-        public IActionResult Create([FromBody] HumidityModel model)
+        public HttpResponseMessage Create([FromBody] HumidityModel model)
         {
+            HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.Created);
+
             try
             {
                 model.Timestamp = DateTime.Now;
@@ -40,8 +43,10 @@ namespace INFT3970Project.Controllers
             catch (Exception exception)
             {
                 Console.WriteLine(exception.Message);
+                response.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                return response;
             }
-            return null;
+            return response;
         }
     }
 }
