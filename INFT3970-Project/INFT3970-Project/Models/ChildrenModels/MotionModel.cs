@@ -7,5 +7,6 @@ namespace INFT3970Project.Models
 {
     public class MotionModel : MasterModel
     {
+        public bool Motion { get; set; }
     }
 }

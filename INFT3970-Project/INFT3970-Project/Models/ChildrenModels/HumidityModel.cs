@@ -7,5 +7,6 @@ namespace INFT3970Project.Models
 {
     public class HumidityModel : MasterModel
     {
+        public decimal Humidity { get; set; }
     }
 }
