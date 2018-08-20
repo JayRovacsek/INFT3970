@@ -5,6 +5,7 @@
     \usepackage{amssymb}
     \usepackage{enumerate}
     \usepackage{enumitem}
+    \usepackage{enumitem}
     \usepackage{graphicx}
     \usepackage{xcolor}
     \usepackage{pdfpages}
@@ -46,6 +47,9 @@
     }
     \pagenumbering{arabic}
 
+    \newlist{legal}{enumerate}{10}
+    \setlist[legal]{label*=\arabic*.}
+
     \begin{document}
 
     \begin{titlingpage}
@@ -55,7 +59,8 @@
     \tableofcontents
     \newpage
     
-    \section{Executive Summary}
+    \section*{Executive Summary}
+    \vspace{10mm}
         \subsection{Background}
             Riding the wave of "IoT Revolution" \cite{Forbes}, this project will develop
             a low cost, easily deployable IoT product in any setting.
@@ -72,7 +77,7 @@
             \\
             Citing this movement, it would only be logical to create a simple to use set of devices 
             that allow for the monitoring and therefore optimisation of such measurables.
-
+        \vspace{10mm}
         \subsection{Overview and Purpose}
             The concept of this project is to create a distributed system in which small 
             devices are used to monitor, log and analyse a number of select metrics from a 
@@ -100,6 +105,8 @@
                 they may make unwittingly in regards to home or business heating, coupled with the 
                 impact of room utilisation.
 
+    \newpage
+
     \section{Project Objectives}
         Within the timeframe still available to this project, we aim to develop and deploy a number of 
         IoT devices\cite{ESP8266} to a home enviroment or two and to track heat, humidity and motion of the
@@ -113,34 +120,130 @@
         coupled with a small budget of roughly \$100-\$200 to purchase all required equipment which currently
         is expected to be:
         \begin{itemize}
+            \item Arduino UNO3 Microcontroller
             \item ESP8266 boards
             \item DHT11 Temperature and Humidity sensors\cite{DHT11}
             \item XC-4444 PIR Motion sensors\cite{XC-4444}
             \item Various required breadboards / generic electronics items
         \end{itemize}
 
-        Overall goals of the project\\
-        Remember Objectives must be SMART!\\
-        Answers What, When, \& How Much
+        \vspace{10mm}
 
         \subsection{Deliverables}
-            Expected outcomes of the project\\
-            A list of specifications
+            Included deliverables for the project will include a large span of items crossing a number
+            of percieved IT-sub-disciplines:
+            \begin{itemize}
+                \item Raw data be stored in an online database including:
+                \item \begin{itemize}
+                    \item Temperature
+                    \item Humidity
+                    \item Motion
+                    \item Associated timestamps for datapoints
+                    \item User information including:
+                    \item \begin{itemize}
+                        \item Name
+                        \item Address
+                        \item Postcode
+                    \end{itemize}
+                \end{itemize}
+            \end{itemize}
+
+            The user interface will be developed to allow the users to access their stored
+            infomation and optionally remove sections of data. Each user will be able to customise 
+            their own homepage in order to display to their needs. The user interface will deliever:
+            \begin{itemize}
+                \item Login page
+                \item Registration
+                \item Home Page (Where all data is displayed)
+                \item Graphs based on the user's data
+                \item Analytic results
+                \item Suggestions
+                \item Logout
+            \end{itemize}
+            \newpage
 
         \subsection{Milestones}
-
-            Is always “The Schedule”\\
-            Assigns the major segments of project with time estimation
-
+            Major milestones for the project include are split into a number of 
+            concurrently developed sub-sections:
+            \\
+            \begin{legal}
+                \item Sensors:
+                \begin{legal}
+                    \item Sensor proof of concept implementation (serial to USB)
+                    \item Testing of POC
+                    \item Sensor and Wifi Implementation
+                    \item Testing of Sensor and Wifi implementation
+                    \item Sensor to API communication including:
+                    \begin{legal}
+                        \item Implementation and testing of Temperature logging
+                        \item Implementation and testing of Humidity logging
+                        \item Implementation and testing of Motion logging
+                        \item Testing of Sensor to API communication
+                    \end{legal}
+                \end{legal}
+                \item Database:
+                \begin{legal}
+                    \item Database Pilot
+                    \item Review and Testing of Database
+                    \item Optimisation of datatypes used in each table
+                    \item Implementation of indexing and other optimisations to avoid big O issues.
+                    \item Final database implementation.
+                \end{legal}
+                \item Backend:
+                \begin{legal}
+                    \item Decision of framework to be used
+                    \item Initial POC on framework
+                    \item Feature implementations: 
+                    \begin{legal}
+                        \item Implementation of PING GET endpoint to avoid sending of data unnecessarily
+                        \item Implementation and testing of POST endpoints:
+                        \begin{legal}
+                            \item Temperature
+                            \item Humidity
+                            \item Motion
+                        \end{legal}
+                        \item Implementation and testing of application helpers to aid front-end data sourcing
+                    \end{legal}
+                    \item Refactor existing code
+                    \begin{legal}
+                        \item Peer review of code, implementation of required changes
+                    \end{legal}
+                \end{legal}
+            \end{legal}
+        \newpage
     
     \section{Technical Requirements}
+        Requirements for raw data be stored in an online database are only access
+        for the development resources to be able to access any suitable cloud account, 
+        self-host on a local machine or debug required functions in the application with 
+        localised datageneration via ajax queries of similar methods.
+        \\
+        Pages for the site itself will require a suitable host either cloud or local which
+        supports .NETcore 2.0\cite{DotNetCore2} and suitable network access to reach a
+        required TSQL\cite{TSQL} database hosted by the team.
+        \vspace{5mm}
 
+        The user interface will be developed to allow the users to access their stored
+        infomation and optionally remove sections of data. Each user will be able to customise 
+        their own homepage in order to display to their needs. The user interface will deliever:
+        \begin{itemize}
+            \item Login page
+            \item Registration
+            \item Home Page (Where all data is displayed)
+            \item Graphs based on the user's data
+            \item Analytic results
+            \item Suggestions
+            \item Logout
+        \end{itemize}
+    
         Majority of product/service has the “requirements”\\
         More details than deliverables.
 
     \section{Limitations}
         “Limitation” of the project\\
         Managing expectation, not over-promising
+
+        \newpage
 
     \begin{thebibliography}{9}
         \raggedright
@@ -156,6 +259,10 @@
             \url{https://www.jaycar.com.au/medias/sys_master/images/9105858396190/XC4444-dataSheetMain.pdf}
         \bibitem{DHT11}
             \url{https://www.jaycar.com.au/medias/sys_master/images/9091897786398/XC4520-dataSheetMain.zip}
+        \bibitem{DotNetCore2}
+            \url{https://www.microsoft.com/net/download}
+        \bibitem{TSQL}
+            \url{https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-2017}
     \end{thebibliography}
 
     \end{document}
