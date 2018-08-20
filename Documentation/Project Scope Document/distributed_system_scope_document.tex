@@ -223,23 +223,37 @@
         required TSQL\cite{TSQL} database hosted by the team.
         \vspace{5mm}
 
-        The user interface will be developed to allow the users to access their stored
-        infomation and optionally remove sections of data. Each user will be able to customise 
-        their own homepage in order to display to their needs. The user interface will deliever:
-        \begin{itemize}
-            \item Login page
-            \item Registration
-            \item Home Page (Where all data is displayed)
-            \item Graphs based on the user's data
-            \item Analytic results
-            \item Suggestions
-            \item Logout
-        \end{itemize}
+        Functioning network connectivity, all of the sensors will be connected to a local network which will 
+        then send all the data to the API. Having the local network is vital part to the success of the system 
+        as the sensors will not be able to communicate with the database.
+        \par
+        Meet system requirements to run the users preference of web browser, the user will have to login into 
+        the system through a local web browser to view their sensor information on their network.
+        \vspace{5mm}
+
+        Azure to run the Database and website hosting. The database will be used to store all the data that is 
+        sent from the sensors. The uptime of the database the web application is vital to the user experience 
+        and the success of the project. Azure provides this security with 99.95\% uptime \cite{AzureUptime}.
+        \par
+        SQL management studio to manage the database. Azure is using TSQL which can be managed by SQL management studio 
+        on the developers local machine. Visual studio to develop the front and back end of the web application. 
+        The development of the web application will be written in visual studio then pushed to azure for final deployment.
+        Arduino boards and sensors. ESP8266 boards will be used with a variety of compatible sensor to create a home 
+        monitoring system. These sensors include temperature, humidity and motion.\\
+        Arduino IDE software for editing/flashing the boards in C/C++
+
     
         Majority of product/service has the “requirements”\\
         More details than deliverables.
 
     \section{Limitations}
+        It is important to acknowledge the limitations of this project, given that this project is taking place 
+        in a compressed format it will primarily be an exploratory exercise in IOT sensor technology and its 
+        ability to interface with middleware frontend/backend and an SQL server implementation.
+        \par
+        In order to managing expectations we are primary focused on heat,humidity and motion, this proof of 
+        concept implementation reduces the risk of under delivering on expectations.
+
         “Limitation” of the project\\
         Managing expectation, not over-promising
 
@@ -263,6 +277,8 @@
             \url{https://www.microsoft.com/net/download}
         \bibitem{TSQL}
             \url{https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-2017}
+        \bibitem{AzureUptime}
+            \url{https://azure.microsoft.com/en-au/support/legal/sla/app-service/v1_4/}
     \end{thebibliography}
 
     \end{document}
