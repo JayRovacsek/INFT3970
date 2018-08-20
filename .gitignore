@@ -334,9 +334,11 @@ Documentation/*.toc
 Documentation/*.synctex.gz
 Documentation/*.fls
 Documentation/*.out
+
+# User defined
 *.aux
 *.fdb_latexmk
-*.fls
-*.out
 *.toc
 *.synctex.gz
+*.fls
+*.out
