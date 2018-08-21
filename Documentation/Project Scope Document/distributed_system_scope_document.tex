@@ -1,10 +1,9 @@
 \documentclass{article}
     \usepackage{url}
-    \usepackage[margin=1.0in]{geometry}
-    \usepackage{cite}
+    \usepackage[margin=0.8in]{geometry}
+    \usepackage{cite}    
     \usepackage{amssymb}
     \usepackage{enumerate}
-    \usepackage{enumitem}
     \usepackage{enumitem}
     \usepackage{graphicx}
     \usepackage{xcolor}
@@ -15,13 +14,42 @@
     \usepackage{lstautogobble}
     \usepackage{titling}
     \usepackage{pdflscape}
+    \usepackage{afterpage}
     \usepackage[nottoc,notlot,notlof]{tocbibind}
     \renewcommand\maketitlehooka{\null\mbox{}\vfill}
     \renewcommand\maketitlehookd{\vfill\null}
 
-    \graphicspath{ {Resources/} }
-    \title{INFT3970 Major Project Scope Document \protect\\
-    Distributed Monitoring System using Embedded Devices}
+    \newcommand\arduinobackgroundimage{
+        \put(-5,0){
+        \parbox[b][\paperheight]{\paperwidth}{
+        \vfill
+        \centering
+        \includegraphics[height=\paperheight]{Images/Arduino.jpg}
+        \vfill
+    }}}
+
+    \newcommand\usbdocumentbackgroundimage{
+        \put(-5,0){
+        \parbox[b][\paperheight]{\paperwidth+5px}{
+        \vfill
+        \centering
+        \includegraphics[width=\paperwidth]{Images/USB.jpg}
+        \vfill
+    }}}
+
+    \newcommand\whitebackgroundimage{
+        \put(-5,0){
+        \parbox[b][\paperheight]{\paperwidth}{
+        \vfill
+        \centering
+        \includegraphics[width=\paperwidth]{Images/White.jpg}
+        \vfill
+    }}}
+
+    \graphicspath{ {Images/} }
+
+    \title{\textbf{INFT3970 Major Project Scope Document \protect\\
+    Distributed Monitoring System using Embedded Devices}}
     \author{
         Jay Rovacsek
         \texttt{c3146220@uon.edu.au}\\
@@ -52,13 +80,20 @@
 
     \begin{document}
 
+    \AddToShipoutPicture{\arduinobackgroundimage}
+
     \begin{titlingpage}
         \maketitle
     \end{titlingpage}
-    \newpage
+
+    \AddToShipoutPicture{\usbdocumentbackgroundimage}
+
     \tableofcontents
-    \newpage
     
+    \newpage
+
+    \AddToShipoutPicture{\whitebackgroundimage}
+
     \section*{Executive Summary}
     \vspace{10mm}
         \subsection{Background}
@@ -68,12 +103,12 @@
             IoT or \textit{The Internet of Things} has proven to be an explosive trend within
             the consumer electronics markets. Never before have such small versatile devices been
             available for general consumption, leading to an estimated combined business and
-            consumer spending value in excess of \$6 \textit{trillion} dollars globally in 2018 \cite{Forbes}
-            \\
+            consumer spending value in excess of \$6 \textit{trillion} dollars globally in 2018\cite{Forbes}.
+            \par\noindent
             For the vast majority of consumers, both corporate and end-customer \cite{Mckinsey}, a large 
             movement toward both minimisation of waste and optimisation of spending is occuring
             on a global scale in the developed world, with the developing world rapidly following 
-            this trend also \cite{SunNews}.
+            this trend also\cite{SunNews}.
             \\
             Citing this movement, it would only be logical to create a simple to use set of devices 
             that allow for the monitoring and therefore optimisation of such measurables.
@@ -82,11 +117,13 @@
             The concept of this project is to create a distributed system in which small 
             devices are used to monitor, log and analyse a number of select metrics from a 
             multitude of potential data points.
-            \\
+            \par\noindent
             The purpose of the project is to deliver a viable product that could be replicated
             for a reasonable price for both end-user and business alike. We believe the market to
             be on a precipice of further explosive growth, with the consumer market partially
             realised, but far from tapped by curent offerings.
+            \par\noindent
+            In this document we intend 
             \subsubsection{Metrics}
                 The metrics measured included will be: 
                 \begin{itemize}
@@ -134,13 +171,13 @@
             of percieved IT-sub-disciplines:
             \begin{itemize}
                 \item Raw data be stored in an online database including:
-                \item \begin{itemize}
+                \begin{itemize}
                     \item Temperature
                     \item Humidity
                     \item Motion
                     \item Associated timestamps for datapoints
                     \item User information including:
-                    \item \begin{itemize}
+                    \begin{itemize}
                         \item Name
                         \item Address
                         \item Postcode
@@ -208,6 +245,28 @@
                     \begin{legal}
                         \item Peer review of code, implementation of required changes
                     \end{legal}
+                \end{legal}
+                \item Front End:
+                \begin{legal}
+                    \item Initial implementation of POC dashboard
+                    \item Initial POC of authentication using a login page
+                    \item Review of code by peers
+                    \item Migrate dashboard behind successful login page
+                    \item Improvements and refactoring of dashboarding code
+                    \item Review and refactor to suit all devices commonly used to browse websites.
+                    \item Implement required bootstrap/css framework to handle display of data.
+                    \item Final peer review and refactor
+                \end{legal}
+                \newpage
+                \item Documentation
+                \begin{legal}
+                    \item Generate POC documentation from project
+                    \item Generate scope document
+                    \item Comment code extensively for readability
+                    \item Document APIs
+                    \item Document database design, with considerations of optimisation and required modifications
+                    \item Generate user guide for final product
+                    \item Generate final report
                 \end{legal}
             \end{legal}
         \newpage
