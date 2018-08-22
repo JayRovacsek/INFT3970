@@ -181,12 +181,14 @@
                     \item Temperature
                     \item Humidity
                     \item Motion
+                    \item Sensor IDs
                     \item Associated timestamps for datapoints
                     \item User information including:
                     \begin{itemize}
                         \item Name
                         \item Address
                         \item Postcode
+                        \item Sensor Ownership
                     \end{itemize}
                 \end{itemize}
             \end{itemize}
@@ -226,7 +228,7 @@
                 \end{legal}
                 \item Database:
                 \begin{legal}
-                    \item Database Pilot
+                    \item Database Pilot (Including creation and design)
                     \item Review and Testing of Database
                     \item Optimisation of datatypes used in each table
                     \item Implementation of indexing and other optimisations to avoid big O issues.
@@ -278,34 +280,66 @@
         \newpage
     
     \section{Technical Requirements}
-        Requirements for raw data be stored in an online database are only access
-        for the development resources to be able to access any suitable cloud account, 
-        self-host on a local machine or debug required functions in the application with 
-        localised datageneration via ajax queries of similar methods.
-        \\
-        Pages for the site itself will require a suitable host either cloud or local which
-        supports .NETcore 2.0\cite{DotNetCore2} and suitable network access to reach a
-        required TSQL\cite{TSQL} database hosted by the team.
-        \vspace{5mm}
 
-        Functioning network connectivity, all of the sensors will be connected to a local network which will 
-        then send all the data to the API. Having the local network is vital part to the success of the system 
-        as the sensors will not be able to communicate with the database.
-        \par
-        Meet system requirements to run the users preference of web browser, the user will have to login into 
-        the system through a local web browser to view their sensor information on their network.
-        \vspace{5mm}
+        \subsection{Generalised Requirements}
+            The team collaboratively have agreed on a few generalised requirements of the project
+            including:
+            \begin{itemize}
+                \item Ease of use: The devices must be able to used by a nontechnical user, they must
+                be supplied in such a way that an ability to place the device in place, and connect power
+                are the largest difficulties that the end user encounters.
+                \item Abstraction of underlying technologies: as a byproduct of the requirement of ease-of-use
+                the devices and web application should not require the end user to have any knowledge of the 
+                underlying technolgies used.
+                \item 
+            \end{itemize}
+        \subsection{Data Requirements}
+            Requirements for raw data be stored in an online database are only access
+            for the development resources to be able to access any suitable cloud account, 
+            self-host on a local machine or debug required functions in the application with 
+            localised data generation via ajax queries of similar methods.
+            
+            \subsubsection{Azure}
+                Azure is a likely candidate for the Database and website hosting, The database will be used to store 
+                all the data that is sent from the sensors. The uptime of the database the web application is vital 
+                to the user experience and the success of the project. Azure provides this security 
+                with 99.95\% uptime \cite{AzureUptime}.
 
-        Azure to run the Database and website hosting. The database will be used to store all the data that is 
-        sent from the sensors. The uptime of the database the web application is vital to the user experience 
-        and the success of the project. Azure provides this security with 99.95\% uptime \cite{AzureUptime}.
-        \par
-        SQL management studio to manage the database. Azure is using TSQL which can be managed by SQL management studio 
-        on the developers local machine. Visual studio to develop the front and back end of the web application. 
-        The development of the web application will be written in visual studio then pushed to azure for final deployment.
-        Arduino boards and sensors. ESP8266 boards will be used with a variety of compatible sensor to create a home 
-        monitoring system. These sensors include temperature, humidity and motion.\\
-        Arduino IDE software for editing/flashing the boards in C/C++.
+        \subsection{Hosting Enviroment}
+            Pages for the site itself will require a suitable host either cloud or local which
+            supports .NETcore 2.0\cite{DotNetCore2} and suitable network access to reach a
+            required TSQL\cite{TSQL} database hosted by the team.
+        
+        \subsection{Network Connectivity}
+            Functioning network connectivity will be heavily depended on by the project,
+            all of the sensors will be connected to a local network wirelessly which will enable the boards
+            to post data at the API endpoint at either \url{https://www.inft3970.com} (Parked domain) or 
+            \url{https://inft3970.azurewebsites.net} (Currently functioning endpoint)
+            \par
+            Requirements for the user to maintain a 2.4gHz enviroment will exist, as without this an expansion board
+            or alternate boards will be required isntead of the proposed ESP8266\cite{ESP8266} and UNO3\cite{UNO3}.
+        
+        \subsection{User Requirements}
+            The users of the system will need to be confident in browsing webpages and accessing them. Generally
+            we recognise any device with browser functionality will suit the purpose, and development will use a 
+            mixture of Firefox\cite{Firefox} or Chromium\cite{Chromium} based browsers to find all possible bugs 
+            within the project span.
+            \\
+            The lack of an adblocker or similar addons for the chosen browsing enviroment would be suggested also,
+            third party javascript libraries are likely to be used and cannot be assured to function under such 
+            enviroments including modification or blocking of traffic/assets.
+        
+        \subsection{Development Requirements}
+            A number of softwares will be required by the development team in order to complete the project,
+            these softwares may include:
+            \begin{itemize}
+                \item SQL management studio to manage the database. Azure is using TSQL which can be managed by SQL management studio 
+                on the developers local machine.
+                \item Visual studio to develop the front and back-ends of the web application. 
+                \item Visual Studio Code to develop elements of the front-end
+                \item Arduino IDE software for editing/flashing the boards in C/C++.
+                \item 
+            \end{itemize}
 
     \newpage
 
@@ -345,6 +379,12 @@
             \url{https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-2017}
         \bibitem{AzureUptime}
             \url{https://azure.microsoft.com/en-au/support/legal/sla/app-service/v1_4/}
+        \bibitem{UNO3}
+            \url{https://store.arduino.cc/usa/arduino-uno-rev3/}
+        \bibitem{Firefox}
+            \url{https://www.mozilla.org/en-US/firefox/}
+        \bibitem{Chromium}
+            \url{https://www.chromium.org/}
     \end{thebibliography}
 
     \end{document}
