@@ -80,19 +80,19 @@
 
     \begin{document}
 
-    \AddToShipoutPicture{\arduinobackgroundimage}
+    % \AddToShipoutPicture{\arduinobackgroundimage}
 
     \begin{titlingpage}
         \maketitle
     \end{titlingpage}
 
-    \AddToShipoutPicture{\usbdocumentbackgroundimage}
+    % \AddToShipoutPicture{\usbdocumentbackgroundimage}
 
     \tableofcontents
     
     \newpage
 
-    \AddToShipoutPicture{\whitebackgroundimage}
+    % \AddToShipoutPicture{\whitebackgroundimage}
 
     \section{Executive Summary}
     \vspace{10mm}
@@ -144,6 +144,64 @@
 
     \newpage
 
+    \section{Business Needs}
+        As suggested in the executive summary and project background, the IoT market is expected 
+        to rapidly grow in not only the current year but a number of future years to come. Accessibility and ease of use being major factors spurring the market into the current 
+        state.
+        \\
+        This project aims to fill some of the gaps that exist within the expanding world of IoT
+        by allowing end users irrespective of technological capability to easily partake in the 
+        current market at a price position that doesn't reflect excessive or overly expensive 
+        alternatives that exist.
+
+        \subsection{Azure Hosting}
+            Currently without extenuating circumstances against hosting within the cloud the
+            decision to host in Azure applications seems to be the path of least resistance for
+            the project in order to enable a globalised access to a single database to host 
+            data.
+            \\
+            We recognise the flaws with hosting in the cloud also, such as data breach potential 
+            (traditional methods or emerging threats\cite{SpectreAndMeltdown}), however also
+            recognise with a limited span of time allowable for the project a more suitable 
+            system design such as below is not suitable in the timeframe:
+            \vspace{10mm}
+            \begin{center}
+                \includegraphics[width=350px]{Images/OptimalSystemDiagram.jpg}
+            \end{center}
+            Such a design would allow for users to maintain connectivity from their 
+            own LAN:
+            \begin{center}
+                \includegraphics[width=350px]{Images/OptimalSystemDiagramAlternate.jpg}
+            \end{center}
+
+            \newpage
+
+            Given time constraints we need to accept that the design of centralised 
+            servers hosted within Azure achieves the same ability to serve the user information and maintain connectivity as required, but is more failable:
+
+            \begin{center}
+                \includegraphics[width=350px]{Images/CurrentSystemDiagram.jpg}
+            \end{center}
+            In a network failure situation:
+            \begin{center}
+                \includegraphics[width=350px]{Images/CurrentSystemDiagramAlternate.jpg}
+            \end{center}
+
+            Optimally the scope of the project would be expanded to development of
+            the user hosted microservers that would act as middleware between
+            the hosted servers and the sensors, this is a highly viable goal given
+            technologies such as the RaspberryPi\cite{RPI} which under \$50AUD 
+            can a number of Linux distributions or Windows IoT Core platform.
+        
+        \subsection{WLAN v Zigbee}
+            Considerations to implement the network of devices was considered however given the requirement to purchase and implement a module
+            to enable use of Zigbee, conventional WEP/WPA/WPA2 network options 
+            were perfered. Both conventional WLAN networks and Zigbee would allow
+            meshability between devices, requiring less of an impact on the user's
+            network in a mixture of DHCP leases and wireless network congestion.
+
+    \newpage
+
     \section{Project Objectives}
         Within the timeframe still available to this project, we aim to develop and deploy a number of 
         IoT devices\cite{ESP8266} to a home enviroment or two and to track heat, humidity and motion of the
@@ -172,39 +230,71 @@
 
         \newpage
 
-        \subsection{Deliverables}
-            Included deliverables for the project will include a large span of items crossing a number
-            of percieved IT-sub-disciplines:
+        \section{Deliverables}
+            The deliverables that are expected to be produced throughout the distributed monitoring system are broken into Four sections; Sensors, Database, UI and 
+            analytics.
+            \subsubsection{Sensors}
             \begin{itemize}
-                \item Raw data be stored in an online database including:
-                \begin{itemize}
-                    \item Temperature
-                    \item Humidity
-                    \item Motion
-                    \item Sensor IDs
-                    \item Associated timestamps for datapoints
-                    \item User information including:
-                    \begin{itemize}
-                        \item Name
-                        \item Address
-                        \item Postcode
-                        \item Sensor Ownership
-                    \end{itemize}
-                \end{itemize}
+                \item Humidity Sensor can be created.
+                \item Temperature Sensor can be created.
+                \item Motion Sensor can be created.
+                \item Sensors can be reprogrammed with different modules (Or have all modules avilable).
+                \item Sensors ownership can be modified.
+                \item Sensors cav connect to any 2.4gHz home network.
             \end{itemize}
 
-            The user interface will be developed to allow the users to access their stored
-            infomation and optionally remove sections of data. Each user will be able to customise 
-            their own homepage in order to display to their needs. The user interface will deliever:
+            \subsection{Database}
             \begin{itemize}
-                \item Login page
-                \item Registration
-                \item Home Page (Where all data is displayed)
-                \item Graphs based on the user's data
-                \item Analytic results
-                \item Suggestions
-                \item Logout
+                \item A new user account can be created.
+                \item A new sensor can be registered.
+                \item An admin can access user’s information (password hashed + salted)
+                \item A user record can be edited.
+                \item A sensor can be assigned to a user account.
+                \item A sensor can be deleted from a user’s account.
+                \item A sensor’s details can be edited.
+                \item An admin can view raw data from all tables.
+                \item An admin can edit data from tables.
+                \item Password can be changed
+                \item Email will be sent for resetting a forgotten password
+                \item Email verification upon account creation
+                \item Procedures and triggers for data analysis and querying 
             \end{itemize}
+            
+            \newpage
+
+            \subsection{User Interface}
+            \begin{itemize}
+                \item Login page for Users.
+                \item Registration page for Users.
+                \item Home page (Displaying an overview).
+                \item Temperature page.
+                \item Humidity page.
+                \item Motion page.
+                \item User able to access associated data.
+                \item Graphs based on the user data.
+                \item User able to customise graphs and Home page layout.
+                \item Custom Analytic results.
+                \item Email Suggestions section.
+                \item Logout Page.
+            \end{itemize}
+
+            \subsection{Data Analytics}
+            \begin{itemize}
+                \item Administration able to view user data that has been depersonalised.
+                \item Display Recommendations and habits to the User.
+                \item Showing different trends around a user’s house using the different modules.
+            \end{itemize}
+
+            Having a Data Analytics major within our group we expect the data collected may contain interesting information. \\
+            An analytic module will be used to parse data for each user and display recommendations and habits from the data.
+            
+            \subsubsection{Temperature Module}
+                The analytic module will be able to tell the users how different the temperature is around their house and see trends on room temperatures. This will also be able to be used to give recommendations on what rooms need heating/cooling and what rooms do not benefit from heating or cooling.
+            \subsubsection{Humidity Module}
+                The analytic module will be able search through the data and view what rooms and areas of the house are the most humid. This allows the user to keep an eye on the moisture that is in their homes like a wardrobe or kitchen pantry. Another use for the humidity module is alongside the temperature module to give suggestions to the user if they should turn on/off Air-conditioning units.
+            \subsubsection{Motion Module}
+                The analytic module will be able to see trends and habits on behaviour as they move through their home. By using this information the user will be able to see what rooms are high traffic areas and at what times of the day this high concentration of movement occurs. Through this it can also be used to tell when outliers occur for security purposes. Such as late night movement in a shed could be an intruder and the user will be notified with this uncommon event.
+
             \newpage
 
         \subsection{Milestones}
@@ -301,7 +391,6 @@
                 \item Abstraction of underlying technologies: as a byproduct of the requirement of ease-of-use
                 the devices and web application should not require the end user to have any knowledge of the 
                 underlying technolgies used.
-                \item 
             \end{itemize}
         \subsection{Data Requirements}
             Requirements for raw data be stored in an online database are only access
@@ -339,7 +428,9 @@
             third party javascript libraries are likely to be used and cannot be assured to function under such 
             enviroments including modification or blocking of traffic/assets.
         
-        \subsection{Development Requirements}
+        \newpage
+
+        \subsection{Development Requirements\cite{DevelopmentResources}}
             A number of softwares will be required by the development team in order to complete the project,
             these softwares may include:
             \begin{itemize}
@@ -350,22 +441,51 @@
                 \item Arduino IDE software for editing/flashing the boards in C/C++.
             \end{itemize}
 
-    \newpage
-
     \section{Limitations}
         It is important to acknowledge the limitations of this project, given that this project is taking place 
         in a compressed format it will primarily be an exploratory exercise in IOT sensor technology and its 
-        ability to interface with middleware frontend/backend and an SQL server implementation.
-        \par
+        ability to interface with middleware, frontend/backend and an SQL server implementation.
+        \vspace{10mm}
         In order to managing expectations we are primary focused on heat,humidity and motion, this proof of 
         concept implementation reduces the risk of under delivering on expectations.
-        \par        
-        The ESP8266 is limited to the 2.4gHz wireless spectrum, and therefore a number of modern wireless
-        networks may prove incompatible with the device. This is only a small hinderence to the device as
-        most modern networks will use both 2.4 and 5.1gHz spectrums. Furthermore the 2.4gHz spectrum is 
-        better suited to longer distance connections than the 5.1gHz range, and even in the most
-        heavily congested of wireless areas it would be reasonable to expect the payload from the ESP would
-        have no issues at a measly 200bytes on average.
+        
+        \subsection{Device Limitations}
+            The ESP8266 is limited to the 2.4gHz wireless spectrum, and therefore a number of modern wireless
+            networks may prove incompatible with the device. This is only a small hinderence to the device as
+            most modern networks will use both 2.4 and 5.1gHz spectrums. Furthermore the 2.4gHz spectrum is 
+            better suited to longer distance connections than the 5.1gHz range, and even in the most
+            heavily congested of wireless areas it would be reasonable to expect the payload from the ESP would
+            have no issues at a measly 200bytes on average.
+            
+            \subsubsection{Security Concerns}
+            Issues related to security on the publicly open API endpoints hosted in Azure prove to be hindered
+            by the limitations of the devices. We are currently investigating potential fixes for the current
+            implementation in which requests over https connections should ensure a level of security over 
+            current use of plain http.
+            \\
+            Implementation of a method that would allow access to a preflashed public key to be used for encryption
+            purposes of sensitive json data before it even leaves the device would be an excellent addition to 
+            the project, however both scope and inefficiencies of pub/private key encryption are reasons against
+            this idea.
+        
+        \subsection{Development Limitations}
+            Limitations of development experience may exist within the group with only 2 software engineering majors
+            present. We expect that these members will be able to assist the other members in potential problem 
+            areas and expect the use of code versioning will alleviate any potential miscommunications in code 
+            modification and submission.
+            \\
+            Factors potentially negating this issue include a base level of programming knowledge being shared across
+            all members of the team, with a heavy level of experience in C\# programming.
+
+            \subsubsection{Framework Limitations}
+                We may experience some level of difficulties with the chosen framework of .NETCore 2.0 in development
+                as only a limited number of the team have experienced .NETCore MVC application programming or 
+                .NETCore API programming. 
+                \\
+                We expect however the time required for upskilling and learning the framework will provide a positive
+                time return if not purely allowing team members a new skill in which to take to potential employment 
+                opportunities into the future.
+        
         \newpage
 
     \begin{thebibliography}{9}
@@ -398,6 +518,8 @@
             \url{https://www.raspberrypi.org/}
         \bibitem{OPI}
             \url{http://www.orangepi.org/}
+        \bibitem{SpectreAndMeltdown}
+            \url{https://meltdownattack.com/}
         \bibitem{DevelopmentResources}
             Development resources:
             \begin{center}
