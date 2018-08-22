@@ -37,12 +37,57 @@
         \vfill
     }}}
 
+    \newcommand\dronebackgroundimage{
+        \put(-5,0){
+        \parbox[b][\paperheight]{\paperwidth+5px}{
+        \vfill
+        \centering
+        \includegraphics[width=\paperwidth]{Images/Drone.jpg}
+        \vfill
+    }}}
+
     \newcommand\whitebackgroundimage{
         \put(-5,0){
         \parbox[b][\paperheight]{\paperwidth}{
         \vfill
         \centering
         \includegraphics[height=\paperheight]{Images/Gradient.jpg}
+        \vfill
+    }}}
+
+    \newcommand\boardbackgroundimage{
+        \put(-5,0){
+        \parbox[b][\paperheight]{\paperwidth}{
+        \vfill
+        \centering
+        \includegraphics[height=\paperheight]{Images/Board.jpg}
+        \vfill
+    }}}
+
+    \newcommand\leadbackgroundimage{
+        \put(-5,0){
+        \parbox[b][\paperheight]{\paperwidth+5px}{
+        \vfill
+        \centering
+        \includegraphics[height=\paperheight]{Images/Leads.jpg}
+        \vfill
+    }}}
+
+    \newcommand\makerbackgroundimage{
+        \put(-5,0){
+        \parbox[b][\paperheight]{\paperwidth}{
+        \vfill
+        \centering
+        \includegraphics[height=\paperheight]{Images/Maker.jpg}
+        \vfill
+    }}}
+
+    \newcommand\unobackgroundimage{
+        \put(-5,0){
+        \parbox[b][\paperheight]{\paperwidth}{
+        \vfill
+        \centering
+        \includegraphics[height=\paperheight]{Images/Uno.jpg}
         \vfill
     }}}
 
@@ -80,22 +125,21 @@
 
     \begin{document}
 
-    % \AddToShipoutPicture{\arduinobackgroundimage}
+    \AddToShipoutPicture{\arduinobackgroundimage}
 
     \begin{titlingpage}
         \maketitle
     \end{titlingpage}
 
-    % \AddToShipoutPicture{\usbdocumentbackgroundimage}
+    \AddToShipoutPicture{\usbdocumentbackgroundimage}
 
     \tableofcontents
     
     \newpage
 
-    % \AddToShipoutPicture{\whitebackgroundimage}
+    \AddToShipoutPicture{\whitebackgroundimage}
 
     \section{Executive Summary}
-    \vspace{10mm}
         \subsection{Background}
             Riding the wave of "IoT Revolution" \cite{Forbes}, this project will develop
             a low cost, easily deployable IoT product in any setting.
@@ -112,7 +156,7 @@
             \\
             Citing this movement, it would only be logical to create a simple to use set of devices 
             that allow for the monitoring and therefore optimisation of such measurables.
-        \vspace{10mm}
+        \vspace{5mm}
         \subsection{Overview and Purpose}
             The concept of this project is to create a distributed system in which small 
             devices are used to monitor, log and analyse a number of select metrics from a 
@@ -201,6 +245,8 @@
             network in a mixture of DHCP leases and wireless network congestion.
 
     \newpage
+    \AddToShipoutPicture{\leadbackgroundimage}
+
 
     \section{Project Objectives}
         Within the timeframe still available to this project, we aim to develop and deploy a number of 
@@ -229,7 +275,7 @@
         We intend in this project to showcase out abilities while expanding our capabilities and have an aim to deliver a prototype by week 9.
 
         \newpage
-
+        \AddToShipoutPicture{\dronebackgroundimage}
         \section{Deliverables}
             The deliverables that are expected to be produced throughout the distributed monitoring system are broken into Four sections; Sensors, Database, UI and 
             analytics.
@@ -261,6 +307,8 @@
             \end{itemize}
             
             \newpage
+
+            \AddToShipoutPicture{\whitebackgroundimage}
 
             \subsection{User Interface}
             \begin{itemize}
@@ -377,10 +425,22 @@
                     \item Generate final report
                 \end{legal}
             \end{legal}
+
         \newpage
+        \AddToShipoutPicture{\makerbackgroundimage}
+
+    \section{Key Roles in Project}
+        Key roles defined for the project include the below:
+        \vspace{10mm}
+        \begin{center}
+            \includegraphics[width=\textwidth]{Images/KeyRoles.jpg}
+        \end{center}
+    \newpage
+
+    \AddToShipoutPicture{\boardbackgroundimage}
+
     
     \section{Technical Requirements}
-
         \subsection{Generalised Requirements}
             The team collaboratively have agreed on a few generalised requirements of the project
             including:
@@ -440,6 +500,8 @@
                 \item Visual Studio Code to develop elements of the front-end
                 \item Arduino IDE software for editing/flashing the boards in C/C++.
             \end{itemize}
+
+        \newpage
 
     \section{Limitations}
         It is important to acknowledge the limitations of this project, given that this project is taking place 
