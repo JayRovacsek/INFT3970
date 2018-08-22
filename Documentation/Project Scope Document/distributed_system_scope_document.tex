@@ -94,7 +94,7 @@
 
     \AddToShipoutPicture{\whitebackgroundimage}
 
-    \section*{Executive Summary}
+    \section{Executive Summary}
     \vspace{10mm}
         \subsection{Background}
             Riding the wave of "IoT Revolution" \cite{Forbes}, this project will develop
@@ -157,8 +157,8 @@
         coupled with a small budget of roughly \$100-\$200 to purchase all required equipment which currently
         is expected to be:
         \begin{itemize}
-            \item Arduino UNO3 Microcontroller
-            \item ESP8266 boards
+            \item Arduino UNO3 Microcontroller\cite{UNO3}
+            \item ESP8266 boards\cite{ESP8266}
             \item DHT11 Temperature and Humidity sensors\cite{DHT11}
             \item XC-4444 PIR Motion sensors\cite{XC-4444}
             \item Various required breadboards / generic electronics items
@@ -212,20 +212,6 @@
             concurrently developed sub-sections:
             \\
             \begin{legal}
-                \item Sensors:
-                \begin{legal}
-                    \item Sensor proof of concept implementation (serial to USB)
-                    \item Testing of POC
-                    \item Sensor and Wifi Implementation
-                    \item Testing of Sensor and Wifi implementation
-                    \item Sensor to API communication including:
-                    \begin{legal}
-                        \item Implementation and testing of Temperature logging
-                        \item Implementation and testing of Humidity logging
-                        \item Implementation and testing of Motion logging
-                        \item Testing of Sensor to API communication
-                    \end{legal}
-                \end{legal}
                 \item Database:
                 \begin{legal}
                     \item Database Pilot (Including creation and design)
@@ -266,6 +252,30 @@
                     \item Final peer review and refactor
                 \end{legal}
                 \newpage
+                \item Sensors:
+                \begin{legal}
+                    \item Pilot testing of potential boards (UNO3\cite{UNO3} / ESP\cite{ESP8266} / RPI\cite{RPI} / OPI\cite{OPI})
+                    \begin{legal}
+                        \item Code feasability report on each board, considerations on support from community 
+                        and team ability
+                        \item Review of boards and decision on main boards to use
+                    \end{legal}
+                    \item Implement monitoring for chosen metrics:
+                    \begin{legal}
+                        \item Temperature
+                        \item Humidity
+                        \item Motion
+                    \end{legal}
+                    \item Implement networking on boards
+                    \begin{legal}
+                        \item Determine viability of WPA2-Enterprise connectivity
+                    \end{legal}
+                    \item Implement json generation on boards
+                    \item Implement PING request functionality to check web server is up or not
+                    \item Test API communication
+                    \item Design and print 3D case for boards
+                    \item Deploy boards to various locations
+                \end{legal}
                 \item Documentation
                 \begin{legal}
                     \item Generate POC documentation from project
@@ -338,7 +348,6 @@
                 \item Visual studio to develop the front and back-ends of the web application. 
                 \item Visual Studio Code to develop elements of the front-end
                 \item Arduino IDE software for editing/flashing the boards in C/C++.
-                \item 
             \end{itemize}
 
     \newpage
@@ -385,6 +394,15 @@
             \url{https://www.mozilla.org/en-US/firefox/}
         \bibitem{Chromium}
             \url{https://www.chromium.org/}
+        \bibitem{RPI}
+            \url{https://www.raspberrypi.org/}
+        \bibitem{OPI}
+            \url{http://www.orangepi.org/}
+        \bibitem{DevelopmentResources}
+            Development resources:
+            \begin{center}
+                \includegraphics[width=400px]{Images/DevelopmentResources.jpg}
+            \end{center}
     \end{thebibliography}
 
     \end{document}
