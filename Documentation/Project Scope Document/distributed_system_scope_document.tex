@@ -102,9 +102,10 @@
 
     \graphicspath{ {Images/} }
 
-    \title{\textbf{INFT3970 Major Project Scope Document \protect\\
-    Distributed Monitoring System using Embedded Devices}}
+    \title{INFT3970 Major Project Scope Document \protect\\
+    Distributed Monitoring System using Embedded Devices}
     \author{
+        Team Encore\\
         Jay Rovacsek
         \texttt{c3146220@uon.edu.au}\\
         Dean Morton
@@ -196,6 +197,7 @@
                 impact of room utilisation.
 
     \newpage
+    \AddToShipoutPicture{\nesbackgroundimage}
 
     \section{Business Needs}
         As suggested in the executive summary and project background, the IoT market is expected 
@@ -229,6 +231,8 @@
 
             \newpage
 
+            \AddToShipoutPicture{\whitebackgroundimage}
+
             Given time constraints we need to accept that the design of centralised 
             servers hosted within Azure achieves the same ability to serve the user information and maintain connectivity as required, but is more failable:
 
@@ -255,7 +259,6 @@
 
     \newpage
     \AddToShipoutPicture{\leadbackgroundimage}
-
 
     \section{Project Objectives}
         Within the timeframe still available to this project, we aim to develop and deploy a number of 
@@ -362,9 +365,8 @@
         \end{center}
 
         \newpage
-
-            Otherwise milestones for the project include are split into a number of 
-            concurrently developed sub-sections:
+            Otherwise milestones for the project include are split into a number 
+            of concurrently developed sub-sections:
             \\
             \begin{legal}
                 \item Database:
@@ -473,7 +475,7 @@
             Requirements for raw data be stored in an online database are only access
             for the development resources to be able to access any suitable cloud account, 
             self-host on a local machine or debug required functions in the application with 
-            localised data generation via ajax queries of similar methods.
+            localised data generation via ajax\cite{AJAX} queries of similar methods.
             
             \subsubsection{Azure}
                 Azure is a likely candidate for the Database and website hosting, The database will be used to store 
@@ -617,6 +619,8 @@
         \bibitem{Unsplash}
             Unsplash Website:
             \url{https://unsplash.com}
+        \bibitem{AJAX}
+            \url{https://api.jquery.com/jQuery.ajax/}
         \bibitem{DevelopmentResources}
             Development resources:
             \begin{center}
