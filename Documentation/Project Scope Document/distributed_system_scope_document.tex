@@ -1,23 +1,24 @@
 \documentclass{article}
     \usepackage{url}
-    \usepackage[margin=1.0in]{geometry}
     \usepackage{cite}    
+    \usepackage{xcolor}
+    \usepackage{lscape}
     \usepackage{amssymb}
-    \usepackage{enumerate}
+    \usepackage{titling}
+    \usepackage{pdfpages}
     \usepackage{enumitem}
     \usepackage{graphicx}
-    \usepackage{xcolor}
-    \usepackage{pdfpages}
     \usepackage{hyperref}
     \usepackage{listings}
     \usepackage{fancybox}
-    \usepackage{lstautogobble}
-    \usepackage{titling}
+    \usepackage{enumerate}
     \usepackage{pdflscape}
     \usepackage{afterpage}
+    \usepackage{lstautogobble}
+    \usepackage[margin=0.8in]{geometry}
     \usepackage[nottoc,notlot,notlof]{tocbibind}
-    \renewcommand\maketitlehooka{\null\mbox{}\vfill}
     \renewcommand\maketitlehookd{\vfill\null}
+    \renewcommand\maketitlehooka{\null\mbox{}\vfill}
 
     \newcommand\arduinobackgroundimage{
         \put(-5,0){
@@ -100,6 +101,8 @@
         \vfill
     }}}
 
+    \newcounter{num}
+
     \graphicspath{ {Images/} }
 
     \title{INFT3970 Major Project Scope Document \protect\\
@@ -165,7 +168,7 @@
             this trend also\cite{SunNews}.
             \\
             Citing this movement, it would only be logical to create a simple to use set of devices 
-            that allow for the monitoring and therefore optimisation of such measurables.
+            that allow for the monitoring of such measurables.
         \vspace{5mm}
         \subsection{Overview and Purpose}
             The concept of this project is to create a distributed system in which small 
@@ -177,7 +180,6 @@
             be on a precipice of further explosive growth, with the consumer market partially
             realised, but far from tapped by curent offerings.
             \par\noindent
-            In this document we intend 
             \subsubsection{Metrics}
                 The metrics measured included will be: 
                 \begin{itemize}
@@ -199,15 +201,22 @@
     \newpage
     \AddToShipoutPicture{\nesbackgroundimage}
 
-    \section{Business Needs}
+    \section{Business Needs/Problems}
         As suggested in the executive summary and project background, the IoT market is expected 
-        to rapidly grow in not only the current year but a number of future years to come. Accessibility and ease of use being major factors spurring the market into the current 
+        to rapidly grow in not only the current year but a number of future years to come. 
+        Accessibility and ease of use being major factors spurring the market into the current 
         state.
         \\
         This project aims to fill some of the gaps that exist within the expanding world of IoT
         by allowing end users irrespective of technological capability to easily partake in the 
         current market at a price position that doesn't reflect excessive or overly expensive 
         alternatives that exist.
+        \\
+        As individuals within the project, we recognise the hurdles that would need to be jumped
+        in order to prove this potentially to be a business viable product, so instead we elect
+        to suggest that this project instead could allow a level of federation for the maker-space
+        and allow the product instead to be documented for open-sourcing into the future potentially
+        or to accept donations as a labour of love.
 
         \subsection{Azure Hosting}
             Currently without extenuating circumstances against hosting within the cloud the
@@ -248,25 +257,37 @@
             the user hosted microservers that would act as middleware between
             the hosted servers and the sensors, this is a highly viable goal given
             technologies such as the RaspberryPi\cite{RPI} which under \$50AUD 
-            can a number of Linux distributions or Windows IoT Core platform.
+            can a number of Linux distributions or Windows IoT Core platform however
+            time will likely limit ability for us to consider this route, and therefore
+            we have decided against including the concept in this project.
         
-        \subsection{WLAN v Zigbee}
-            Considerations to implement the network of devices was considered however given the requirement to purchase and implement a module
+        \subsection{Wi-Fi vs Zigbee}
+            Considerations to implement the network of devices was considered however 
+            given the requirement to purchase and implement a module
             to enable use of Zigbee, conventional WEP/WPA/WPA2 network options 
-            were perfered. Both conventional WLAN networks and Zigbee would allow
-            meshability between devices, requiring less of an impact on the user's
-            network in a mixture of DHCP leases and wireless network congestion.
+            were perfered. Both conventional Wi-Fi networks and Zigbee would allow
+            meshability between devices, however Zigbee would prove less of an impact on the user's
+            network in the form of mixture of DHCP leases and wireless network congestion avoided.
 
     \newpage
+        \subsection{Privacy Issues}
+        We recognise the collection of such personal data not only increases the attack surface for 
+        privacy conscious individuals, but erodes privacy barriers that should be upheld. GDPR\cite{GDPR} compliance
+        will be attempted to be upheld in this project, breach notification, right to access, 
+        right to be forgotten and data portability (in the form of a user being able to download their
+        own data) will be offered where possible.
+        Furthermore to avoid various attacks against privacy such as Record linkage, attribute linkage or
+        table linkage (less severe in this case) data that is related to multiple parties will be 
+        anonymised where possible and not a hinderance to the project's scoped objectives.\cite{PrivacyAttacks}
+
     \AddToShipoutPicture{\leadbackgroundimage}
 
     \section{Project Objectives}
         Within the timeframe still available to this project, we aim to develop and deploy a number of 
         IoT devices\cite{ESP8266} to a home enviroment or two and to track heat, humidity and motion of the
         dwelling to better understand the potential correlations of room use, heating and potential 
-        inefficiencies created in areas such as 'High Traffic' spots (Loungerooms and Hallways)
-        \\
-        Optimally we ain to couple this with a mapping of the dwelling, allowing a more intuitive expression 
+        inefficiencies created in areas such as 'High Traffic' spots (loungerooms and hallways).
+        Optimally we aim to couple this with a mapping of the dwelling, allowing a more intuitive expression 
         of the data collected.
         \par
         We intend on using student subscriptions to leverage Azure for both website hosting and databasing 
@@ -280,18 +301,19 @@
             \item Various required breadboards / generic electronics items
         \end{itemize}
 
-        The overall goals of the project is to enhance our knowledge of of IOT sensor technology in the scope of exploratoring what this technology can achieve and expanding the paradigm of this technologies implementations. 
+        The overall goals of the project is to enhance our knowledge of of IOT sensor 
+        technology in the scope of exploratoring what this technology 
+        can achieve and expanding the paradigm of this technologies implementations. 
         \par
-        Secondarily the group seeks to develop our ability to interface with middleware using a number of appropriate languages to create a frontend user interface for users to monitor/operate and perform data analytics on the system and a backend for data management system that interfaces with an SQL server implementation. 
-        \par
-        We intend in this project to showcase out abilities while expanding our capabilities and have an aim to deliver a prototype by week 9.
+        Secondarily the group seeks to develop our ability to interface with middleware 
+        using a number of appropriate languages to create a frontend user interface 
+        for users to monitor/operate and perform data analytics on the system and a 
+        backend for data management system that interfaces with an SQL server implementation. 
 
-        \newpage
-        \AddToShipoutPicture{\dronebackgroundimage}
         \section{Deliverables}
             The deliverables that are expected to be produced throughout the distributed monitoring system are broken into Four sections; Sensors, Database, UI and 
             analytics.
-            \subsubsection{Sensors}
+            \subsection{Sensors}
             \begin{itemize}
                 \item Humidity Sensor can be created.
                 \item Temperature Sensor can be created.
@@ -300,6 +322,9 @@
                 \item Sensors ownership can be modified.
                 \item Sensors cav connect to any 2.4gHz home network.
             \end{itemize}
+
+            \newpage
+            \AddToShipoutPicture{\dronebackgroundimage}
 
             \subsection{Database}
             \begin{itemize}
@@ -317,10 +342,6 @@
                 \item Email verification upon account creation
                 \item Procedures and triggers for data analysis and querying 
             \end{itemize}
-            
-            \newpage
-
-            \AddToShipoutPicture{\whitebackgroundimage}
 
             \subsection{User Interface}
             \begin{itemize}
@@ -338,11 +359,26 @@
                 \item Logout Page.
             \end{itemize}
 
+            \newpage
+
+            \AddToShipoutPicture{\whitebackgroundimage}
+
             \subsection{Data Analytics}
             \begin{itemize}
                 \item Administration able to view user data that has been depersonalised.
-                \item Display Recommendations and habits to the User.
-                \item Showing different trends around a user’s house using the different modules.
+                \item Display Recommendations to the user based on trends.
+                \item Showing different trends around a user’s home using the different modules.
+                \item Visibility of outlier data.
+                \item Make recommendations on when to use heating or cooling in rooms.
+                \item Determine if applicances may have been left on or utilised when not required
+                      and prompt user.
+                \item Meta-Analytics including:
+                \begin{itemize}
+                    \item Average temperature/humidity.
+                    \item Average events for motion sensors.
+                    \item Determine localised trends
+                \end{itemize}
+                \item Determine expected trends and flag or notify of extreme outliers.
             \end{itemize}
             \noindent
             Having a Data Analytics major within our group we expect the data collected may contain interesting information. \\
@@ -363,88 +399,23 @@
         \begin{center}
             \includegraphics[width=300px]{Images/Milestones.jpg}
         \end{center}
-
-        \newpage
-            Otherwise milestones for the project include are split into a number 
-            of concurrently developed sub-sections:
-            \\
-            \begin{legal}
-                \item Database:
-                \begin{legal}
-                    \item Database Pilot (Including creation and design)
-                    \item Review and Testing of Database
-                    \item Optimisation of datatypes used in each table
-                    \item Implementation of indexing and other optimisations to avoid big O issues.
-                    \item Final database implementation.
-                \end{legal}
-                \item Backend:
-                \begin{legal}
-                    \item Decision of framework to be used
-                    \item Initial POC on framework
-                    \item Feature implementations: 
-                    \begin{legal}
-                        \item Implementation of PING GET endpoint to avoid sending of data unnecessarily
-                        \item Implementation and testing of POST endpoints:
-                        \begin{legal}
-                            \item Temperature
-                            \item Humidity
-                            \item Motion
-                        \end{legal}
-                        \item Implementation and testing of application helpers to aid front-end data sourcing
-                    \end{legal}
-                    \item Refactor existing code
-                    \begin{legal}
-                        \item Peer review of code, implementation of required changes
-                    \end{legal}
-                \end{legal}
-                \item Front End:
-                \begin{legal}
-                    \item Initial implementation of POC dashboard
-                    \item Initial POC of authentication using a login page
-                    \item Review of code by peers
-                    \item Migrate dashboard behind successful login page
-                    \item Improvements and refactoring of dashboarding code
-                    \item Review and refactor to suit all devices commonly used to browse websites.
-                    \item Implement required bootstrap/css framework to handle display of data.
-                    \item Final peer review and refactor
-                \end{legal}
-                \newpage
-                \item Sensors:
-                \begin{legal}
-                    \item Pilot testing of potential boards (UNO3\cite{UNO3} / ESP\cite{ESP8266} / RPI\cite{RPI} / OPI\cite{OPI})
-                    \begin{legal}
-                        \item Code feasability report on each board, considerations on support from community 
-                        and team ability
-                        \item Review of boards and decision on main boards to use
-                    \end{legal}
-                    \item Implement monitoring for chosen metrics:
-                    \begin{legal}
-                        \item Temperature
-                        \item Humidity
-                        \item Motion
-                    \end{legal}
-                    \item Implement networking on boards
-                    \begin{legal}
-                        \item Determine viability of WPA2-Enterprise connectivity
-                    \end{legal}
-                    \item Implement json generation on boards
-                    \item Implement PING request functionality to check web server is up or not
-                    \item Test API communication
-                    \item Design and print 3D case for boards
-                    \item Deploy boards to various locations
-                \end{legal}
-                \item Documentation
-                \begin{legal}
-                    \item Generate POC documentation from project
-                    \item Generate scope document
-                    \item Comment code extensively for readability
-                    \item Document APIs
-                    \item Document database design, with considerations of optimisation and required modifications
-                    \item Generate user guide for final product
-                    \item Generate final report
-                \end{legal}
-            \end{legal}
-
+        An extended list of milestones on expected completion times for tasks is included in the proceeding pages.
+        \\
+        For a full gantt char, please refer to the apendix.
+        \begin{landscape}
+            \begin{center}
+                \includegraphics[
+                    width=\paperheight-116pt,
+                    keepaspectratio,
+                    page=1]
+                {Resources/ProjectTasks.pdf}
+                \includegraphics[
+                    width=\paperheight-116pt,
+                    keepaspectratio,
+                    page=2]
+                {Resources/ProjectTasks.pdf}
+            \end{center}
+        \end{landscape}
         \newpage
         \AddToShipoutPicture{\makerbackgroundimage}
 
@@ -452,7 +423,7 @@
         Key roles defined for the project include the below:
         \vspace{10mm}
         \begin{center}
-            \includegraphics[width=\textwidth]{Images/KeyRoles.jpg}
+            \includegraphics[width=\textwidth-70pt]{Images/KeyRoles.jpg}
         \end{center}
     \newpage
 
@@ -507,8 +478,6 @@
             third party javascript libraries are likely to be used and cannot be assured to function under such 
             enviroments including modification or blocking of traffic/assets.
         
-        \newpage
-
         \subsection{Development Requirements\cite{DevelopmentResources}}
             A number of softwares will be required by the development team in order to complete the project,
             these softwares may include:
@@ -526,7 +495,6 @@
         It is important to acknowledge the limitations of this project, given that this project is taking place 
         in a compressed format it will primarily be an exploratory exercise in IOT sensor technology and its 
         ability to interface with middleware, frontend/backend and an SQL server implementation.
-        \vspace{10mm}
         In order to managing expectations we are primary focused on heat,humidity and motion, this proof of 
         concept implementation reduces the risk of under delivering on expectations.
         
@@ -620,15 +588,74 @@
             Unsplash Website:
             \url{https://unsplash.com}
         \bibitem{AJAX}
+            jQuery API calls with AJAX
             \url{https://api.jquery.com/jQuery.ajax/}
+        \bibitem{PrivacyAttacks}
+            Prof Ljiljana Brankovic, University Of Newcastle \textit{COMP3260} Data Security
+        
+        \newpage
+
+        \bibitem{GDPR}
+            Information page: GDPR
+            \url{https://www.eugdpr.org}
         \bibitem{DevelopmentResources}
             Development resources:
             \begin{center}
                 \includegraphics[width=400px]{Images/DevelopmentResources.jpg}
             \end{center}
     \end{thebibliography}
+    All image backgrounds are images from Unsplash, a provider of free and openly licensed images\cite{Unsplash}
+    \vspace{5mm}
+    All code hosted both locally and an origin repository maintained in Github:
+    \begin{itemize}
+        \item Web Application code: \url{https://github.com/JayRovacsek/INFT3970}
+        \item Database code: \url{https://github.com/JayRovacsek/INFT3970-DB}
+        \item Sensor code: \url{https://github.com/JayRovacsek/INFT3970-Sensors}
+    \end{itemize}
+    Access to the private repositories can be organised, at the completion of the course if no members
+    object we will move the repositories to an open status.
 
-    All image backgrounds are images from Unsplash, a provider of free and openly
-    licensed images\cite{Unsplash}
+    \begin{landscape}
+        \section{Appendix}
+        \begin{center}
+            \includegraphics[
+                width=\paperheight-140pt,
+                keepaspectratio,
+                page=1]
+            {Resources/Gantt.pdf}
+            \newpage
+            \includegraphics[
+                width=\paperheight-116pt,
+                keepaspectratio,
+                page=2]
+            {Resources/Gantt.pdf}
+            \newpage
+            \includegraphics[
+                width=\paperheight-116pt,
+                keepaspectratio,
+                page=3]
+            {Resources/Gantt.pdf}
+            \newpage
+            \includegraphics[
+                width=\paperheight-116pt,
+                keepaspectratio,
+                page=4]
+            {Resources/Gantt.pdf}
+            \newpage
+            \includegraphics[
+                width=\paperheight-116pt,
+                keepaspectratio,
+                page=5]
+            {Resources/Gantt.pdf}
+            \newpage
+            \includegraphics[
+                width=\paperheight-116pt,
+                keepaspectratio,
+                page=6]
+            {Resources/Gantt.pdf}
+            \newpage
+        \end{center}
+    \end{landscape}
+
 
     \end{document}
