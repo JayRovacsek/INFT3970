@@ -73,6 +73,15 @@
         \vfill
     }}}
 
+    \newcommand\nesbackgroundimage{
+        \put(-5,0){
+        \parbox[b][\paperheight]{\paperwidth+5px}{
+        \vfill
+        \centering
+        \includegraphics[height=\paperheight]{Images/NES.jpg}
+        \vfill
+    }}}
+
     \newcommand\makerbackgroundimage{
         \put(-5,0){
         \parbox[b][\paperheight]{\paperwidth}{
@@ -137,7 +146,7 @@
     
     \newpage
 
-    \AddToShipoutPicture{\whitebackgroundimage}
+    \AddToShipoutPicture{\unobackgroundimage}
 
     \section{Executive Summary}
         \subsection{Background}
@@ -561,40 +570,61 @@
     \begin{thebibliography}{9}
         \raggedright
         \bibitem{Forbes}
+            Forbes article: Top 8 IoT trends of 2018:
             \url{https://www.forbes.com/sites/danielnewman/2017/12/19/the-top-8-iot-trends-for-2018/}
         \bibitem{Mckinsey}
+            Mckinsey article: Value of digitizing the physical world:
             \url{https://www.mckinsey.com/business-functions/digital-mckinsey/our-insights/the-internet-of-things-the-value-of-digitizing-the-physical-world}
         \bibitem{SunNews}
+            Sun News article: China; Largest Renewables Producer:
             \url{http://sunnewsonline.com/china-is-worlds-largest-renewable-energy-producer-consumer/}
         \bibitem{ESP8266}
+            ESP8266 Information Page:
             \url{http://esp8266.net/}
         \bibitem{XC-4444}
+            Jaycar XC-4444 Datasheet:
             \url{https://www.jaycar.com.au/medias/sys_master/images/9105858396190/XC4444-dataSheetMain.pdf}
         \bibitem{DHT11}
+            Jaycar Resources; DHT11 Datasheet:
             \url{https://www.jaycar.com.au/medias/sys_master/images/9091897786398/XC4520-dataSheetMain.zip}
         \bibitem{DotNetCore2}
+            .NETCore SDK Download Page:
             \url{https://www.microsoft.com/net/download}
         \bibitem{TSQL}
+            TSQL Server Download Page:
             \url{https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-2017}
         \bibitem{AzureUptime}
+            Azure Uptime SLA:
             \url{https://azure.microsoft.com/en-au/support/legal/sla/app-service/v1_4/}
         \bibitem{UNO3}
+            Arduino UNO3 Store Page:
             \url{https://store.arduino.cc/usa/arduino-uno-rev3/}
         \bibitem{Firefox}
+            Firefox:
             \url{https://www.mozilla.org/en-US/firefox/}
         \bibitem{Chromium}
+            Chromium:
             \url{https://www.chromium.org/}
         \bibitem{RPI}
+            RaspberryPi Organisation Page:
             \url{https://www.raspberrypi.org/}
         \bibitem{OPI}
+            OrangePi Website:
             \url{http://www.orangepi.org/}
         \bibitem{SpectreAndMeltdown}
+            Spectre and Meltdown explaination page:
             \url{https://meltdownattack.com/}
+        \bibitem{Unsplash}
+            Unsplash Website:
+            \url{https://unsplash.com}
         \bibitem{DevelopmentResources}
             Development resources:
             \begin{center}
                 \includegraphics[width=400px]{Images/DevelopmentResources.jpg}
             \end{center}
     \end{thebibliography}
+
+    All image backgrounds are images from Unsplash, a provider of free and openly
+    licensed images\cite{Unsplash}
 
     \end{document}
