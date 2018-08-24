@@ -154,6 +154,23 @@
 
     \section{Executive Summary}
         \subsection{Background}
+            As technology is integrated further into society, a knowledge of sensor technology will be 
+            seminal for the IT professional. Computation devices are becoming extensions of our senses and 
+            in this vein becoming indispensable. Starting in the health services industry black box solutions 
+            have run medical devices for over a decade. In the contemporary setting we can observe mining trucks 
+            that are driverless, driverless car incubation projects and robots that perform operations 
+            like the davinci\cite{ForbesBernardmarr}\cite{ForbesAndrewwarnold}.
+            \vspace{5mm}
+            One thing these devices all have in common is the extensive use of sensor technology. 
+            Furthermore, these sensors are extending our sense-making ability into areas that the 
+            human race has never experienced before, infrared and ultraviolet sensors in remote 
+            controls give us the ability to control devices without physical intervention. Phones 
+            with accelerometers can be combined with a gyroscopes for games and movement tracking. 
+            Barometric sensors are implemented to measure atmospheric pressure and forecast short 
+            term changes in the weather. Sensors can now measure heart rate and health telemetry 
+            which will be a trillion dollar industry in the future. Even simple sensors such as 
+            temperature, humidity, motion can be employed to create analytics for the home. 
+            \vspace{5mm}
             Riding the wave of "IoT Revolution" \cite{Forbes}, this project will develop
             a low cost, easily deployable IoT product in any setting.
             \\
@@ -230,12 +247,12 @@
             system design such as below is not suitable in the timeframe:
             \vspace{10mm}
             \begin{center}
-                \includegraphics[width=350px]{Images/OptimalSystemDiagram.jpg}
+                \includegraphics[width=270pt]{Images/OptimalSystemDiagram.jpg}
             \end{center}
             Such a design would allow for users to maintain connectivity from their 
             own LAN:
             \begin{center}
-                \includegraphics[width=350px]{Images/OptimalSystemDiagramAlternate.jpg}
+                \includegraphics[width=270pt]{Images/OptimalSystemDiagramAlternate.jpg}
             \end{center}
 
             \newpage
@@ -246,11 +263,11 @@
             servers hosted within Azure achieves the same ability to serve the user information and maintain connectivity as required, but is more failable:
 
             \begin{center}
-                \includegraphics[width=350px]{Images/CurrentSystemDiagram.jpg}
+                \includegraphics[width=270pt]{Images/CurrentSystemDiagram.jpg}
             \end{center}
             In a network failure situation:
             \begin{center}
-                \includegraphics[width=350px]{Images/CurrentSystemDiagramAlternate.jpg}
+                \includegraphics[width=270pt]{Images/CurrentSystemDiagramAlternate.jpg}
             \end{center}
 
             Optimally the scope of the project would be expanded to development of
@@ -269,7 +286,6 @@
             meshability between devices, however Zigbee would prove less of an impact on the user's
             network in the form of mixture of DHCP leases and wireless network congestion avoided.
 
-    \newpage
         \subsection{Privacy Issues}
         We recognise the collection of such personal data not only increases the attack surface for 
         privacy conscious individuals, but erodes privacy barriers that should be upheld. GDPR\cite{GDPR} compliance
@@ -280,6 +296,7 @@
         table linkage (less severe in this case) data that is related to multiple parties will be 
         anonymised where possible and not a hinderance to the project's scoped objectives.\cite{PrivacyAttacks}
 
+    \newpage
     \AddToShipoutPicture{\leadbackgroundimage}
 
     \section{Project Objectives}
@@ -301,7 +318,7 @@
             \item Various required breadboards / generic electronics items
         \end{itemize}
 
-        The overall goals of the project is to enhance our knowledge of of IOT sensor 
+        The overall goals of the project is to enhance our knowledge of IOT sensor 
         technology in the scope of exploratoring what this technology 
         can achieve and expanding the paradigm of this technologies implementations. 
         \par
@@ -309,53 +326,61 @@
         using a number of appropriate languages to create a frontend user interface 
         for users to monitor/operate and perform data analytics on the system and a 
         backend for data management system that interfaces with an SQL server implementation. 
+        
+        \newpage
+        \AddToShipoutPicture{\dronebackgroundimage}
 
         \section{Deliverables}
             The deliverables that are expected to be produced throughout the distributed monitoring system are broken into Four sections; Sensors, Database, UI and 
             analytics.
             \subsection{Sensors}
             \begin{itemize}
-                \item Humidity Sensor can be created.
-                \item Temperature Sensor can be created.
-                \item Motion Sensor can be created.
+                \item Sensors are created to read temperature.
+                \item Sensors are created to read humidity.
+                \item Sensors are created to read motion.
                 \item Sensors can be reprogrammed with different modules (Or have all modules avilable).
-                \item Sensors ownership can be modified.
+                \item Sensor ownership can be modified.
                 \item Sensors cav connect to any 2.4gHz home network.
             \end{itemize}
-
-            \newpage
-            \AddToShipoutPicture{\dronebackgroundimage}
 
             \subsection{Database}
             \begin{itemize}
                 \item A new user account can be created.
                 \item A new sensor can be registered.
-                \item An admin can access user’s information (password hashed + salted)
+                \item A newly registered sensor can create data on first boot.
+                \item An admin can access user’s information (password hashed + salted).
                 \item A user record can be edited.
                 \item A sensor can be assigned to a user account.
                 \item A sensor can be deleted from a user’s account.
                 \item A sensor’s details can be edited.
-                \item An admin can view raw data from all tables.
+                \item An admin can view raw data from all tables (Depersonalised data).
                 \item An admin can edit data from tables.
-                \item Password can be changed
-                \item Email will be sent for resetting a forgotten password
-                \item Email verification upon account creation
-                \item Procedures and triggers for data analysis and querying 
+                \item Password can be changed.
+                \item Email will be sent for resetting a forgotten password.
+                \item Email verification upon account creation.
+                \item Procedures and triggers for data analysis and querying.
             \end{itemize}
+            A full prototype EER diagram can be found in the \hyperref[sec:Appendix]{Appendix}
+            
+            \newpage
 
             \subsection{User Interface}
             \begin{itemize}
-                \item Login page for Users.
-                \item Registration page for Users.
+                \item Login page for users.
+                \item Registration page for users.
                 \item Home page (Displaying an overview).
-                \item Temperature page.
-                \item Humidity page.
-                \item Motion page.
+                \item Tabbed pages for: 
+                    \begin{itemize}
+                        \item Temperature page.
+                        \item Humidity page.
+                        \item Motion page.
+                    \end{itemize}
                 \item User able to access associated data.
                 \item Graphs based on the user data.
-                \item User able to customise graphs and Home page layout.
+                \item User able to customise graphs and home page layout.
                 \item Custom Analytic results.
                 \item Email Suggestions section.
+                \item Password reset section.
                 \item Logout Page.
             \end{itemize}
 
@@ -401,7 +426,7 @@
         \end{center}
         An extended list of milestones on expected completion times for tasks is included in the proceeding pages.
         \\
-        For a full gantt char, please refer to the apendix.
+        For a full gantt chart, please refer to the \hyperref[sec:Appendix]{Appendix}
         \begin{landscape}
             \begin{center}
                 \includegraphics[
@@ -595,6 +620,10 @@
         
         \newpage
 
+        \bibitem{ForbesBernardmarr}
+            \url{https://www.forbes.com/sites/bernardmarr/2017/11/06/the-future-of-the-transport-industry-iot-big-data-ai-and-autonomous-vehicles/#403857061137}
+        \bibitem{ForbesAndrewwarnold}
+            \url{https://www.forbes.com/sites/danielnewman/2017/12/19/the-top-8-iot-trends-for-2018/}
         \bibitem{GDPR}
             Information page: GDPR
             \url{https://www.eugdpr.org}
@@ -617,6 +646,7 @@
 
     \begin{landscape}
         \section{Appendix}
+        \label{sec:Appendix}
         \begin{center}
             \includegraphics[
                 width=\paperheight-140pt,
