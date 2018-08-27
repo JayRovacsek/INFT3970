@@ -34,7 +34,6 @@ namespace INFT3970Project.Controllers
         public HttpResponseMessage Create([FromBody] HumidityModel model)
         {
             HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.Created);
-
             try
             {
                 model.Timestamp = DateTime.Now;

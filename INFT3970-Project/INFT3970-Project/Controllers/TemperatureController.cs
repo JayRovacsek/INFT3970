@@ -34,6 +34,11 @@ namespace INFT3970Project.Controllers
         {
             HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.Created);
 
+            if(model == null)
+            {
+                response.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                return response;
+            }
             try
             {
                 model.Timestamp = DateTime.Now;
