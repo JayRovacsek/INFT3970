@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
+using System.Security.Cryptography;
 
 namespace INFT3970Project.Helpers
 {
@@ -98,7 +99,56 @@ namespace INFT3970Project.Helpers
                     await result;
                 }
             }
+        }
 
+        /// <summary>
+        /// Implementation of SHA512 hash function over a password input
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public string HashAndSalt(string username, string password)
+        {
+            string salt = null;
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                SqlCommand query = new SqlCommand($@"SELECT Salt FROM CustomerPassword p
+                                                    INNER JOIN Customer c ON
+                                                        c.CustomerID = p.CustomerID
+                                                    WHERE c.Email = @Username");
+                query.Parameters.AddWithValue("@Username", username);
+                salt = _databaseHelper.Connection.Query<string>(query.ToString()).FirstOrDefault();
+            }
+            string input = salt + password;
+            using (SHA512 shaHash = new SHA512Managed())
+            {
+                var data = Encoding.UTF8.GetBytes(input);
+                return shaHash.ComputeHash(data).ToString();
+            }
+        }
+
+        public bool Authenticate(string username, string password)
+        {
+            string saltedInput = HashAndSalt(username,password);
+            try
+            {
+                using (var _databaseHelper = new DatabaseHelper(configuration))
+                {
+                    SqlCommand query = new SqlCommand($@"SELECT CASE WHEN COUNT(1) > 0 THEN 1 ELSE 0 END AS [Value]
+                                                    FROM Customer c
+                                                    INNER JOIN CustomerPassword p ON
+                                                        c.CustomerID = p.CustomerID
+                                                    WHERE p.Password = @HashedInput and c.Email = @Username");
+                    query.Parameters.AddWithValue("@HashedInput", saltedInput);
+                    query.Parameters.AddWithValue("@Username", username);
+                    var result = _databaseHelper.Connection.ExecuteAsync(query.ToString());
+                    return Convert.ToBoolean(result);
+                }
+            }
+            catch(Exception exception)
+            {
+                // Need to add logger here.
+                return false;
+            }
         }
 
 
