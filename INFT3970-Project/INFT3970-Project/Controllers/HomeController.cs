@@ -28,6 +28,20 @@ namespace INFT3970Project.Controllers
 
             return View();
         }
+        public IActionResult LogIn()
+        {
+            ViewData["Message"] = "Please enter your login details.";
+
+            return View();
+        }
+
+        public IActionResult Register()
+        {
+            ViewData["Message"] = "Please enter your details.";
+
+            return View();
+        }
+
 
         public IActionResult Error()
         {
