@@ -26,7 +26,8 @@
 
         <div class="formcontainer" style="background-color:#f1f1f1">
             <button type="button" class="cancelbtn">Cancel</button>
-            <span class="psw"> <a asp-action="Register">Register</a></span>
+            <button class="btn btn-info" type="button" id="register"
+                    onclick="location.href='@Url.Action("Index", "Register")'">Register</button>
             <span class="psw">Forgot <a href="#">password?</a></span>
         </div>
     </div>

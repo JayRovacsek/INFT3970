@@ -207,5 +207,10 @@ namespace INFT3970Project.Helpers
                 return results;
             }
         }
+
+        public bool RegisterAccount(string username, string password)
+        {
+            return false;
+        }
     }
 }
