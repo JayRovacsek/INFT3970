@@ -8,7 +8,6 @@ namespace INFT3970Project.Models
 {
     public class MasterModel
     {
-        [Required]
         public int Id { get; set; }
         public DateTime Timestamp { get; set; }
     }

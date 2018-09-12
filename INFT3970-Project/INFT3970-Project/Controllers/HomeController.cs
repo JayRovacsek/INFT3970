@@ -35,14 +35,6 @@ namespace INFT3970Project.Controllers
             return View();
         }
 
-        public IActionResult Register()
-        {
-            ViewData["Message"] = "Please enter your details.";
-
-            return View();
-        }
-
-
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
