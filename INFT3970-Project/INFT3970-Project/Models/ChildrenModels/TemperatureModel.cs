@@ -8,7 +8,6 @@ namespace INFT3970Project.Models
 {
     public class TemperatureModel : MasterModel
     {
-        [Required]
         public double Temperature { get; set; }
     }
 }

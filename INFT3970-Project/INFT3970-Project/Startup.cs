@@ -59,8 +59,11 @@ namespace INFT3970_Project
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
                 routes.MapRoute(
-                    name: "temperature",
-                    template: "{controller=Temperature}/{action=Index}/{id?}");
+                    name: "register",
+                    template: "{controller=Register}/{action=Index}/{id?}");
+                //routes.MapRoute(
+                //    name: "temperature",
+                //    template: "{controller=Temperature}/{action=Index}/{id?}");
             });
         }
     }
