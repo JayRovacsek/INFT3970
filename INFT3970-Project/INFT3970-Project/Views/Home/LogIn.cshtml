@@ -1,4 +1,6 @@
-﻿@{
+﻿@model INFT3970Project.Models.LoginModel
+
+@{
     ViewData["Title"] = "Login";
 }
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,28 +10,14 @@
 <h3>@ViewData["Message"]</h3>
 
 
-<form action="/action_page.php">
+@using (Html.BeginForm("LogIn", "Home", FormMethod.Post))
+{
+    //this needs to be reworked
+    @Html.TextBoxFor(model => model.Username)
+    @Html.ValidationMessageFor(model => model.Username)
+    @Html.TextBoxFor(model => model.Password)
+    @Html.ValidationMessageFor(model => model.Password)
+    <button type="submit">Log In</button>
+}
 
-
-    <div class="formcontainer">
-        <label for="uname"><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" name="uname" required>
-
-        <label for="psw"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="psw" required>
-
-        <button type="submit">Login</button>
-        <label>
-            <input type="checkbox" checked="checked" name="remember"> Remember me
-        </label>
-
-
-        <div class="formcontainer" style="background-color:#f1f1f1">
-            <button type="button" class="cancelbtn">Cancel</button>
-            <button class="btn btn-info" type="button" id="register"
-                    onclick="location.href='@Url.Action("Index", "Register")'">Register</button>
-            <span class="psw">Forgot <a href="#">password?</a></span>
-        </div>
-    </div>
-</form>
 
