@@ -3,13 +3,25 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Dapper;
+using INFT3970Project.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using INFT3970Project.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace INFT3970Project.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IConfiguration configuration;
+        private DatabaseHelper _databaseHelper;
+
+        public HomeController(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+            _databaseHelper = new DatabaseHelper(configuration);
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -28,16 +40,30 @@ namespace INFT3970Project.Controllers
 
             return View();
         }
-        public IActionResult LogIn()
+        public IActionResult LogIn(string username = null, string password = null)
         {
-            ViewData["Message"] = "Please enter your login details.";
+            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(username))
+            {
+                using (var _databaseHelper = new DatabaseHelper(configuration))
+                {
+                    var valid = _databaseHelper.Authenticate(username, password);
 
+                    if (valid)
+                    {
+                        ViewData["Message"] = "Please enter your login details.";
+                        return RedirectToAction("About", "Home");
+                    }
+                }
+            }
+
+            ViewData["Message"] = "Please enter your login details.";
             return View();
+
         }
 
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return RedirectToAction("LogIn", "Home");
         }
     }
 }
