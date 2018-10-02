@@ -123,7 +123,10 @@ namespace INFT3970Project.Helpers
 
                     var response = command.Parameters["@responseMessage"].Value;
 
-                    return Convert.ToBoolean(response);
+                    var success = (response == "Invalid login Details") ? false :
+                        (response == "Wrong Password") ? false : true;
+
+                    return success;
                 }
             }
             catch(Exception exception)
