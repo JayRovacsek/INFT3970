@@ -9,7 +9,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace INFT3970Project.Helpers
 {
@@ -97,60 +96,54 @@ namespace INFT3970Project.Helpers
             }
         }
 
-
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public bool Authenticate(string username, string password)
+        public bool Authenticate(LoginModel model)
         {
-            try
+            if (model.Username != null && model.Password != null)
             {
-                using (var _databaseHelper = new DatabaseHelper(configuration))
+                try
                 {
-                    var command = new SqlCommand
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
                     {
-                        Connection = (SqlConnection)_databaseHelper.Connection,
-                        CommandType = CommandType.StoredProcedure,
-                        CommandText = "dbo.UserLogin"
-                    };
+                        var command = new SqlCommand
+                        {
+                            Connection = (SqlConnection)_databaseHelper.Connection,
+                            CommandType = CommandType.StoredProcedure,
+                            CommandText = "dbo.UserLogin"
+                        };
 
-                    command.Parameters.AddWithValue("@Email", username);
-                    command.Parameters.AddWithValue("@Password", password);
+                        command.Parameters.AddWithValue("@Email", model.Username);
+                        command.Parameters.AddWithValue("@Password", model.Password);
 
-                    SqlParameter output = new SqlParameter("@responseMessage", SqlDbType.VarChar);
-                    output.Direction = ParameterDirection.Output;
-                    output.Size = 255;
-                    command.Parameters.Add(output);
+                        SqlParameter output = new SqlParameter("@responseMessage", SqlDbType.VarChar);
+                        output.Direction = ParameterDirection.Output;
+                        output.Size = 255;
+                        command.Parameters.Add(output);
 
-                    //var par = new SqlParameter("@responseMessage", SqlDbType.VarChar)
-                    //{
-                    //    Direction = ParameterDirection.ReturnValue,
-                    //    Size = 255
-                    //};
-                    //command.Parameters.Add(par);
+                        command.Connection.Open();
+                        command.ExecuteNonQuery();
 
-                    command.Connection.Open();
-                    command.ExecuteNonQuery();
+                        var response = command.Parameters["@responseMessage"].Value;
 
-                    var response = command.Parameters["@responseMessage"].Value;
+                        var valid = (response.ToString() == "Invalid Login Details") ? false :
+                            (response.ToString() == "Wrong Password") ? false : true;
 
-                    var valid = (response.ToString() == "Invalid login Details") ? false :
-                        (response.ToString() == "Wrong Password") ? false : true;
-
-                    return valid;
+                        return valid;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    // Need to add logger here.
+                    // Need to reimplement
+                    return false;
                 }
             }
-            catch(Exception exception)
-            {
-                // Need to add logger here.
-                throw exception;
-                // Need to reimplement
-                return false;
-            }
+            return false;
         }
 
 
