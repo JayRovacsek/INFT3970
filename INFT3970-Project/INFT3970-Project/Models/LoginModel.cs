@@ -9,6 +9,6 @@ namespace INFT3970Project.Models
         public string Username { get; set; }
         [Required]
         public string Password { get; set; }
-        public bool SuccessfulLogin { get; set; }
+        public bool SuccessfulLogin { get; set; } = false;
     }
 }
