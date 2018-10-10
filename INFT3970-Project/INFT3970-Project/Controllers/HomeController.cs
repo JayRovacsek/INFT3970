@@ -40,38 +40,38 @@ namespace INFT3970Project.Controllers
 
             return View();
         }
-        public IActionResult LogIn(string username = null, string password = null)
+        public IActionResult Login(string username = null, string password = null)
         {
             if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(username))
             {
                 using (var _databaseHelper = new DatabaseHelper(configuration))
                 {
-                    var valid = _databaseHelper.Authenticate(username, password);
+                    var valid = _databaseHelper.Authenticate(new LoginModel() { Username = username, Password = password });
 
                     if (valid)
                     {
                         return RedirectToAction("About", "Home");
                     }
 
-                    var loginModel = new LoginModel()
+                    var LoginModel = new LoginModel()
                     {
                         Username = username,
                         Password = password,
                         SuccessfulLogin = false
                     };
-                    return View("LogIn", loginModel);
+                    return View("Login", LoginModel);
 
                 }
             }
 
-            ViewData["Message"] = "Please enter your login details.";
+            ViewData["Message"] = "Please enter your Login details.";
             return View();
 
         }
 
         public IActionResult Error()
         {
-            return RedirectToAction("LogIn", "Home");
+            return RedirectToAction("Login", "Home");
         }
     }
 }
