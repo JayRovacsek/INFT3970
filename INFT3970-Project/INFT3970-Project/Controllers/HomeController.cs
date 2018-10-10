@@ -50,9 +50,17 @@ namespace INFT3970Project.Controllers
 
                     if (valid)
                     {
-                        ViewData["Message"] = "Please enter your login details.";
                         return RedirectToAction("About", "Home");
                     }
+
+                    var loginModel = new LoginModel()
+                    {
+                        Username = username,
+                        Password = password,
+                        SuccessfulLogin = false
+                    };
+                    return View("LogIn", loginModel);
+
                 }
             }
 
