@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace INFT3970Project.Helpers
 {
@@ -96,6 +97,8 @@ namespace INFT3970Project.Helpers
             }
         }
 
+
+
         /// <summary>
         /// 
         /// </summary>
@@ -114,19 +117,31 @@ namespace INFT3970Project.Helpers
                         CommandType = CommandType.StoredProcedure,
                         CommandText = "dbo.UserLogin"
                     };
-                    command.Parameters.AddWithValue("@responseMessage", "");
-                    command.Parameters["@responseMessage"].Direction = ParameterDirection.ReturnValue;
+
                     command.Parameters.AddWithValue("@Email", username);
                     command.Parameters.AddWithValue("@Password", password);
+
+                    SqlParameter output = new SqlParameter("@responseMessage", SqlDbType.VarChar);
+                    output.Direction = ParameterDirection.Output;
+                    output.Size = 255;
+                    command.Parameters.Add(output);
+
+                    //var par = new SqlParameter("@responseMessage", SqlDbType.VarChar)
+                    //{
+                    //    Direction = ParameterDirection.ReturnValue,
+                    //    Size = 255
+                    //};
+                    //command.Parameters.Add(par);
+
                     command.Connection.Open();
                     command.ExecuteNonQuery();
 
                     var response = command.Parameters["@responseMessage"].Value;
 
-                    var success = (response == "Invalid login Details") ? false :
-                        (response == "Wrong Password") ? false : true;
+                    var valid = (response.ToString() == "Invalid login Details") ? false :
+                        (response.ToString() == "Wrong Password") ? false : true;
 
-                    return success;
+                    return valid;
                 }
             }
             catch(Exception exception)
