@@ -3,13 +3,25 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Dapper;
+using INFT3970Project.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using INFT3970Project.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace INFT3970Project.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IConfiguration configuration;
+        private DatabaseHelper _databaseHelper;
+
+        public HomeController(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+            _databaseHelper = new DatabaseHelper(configuration);
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -31,7 +43,7 @@ namespace INFT3970Project.Controllers
 
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return RedirectToAction("Login", "Home");
         }
     }
 }
