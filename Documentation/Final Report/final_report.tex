@@ -1,0 +1,132 @@
+\documentclass[
+    a4paper,
+    12pt,
+    %twocolumn,
+    headings=normal
+]{scrreprt}
+    \usepackage{url}
+    \usepackage{xcolor}
+    \usepackage{lscape}
+    \usepackage{amssymb}
+    \usepackage{titling}
+    \usepackage{pdfpages}
+    \usepackage{enumitem}
+    \usepackage{graphicx}
+    \usepackage{hyperref}
+    \usepackage{listings}
+    \usepackage{fancybox}
+    \usepackage{enumerate}
+    \usepackage{pdflscape}
+    \usepackage{afterpage}
+    \usepackage{lstautogobble}
+    \usepackage[english]{babel}
+    \usepackage{csquotes}
+    \usepackage{comment}
+    \usepackage[normalem]{ulem}
+    \usepackage[margin=0.8in]{geometry}
+    \usepackage[nottoc,notlot,notlof]{tocbibind}
+    \usepackage[
+        backend=biber,
+        style=ieee,
+        sorting=ynt
+        ]{biblatex}
+        \addbibresource{report.bib}
+
+    \renewcommand\maketitlehookd{\vfill\null}
+    \renewcommand\maketitlehooka{\null\mbox{}\vfill}
+
+    \newcounter{num}
+
+    \graphicspath{ {Images/} }
+
+    \title{INFT3970 Major Project Final Report \protect\\
+    Distributed Monitoring System using ESP-12E}
+    \author{
+        Team Encore\\
+        \textit{Thursday 10:00AM - 10:30AM}\\
+        Jay Rovacsek
+        \texttt{c3146220@uon.edu.au}\\
+        Dean Morton
+        \texttt{c3252227@uon.edu.au}\\
+        Josh Brown
+        \texttt{c3283797@uon.edu.au}\\
+        Jacob Litherland
+        \texttt{c3263482@uon.edu.au}\\
+        Lee Marron
+        \texttt{c3263482@uon.edu.au}\\
+        Edward Lonsdale
+        \texttt{c3252144@uon.edu.au}
+    }
+    \date{\today}
+    \hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=magenta,      
+    urlcolor=blue,
+    citecolor=red,
+    linktoc=section,
+    }
+    \pagenumbering{arabic}
+
+    \newlist{legal}{enumerate}{10}
+    \setlist[legal]{label*=\arabic*.}
+
+    \begin{document}
+
+    \begin{titlingpage}
+        \maketitle
+    \end{titlingpage}
+
+    \tableofcontents
+    
+    \newpage
+
+    \section{Executive Summary}
+
+    \newpage
+    \section{Introduction}
+        \subsection{Project Objectives}
+        \subsection{Business Summary}
+
+    \newpage
+    \section{Proposed Solution}
+        \subsection{Outline}
+        \subsection{Technical Requirements}
+        \subsection{Limitations or Constraints}
+
+    \newpage
+    \section{Technical Documentation}
+        \subsection{Database Documentation}
+            \subsubsection{Relational Model}
+            \subsubsection{Data Requirements}
+            \subsubsection{Data Dictionary}
+            \subsubsection{Database Schema}
+
+        \newpage
+        \subsection{ESP12-E Documentation}
+            \subsubsection{Temperature}
+            \subsubsection{Humidity}
+            \subsubsection{Motion}
+
+        \newpage
+        \subsection{Web Application Documentation}
+            \subsubsection{API Documentation}
+
+        \newpage
+        \subsection{General Documentation}
+            \subsubsection{Sequence Diagrams}
+            \subsubsection{Network Diagram}
+
+        \newpage
+        \subsection{Install Proceedures}
+    
+    \newpage
+    \section{User Documentation}
+        \subsection{Instalation}
+        \subsection{Accessing Dashboards}
+        \subsection{Account Administration}
+
+    \newpage
+    \printbibliography
+
+    \end{document}
