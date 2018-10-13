@@ -36,6 +36,18 @@ namespace INFT3970_Project
             services.TryAddSingleton<DatabaseHelper>();
             services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
+            services.AddDistributedMemoryCache();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromHours(1);
+
+                options.LoginPath = "/Login";
+                options.AccessDeniedPath = "/Login";
+                options.SlidingExpiration = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,16 +63,19 @@ namespace INFT3970_Project
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
                 routes.MapRoute(
-                    name: "temperature",
-                    template: "{controller=Temperature}/{action=Index}/{id?}");
+                    name: "register",
+                    template: "{controller=Register}/{action=Index}/{id?}");
+                //routes.MapRoute(
+                //    name: "temperature",
+                //    template: "{controller=Temperature}/{action=Index}/{id?}");
             });
         }
     }

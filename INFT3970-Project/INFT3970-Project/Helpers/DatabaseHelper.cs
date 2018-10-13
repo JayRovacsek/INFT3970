@@ -1,18 +1,14 @@
 ﻿using Dapper;
 using INFT3970Project.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Microsoft.Extensions.Configuration;
 using System.Runtime.InteropServices;
-using Microsoft.Win32.SafeHandles;
+using System.Text;
 
 namespace INFT3970Project.Helpers
 {
@@ -21,7 +17,7 @@ namespace INFT3970Project.Helpers
         private readonly IConfiguration configuration;
         private readonly string _connectionString;
         public IDbConnection Connection { get; set; }
-        bool disposed = false;
+        private bool disposed;
         SafeHandle handle = new SafeFileHandle(IntPtr.Zero, true);
         string format = "yyyy-MM-dd HH:mm:ss";
 
@@ -98,7 +94,56 @@ namespace INFT3970Project.Helpers
                     await result;
                 }
             }
+        }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public bool Authenticate(LoginModel model)
+        {
+            if (model.Username != null && model.Password != null)
+            {
+                try
+                {
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        var command = new SqlCommand
+                        {
+                            Connection = (SqlConnection)_databaseHelper.Connection,
+                            CommandType = CommandType.StoredProcedure,
+                            CommandText = "dbo.UserLogin"
+                        };
+
+                        command.Parameters.AddWithValue("@Email", model.Username);
+                        command.Parameters.AddWithValue("@Password", model.Password);
+
+                        SqlParameter output = new SqlParameter("@responseMessage", SqlDbType.VarChar);
+                        output.Direction = ParameterDirection.Output;
+                        output.Size = 255;
+                        command.Parameters.Add(output);
+
+                        command.Connection.Open();
+                        command.ExecuteNonQuery();
+
+                        var response = command.Parameters["@responseMessage"].Value;
+
+                        var valid = (response.ToString() == "Invalid login Details") ? false :
+                            (response.ToString() == "Wrong Password") ? false : true;
+
+                        return valid;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    // Need to add logger here.
+                    // Need to reimplement
+                    return false;
+                }
+            }
+            return false;
         }
 
 
@@ -156,6 +201,11 @@ namespace INFT3970Project.Helpers
                 var results = _databaseHelper.Connection.Query<TemperatureModel>(query);
                 return results;
             }
+        }
+
+        public bool RegisterAccount(string username, string password)
+        {
+            return false;
         }
     }
 }
