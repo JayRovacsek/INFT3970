@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace INFT3970Project.Controllers
 {
-    [Authorize]
     public class HomeController : Controller
     {
         private readonly IConfiguration configuration;
@@ -24,6 +23,7 @@ namespace INFT3970Project.Controllers
             _databaseHelper = new DatabaseHelper(configuration);
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             return View();
@@ -31,21 +31,7 @@ namespace INFT3970Project.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
-
             return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Error()
-        {
-            return RedirectToAction("Login", "Home");
         }
     }
 }

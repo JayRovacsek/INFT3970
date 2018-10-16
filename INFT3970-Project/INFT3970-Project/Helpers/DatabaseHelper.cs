@@ -170,7 +170,7 @@ namespace INFT3970Project.Helpers
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        public TemperatureModel QuerySingleTemperatures(Guid? Id)
+        public TemperatureModel QuerySingleTemperature(Guid? Id)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
@@ -203,9 +203,42 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        public IEnumerable<SensorModel> QueryAllSensors()
+        {
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                _databaseHelper.Connection.Open();
+                var command = new SqlCommand("SELECT * FROM [Sensor];");
+                var results = _databaseHelper.Connection.Query<SensorModel>(command.ToString());
+                return results;
+            }
+        }
+
         public bool RegisterAccount(string username, string password)
         {
             return false;
+        }
+
+        public UserSensorAndPasswordViewModel GetUserSensorAndPasswordViewModel(int userId)
+        {
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                _databaseHelper.Connection.Open();
+                var command = new SqlCommand($"SELECT * FROM [Sensor] WHERE [UserID]={userId};");
+                var sensors = _databaseHelper.Connection.Query<SensorModel>(command.ToString()).ToList();
+
+                command = new SqlCommand($"SELECT * FROM [Users] WHERE [UserID]={userId};");
+                var user = _databaseHelper.Connection.Query<UserModel>(command.ToString()).FirstOrDefault();
+
+                command = new SqlCommand($"SELECT * FROM [UsersPassword] WHERE [UserID]={userId};");
+                var password = _databaseHelper.Connection.Query<UserPasswordModel>(command.ToString()).FirstOrDefault();
+                return new UserSensorAndPasswordViewModel()
+                {
+                    User = user,
+                    Password = password,
+                    Sensors = sensors
+                };
+            }
         }
     }
 }
