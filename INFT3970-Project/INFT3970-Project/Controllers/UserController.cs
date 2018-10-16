@@ -24,9 +24,7 @@ namespace INFT3970Project.Controllers
 
         public IActionResult Manage()
         {
-            var userSensorPasswordViewModel = _databaseHelper.GetUserSensorAndPasswordViewModel(1);
-            //throw new ApplicationException("Need to fix this to get userId");
-            return View(userSensorPasswordViewModel);
+            return View();
         }
 
 
