@@ -1,18 +1,27 @@
 ﻿@model INFT3970Project.Models.RegisterModel
 
 @{
+    if (User.IsInRole("User"))
+    {
+        Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_UnauthenticatedLayout.cshtml";
+    }
+}
+
+@{
     ViewData["Title"] = "Register";
 }
-<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 <h2>@ViewData["Title"]</h2>
 <h3>@ViewData["Message"]</h3>
 
 <div class="container">
     <div class="row">
         <div class="form-group-lg">
-            <div class="col-lg-4 col-lg-offset-4">
+            <div class="col-md-12">
                 @using (Html.BeginForm("Register", "Register", FormMethod.Post, new { @class = "form-signin" }))
                 {
                     <div class="form-group row-fluid">
@@ -48,14 +57,14 @@
                         @Html.ValidationMessageFor(model => model.City)
                     </div>
                     <div class="form-group row-fluid">
-                            @Html.TextBoxFor(model => model.State, new { @class = "form-control", @placeholder = "State", })
-                            @Html.ValidationMessageFor(model => model.State)
+                        @Html.TextBoxFor(model => model.State, new { @class = "form-control", @placeholder = "State", })
+                        @Html.ValidationMessageFor(model => model.State)
                     </div>
                     <div class="form-group row-fluid">
-                            @Html.TextBoxFor(model => model.Country, new { @class = "form-control", @placeholder = "Country", })
-                            @Html.ValidationMessageFor(model => model.Country)
+                        @Html.TextBoxFor(model => model.Country, new { @class = "form-control", @placeholder = "Country", })
+                        @Html.ValidationMessageFor(model => model.Country)
                     </div>
-        
+
                     <div class="form-group row-fluid">
                         @Html.TextBoxFor(model => model.Password, new { @class = "form-control", @placeholder = "Password", @type = "password" })
                         @Html.ValidationMessageFor(model => model.Password)
