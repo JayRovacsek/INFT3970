@@ -8,9 +8,11 @@ using INFT3970Project.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using INFT3970Project.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authorization;
 
 namespace INFT3970Project.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly IConfiguration configuration;

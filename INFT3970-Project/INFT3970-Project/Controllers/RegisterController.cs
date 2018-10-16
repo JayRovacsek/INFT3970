@@ -29,7 +29,6 @@ namespace INFT3970Project.Controllers
 
         public IActionResult RegisterAccount(string username, string password)
         {
-
             return View();
         }
     }

@@ -6,6 +6,10 @@ using INFT3970Project.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using INFT3970Project.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace INFT3970Project.Controllers
 {
@@ -25,7 +29,14 @@ namespace INFT3970Project.Controllers
             return View();
         }
 
-        public IActionResult Login(string username = null, string password = null)
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return Ok();
+        }
+
+        public async Task<IActionResult> Login(string username = null, string password = null)
         {
             if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(username))
             {
@@ -33,9 +44,31 @@ namespace INFT3970Project.Controllers
                 {
                     var valid = _databaseHelper.Authenticate(new LoginModel() { Username = username, Password = password });
 
-                    if (valid)
+                    if (true)
                     {
-                        return RedirectToAction("About", "Home");
+                        var claims = new List<Claim> { 
+                                new Claim(ClaimTypes.Name, username),
+                                new Claim(ClaimTypes.Role, "User"),
+                            };
+
+                        var claimsIdentity = new ClaimsIdentity(
+                            claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                        var authProperties = new AuthenticationProperties
+                        {
+                            AllowRefresh = true,
+
+                            ExpiresUtc = DateTimeOffset.UtcNow.AddHours(1),
+
+                            IssuedUtc = DateTime.UtcNow
+                        };
+
+                        await HttpContext.SignInAsync(
+                            CookieAuthenticationDefaults.AuthenticationScheme,
+                            new ClaimsPrincipal(claimsIdentity),
+                            authProperties);
+
+                        return RedirectToAction("Index", "Dashboard");
                     }
 
                     var LoginModel = new LoginModel()
@@ -50,7 +83,7 @@ namespace INFT3970Project.Controllers
             }
 
             ViewData["Message"] = "Please enter your Login details.";
-            return View();
+            return View("Index");
 
         }
     }
