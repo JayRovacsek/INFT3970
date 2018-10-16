@@ -143,9 +143,71 @@ namespace INFT3970Project.Helpers
                     return false;
                 }
             }
+
+
+
             return false;
         }
 
+
+        ///   REGISTER
+
+        public bool Authenticate(RegisterModel model)
+        {
+            if (model.fName != null && model.Password != null)
+            {
+                try
+                {
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        var command = new SqlCommand
+                        {
+                            Connection = (SqlConnection)_databaseHelper.Connection,
+                            CommandType = CommandType.StoredProcedure,
+                            CommandText = "dbo.AddUser"
+                        };
+
+                        command.Parameters.AddWithValue("@fName", model.fName);
+                        command.Parameters.AddWithValue("@lName", model.lName);
+                        command.Parameters.AddWithValue("@ContactNumber", model.ContactNumber);
+                        command.Parameters.AddWithValue("@Email", model.Email);
+                        command.Parameters.AddWithValue("@StreetNum", model.StreetNum);
+                        command.Parameters.AddWithValue("@StreetName", model.StreetName);
+                        command.Parameters.AddWithValue("@Postcode", model.Postcode);
+                        command.Parameters.AddWithValue("@City", model.City);
+                        command.Parameters.AddWithValue("@State", model.State);
+                        command.Parameters.AddWithValue("@Country", model.Country);
+                        command.Parameters.AddWithValue("@HashedPassword", model.Password);
+
+
+                        SqlParameter output = new SqlParameter("@responseMessage", SqlDbType.VarChar);
+                        output.Direction = ParameterDirection.Output;
+                        output.Size = 255;
+                        command.Parameters.Add(output);
+
+                        command.Connection.Open();
+                        command.ExecuteNonQuery();
+
+                        var response = command.Parameters["@responseMessage"].Value;
+
+                        var valid = (response.ToString() == "Invalid login Details") ? false :
+                            (response.ToString() == "Wrong Password") ? false : true;
+
+                        return valid;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    // Need to add logger here.
+                    // Need to reimplement
+                    return false;
+                }
+            }
+
+
+
+            return false;
+        }
 
         /// <summary>
         /// Implementation of method to query for all temperatures
