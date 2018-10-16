@@ -33,7 +33,7 @@ namespace INFT3970Project.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return Ok();
+            return RedirectToAction("Index", "Login");
         }
 
         public async Task<IActionResult> Login(string username = null, string password = null)
@@ -68,7 +68,7 @@ namespace INFT3970Project.Controllers
                             new ClaimsPrincipal(claimsIdentity),
                             authProperties);
 
-                        return RedirectToAction("Index", "Dashboard");
+                        return RedirectToAction("Index", "Home");
                     }
 
                     var LoginModel = new LoginModel()
