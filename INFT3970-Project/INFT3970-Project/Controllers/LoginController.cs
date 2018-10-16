@@ -26,6 +26,10 @@ namespace INFT3970Project.Controllers
 
         public IActionResult Index()
         {
+            if (User.IsInRole("User"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
