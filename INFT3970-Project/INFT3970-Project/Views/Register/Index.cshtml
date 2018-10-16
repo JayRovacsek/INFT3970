@@ -1,71 +1,78 @@
-﻿@{
-    ViewData["Title"] = "Register";
-}
+﻿@model INFT3970Project.Models.RegisterModel
 
 @{
-    Layout = "~/Views/Shared/_UnauthenticatedLayout.cshtml";
+    ViewData["Title"] = "Register";
 }
-
-@model bool?
-
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link rel="stylesheet" href="~/css/Login.css" />
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 <h2>@ViewData["Title"]</h2>
 <h3>@ViewData["Message"]</h3>
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <link rel="stylesheet" href="~/css/Login.css" />
-    <title>Register</title>
-</head>
-<body>
-
-    @{
-        if (Model.HasValue == false || Model.Value == false)
-        {
-            <form action="/action_page.php" style="border:1px solid #ccc">
-                <div class="container">
-                    <h1>Sign Up</h1>
-                    <p>Please fill in this form to create an account.</p>
-                    <hr>
-
-                    <label for="email"><b>Email</b></label>
-                    <input type="text" placeholder="Enter Email" name="email" required>
-
-                    <label for="psw"><b>Password</b></label>
-                    <input type="password" placeholder="Enter Password" name="psw" required>
-
-                    <label for="psw-repeat"><b>Repeat Password</b></label>
-                    <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
-
-                    <label>
-                        <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
-                    </label>
-
-                    <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
-
-                    <div class="clearfix">
-                        <button type="button" class="cancelbtn">Cancel</button>
-                        @*<button type="submit" class="signupbtn">Sign Up</button>*@
-                        <button class="btn btn-info" type="submit" id="register" onclick="location.href='@Url.Action("RegisterAccount", "Register")'">Sign up</button>
+<div class="container">
+    <div class="row">
+        <div class="form-group-lg">
+            <div class="col-lg-4 col-lg-offset-4">
+                @using (Html.BeginForm("Register", "Register", FormMethod.Post, new { @class = "form-signin" }))
+                {
+                    <div class="form-group row-fluid">
+                        @Html.TextBoxFor(model => model.fName, new { @class = "form-control", @placeholder = "First Name" })
+                        @Html.ValidationMessageFor(model => model.fName)
                     </div>
-                </div>
-            </form>
-        }
-        else
-        {
-            <div class="container">
-                <h1>Sign Up Successful</h1>
-                <p>Please check your emails for confirmation</p>
-                <hr>
-                <button class="btn btn-info" type="button" id="Login" onclick="location.href='@Url.Action("Login", "Home")'">Return to Login</button>
-            </div>
-        }
-    }
+                    <div class="form-group row-fluid">
+                        @Html.TextBoxFor(model => model.lName, new { @class = "form-control", @placeholder = "Last Name", })
+                        @Html.ValidationMessageFor(model => model.lName)
+                    </div>
+                    <div class="form-group row-fluid">
+                        @Html.TextBoxFor(model => model.ContactNumber, new { @class = "form-control", @placeholder = "Contact Number", })
+                        @Html.ValidationMessageFor(model => model.ContactNumber)
+                    </div>
+                    <div class="form-group row-fluid">
+                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @placeholder = "Email", })
+                        @Html.ValidationMessageFor(model => model.Email)
+                    </div>
+                    <div class="form-group row-fluid">
+                        @Html.TextBoxFor(model => model.StreetNum, new { @class = "form-control", @placeholder = "Street Number", })
+                        @Html.ValidationMessageFor(model => model.StreetNum)
+                    </div>
+                    <div class="form-group row-fluid">
+                        @Html.TextBoxFor(model => model.StreetName, new { @class = "form-control", @placeholder = "Street Name", })
+                        @Html.ValidationMessageFor(model => model.StreetName)
+                    </div>
+                    <div class="form-group row-fluid">
+                        @Html.TextBoxFor(model => model.Postcode, new { @class = "form-control", @placeholder = "Post Code", })
+                        @Html.ValidationMessageFor(model => model.Postcode)
+                    </div>
+                    <div class="form-group row-fluid">
+                        @Html.TextBoxFor(model => model.City, new { @class = "form-control", @placeholder = "City", })
+                        @Html.ValidationMessageFor(model => model.City)
+                    </div>
+                    <div class="form-group row-fluid">
+                            @Html.TextBoxFor(model => model.State, new { @class = "form-control", @placeholder = "State", })
+                            @Html.ValidationMessageFor(model => model.State)
+                    </div>
+                    <div class="form-group row-fluid">
+                            @Html.TextBoxFor(model => model.Country, new { @class = "form-control", @placeholder = "Country", })
+                            @Html.ValidationMessageFor(model => model.Country)
+                    </div>
+        
+                    <div class="form-group row-fluid">
+                        @Html.TextBoxFor(model => model.Password, new { @class = "form-control", @placeholder = "Password", @type = "password" })
+                        @Html.ValidationMessageFor(model => model.Password)
+                    </div>
 
-</body>
-</html>
+                    <div class="form-group row-fluid">
+                        @if (Model != null)
+                        {
+                            if (!Model.SuccessfulRegister)
+                            {
+                                <p class="text-center alert-danger"> Error, could not create user </p>
+                            }
+                        }
+                        <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Register</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
