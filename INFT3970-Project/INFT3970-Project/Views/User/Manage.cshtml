@@ -1,51 +1,8 @@
-﻿@model UserSensorAndPasswordViewModel
-
-@{
+﻿@{
     Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
 }
 
-<div>
-    <div class="container">
-        <h3>Update Account Password:</h3>
-        <div class="row">
-            <div class="col-md-6">
-                <h3>Update Account Password:</h3>
-                <div class="form-group">
-                    @using (Html.BeginForm("UpdatePassword", "User", FormMethod.Post, new { @class = "form-group" }))
-                    {
-                        <div class="form-group row-fluid">
-                            @Html.TextBoxFor(model => model.User.Email, new { @class = "form-control", @placeholder = "Username" })
-                            @Html.ValidationMessageFor(model => model.User.Email)
-                        </div>
-                            // THIS NEEDS TO BE FIXED BADLY.
-                        <div class="form-group row-fluid">
-                            @Html.TextBoxFor(model => model.Password, new { @class = "form-control", @placeholder = "Password", @type = "password" })
-                            @Html.ValidationMessageFor(model => model.Password)
-                        </div>
-                        <div class="form-group row-fluid">
-                            <button class="btn btn-lg btn-primary" type="submit">Update Password</button>
-                        </div>
-                    }
-                </div>
-            </div>
-            @* THE BELOW IS BADLY BROKEN, CAN EITHER SPLIT TO ANOTHER VIEW OR FIX. *@
-            <div class="col-md-6">
-                <h3>Add Sensor:</h3>
-                @using (Html.BeginForm("UpdatePassword", "User", FormMethod.Post, new { @class = "form-group" }))
-                {
-                    <div class="form-group row-fluid">
-                        @Html.TextBoxFor(model => model.Sensors, new { @class = "form-control", @placeholder = "User Id" })
-                        @Html.ValidationMessageFor(model => model.Sensors)
-                    </div>
-                    <div class="form-group row-fluid">
-                        @Html.TextBoxFor(model => model.Password, new { @class = "form-control", @placeholder = "Sensor Id" })
-                        @Html.ValidationMessageFor(model => model.Password)
-                    </div>
-                    <div class="form-group row-fluid">
-                        <button class="btn btn-lg btn-primary" type="submit">Add Sensor</button>
-                    </div>
-                }
-            </div>
-        </div>
-    </div>
+<div class="row">
+    <div class="col-md-6">@{await Html.RenderPartialAsync("_UpdatePassword");}</div>
+    <div class="col-md-6">@{await Html.RenderPartialAsync("_AddSensor");}</div>
 </div>
