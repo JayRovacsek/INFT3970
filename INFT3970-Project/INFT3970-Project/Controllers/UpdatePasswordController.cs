@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace INFT3970Project.Controllers
 {
-    public class UpdatePasswordController
+    public class UpdatePasswordController : Controller
     {
         private readonly IConfiguration configuration;
         private DatabaseHelper _databaseHelper;
@@ -32,7 +32,7 @@ namespace INFT3970Project.Controllers
             return View();
         }
 
-        public IActionResult UpdatePassword(string Username, string Password)
+        public IActionResult _UpdatePassword(string Username, string Password)
         {
             if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
             {
@@ -42,17 +42,15 @@ namespace INFT3970Project.Controllers
 
                     if (true)
                     {
-                        return RedirectToAction("Index", "Login");
+                        ViewData["Message"] = "Password Changed";
+                        return View();
                     }
 
                 }
             }
 
-            ViewData["Message"] = "Please enter your Login details.";
-            return View("Index");
-
-
+            ViewData["Message"] = "Didnt work";
+            return RedirectToAction("Index", "Login");
         }
     }
-}
 }
