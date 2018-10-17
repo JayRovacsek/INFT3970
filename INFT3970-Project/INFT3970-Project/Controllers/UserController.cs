@@ -28,9 +28,9 @@ namespace INFT3970Project.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdatePassword(UpdatingPasswordModel model)
+        public IActionResult UpdatePassword(UserAndPasswordModel model)
         {
-            if (!string.IsNullOrEmpty(model.Username) && !string.IsNullOrEmpty(model.Username))
+            if (!string.IsNullOrEmpty(model.User.Email) && !string.IsNullOrEmpty(model.User.Email))
             {
                 using (var _databaseHelper = new DatabaseHelper(configuration))
                 {
