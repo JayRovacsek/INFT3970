@@ -20,65 +20,71 @@
 
 <div class="container">
     <div class="row">
-        <div class="form-group-lg">
-            <div class="col-md-12">
+        <form>
+            <div class="form-group-lg">
                 @using (Html.BeginForm("Register", "Register", FormMethod.Post, new { @class = "form-horizontal" }))
                 {
-                    <div class="form-group row-fluid">
-                        @Html.TextBoxFor(model => model.fName, new { @class = "form-control", @placeholder = "First Name" })
-                        @Html.ValidationMessageFor(model => model.fName)
-                    </div>
-                    <div class="form-group row-fluid">
-                        @Html.TextBoxFor(model => model.lName, new { @class = "form-control", @placeholder = "Last Name" })
-                        @Html.ValidationMessageFor(model => model.lName)
-                    </div>
-                    <div class="form-group row-fluid">
-                        @Html.TextBoxFor(model => model.ContactNumber, new { @class = "form-control", @placeholder = "Contact Number", @type = "tel" })
-                        @Html.ValidationMessageFor(model => model.ContactNumber)
-                    </div>
-                    <div class="form-group row-fluid">
-                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @placeholder = "Email", @type = "email" })
-                        @Html.ValidationMessageFor(model => model.Email)
-                    </div>
-                    <div class="form-inline">
-                    <div class="form-group">
-                        @Html.TextBoxFor(model => model.StreetNum, new { @class = "form-control", @placeholder = "Street Number", })
-                        @Html.ValidationMessageFor(model => model.StreetNum)
-                    </div>
-                    <div class="form-group">
-                        <!--Need to make the Street name field bigger-->
-                        @Html.TextBoxFor(model => model.StreetName, new { @class = "form-control", @placeholder = "Street Name", })
-                        @Html.ValidationMessageFor(model => model.StreetName)
-                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            @Html.TextBoxFor(model => model.fName, new { @class = "form-control", @placeholder = "First Name" })
+                            @Html.ValidationMessageFor(model => model.fName)
                         </div>
-                        <br/>
-                        <div class="form-inline">
-
-                            <div class="form-group row-fluid">
-                                @Html.TextBoxFor(model => model.City, new { @class = "form-control", @placeholder = "City", })
-                                @Html.ValidationMessageFor(model => model.City)
-                            </div>
-                            <div class="form-group row-fluid">
-                                @Html.TextBoxFor(model => model.State, new { @class = "form-control", @placeholder = "State", })
-                                @Html.ValidationMessageFor(model => model.State)
-                            </div>
-                            <div class="form-group row-fluid">
-                                @Html.TextBoxFor(model => model.Postcode, new { @class = "form-control", @placeholder = "Post Code", })
-                                @Html.ValidationMessageFor(model => model.Postcode)
-                            </div>
+                        <div class="form-group col-md-6">
+                            @Html.TextBoxFor(model => model.lName, new { @class = "form-control", @placeholder = "Last Name" })
+                            @Html.ValidationMessageFor(model => model.lName)
                         </div>
-                        <br/>
-                        <div class="form-group row-fluid">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            @Html.TextBoxFor(model => model.ContactNumber, new { @class = "form-control", @placeholder = "Contact Number", @type = "tel" })
+                            @Html.ValidationMessageFor(model => model.ContactNumber)
+                        </div>
+                        <div class="form-group col-md-6">
+                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @placeholder = "Email", @type = "email" })
+                            @Html.ValidationMessageFor(model => model.Email)
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            @Html.TextBoxFor(model => model.StreetNum, new { @class = "form-control", @placeholder = "Street Number", })
+                            @Html.ValidationMessageFor(model => model.StreetNum)
+                        </div>
+                        <div class="form-group col-md-8">
+                            @Html.TextBoxFor(model => model.StreetName, new { @class = "form-control", @placeholder = "Street Name", })
+                            @Html.ValidationMessageFor(model => model.StreetName)
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-8">
+                            @Html.TextBoxFor(model => model.City, new { @class = "form-control", @placeholder = "City", })
+                            @Html.ValidationMessageFor(model => model.City)
+                        </div>
+                        <div class="form-group col-md-2">
+                            @Html.TextBoxFor(model => model.State, new { @class = "form-control", @placeholder = "State", })
+                            @Html.ValidationMessageFor(model => model.State)
+                        </div>
+                        <div class="form-group col-md-2">
+                            @Html.TextBoxFor(model => model.Postcode, new { @class = "form-control", @placeholder = "Post Code", })
+                            @Html.ValidationMessageFor(model => model.Postcode)
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
                             @Html.TextBoxFor(model => model.Country, new { @class = "form-control", @placeholder = "Country", })
                             @Html.ValidationMessageFor(model => model.Country)
                         </div>
+                    </div>
 
-                        <div class="form-group row-fluid">
+                    <div class="form-row">
+
+                        <div class="form-group col-md-12">
                             @Html.TextBoxFor(model => model.Password, new { @class = "form-control", @placeholder = "Password", @type = "password" })
                             @Html.ValidationMessageFor(model => model.Password)
                         </div>
+                    </div>
+                    <div class="form-row">
 
-                        <div class="form-group row-fluid">
+                        <div class="form-group col-md-12">
                             @if (Model != null)
                             {
                                 if (!Model.SuccessfulRegister)
@@ -88,8 +94,9 @@
                             }
                             <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Register</button>
                         </div>
-                        }
                     </div>
-        </div>
+                }
+            </div>
+        </form>
     </div>
 </div>
