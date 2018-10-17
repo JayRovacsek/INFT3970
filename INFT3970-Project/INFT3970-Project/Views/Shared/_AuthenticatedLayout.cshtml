@@ -8,6 +8,8 @@
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/lib/bootstrap-social-gh-pages/bootstrap-social.css" />
+        <link rel="stylesheet" href="~/lib/bootstrap-social-gh-pages/assets/css/font-awesome.css" />
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -43,9 +45,24 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; 2018 - INFT3970_Project</p>
-        </footer>
+        <nav class="navbar navbar-fixed-bottom">
+            <div class="container-fluid">
+                <div class="navbar-collapse collapse">
+                    <table class="col-md-12">
+                        <tr>
+                            <td class="align-content-lg-end col-sm-1 col-xs-6">
+                                <a class="btn btn-block btn-social btn-github" href="https://github.com/JayRovacsek/INFT3970">
+                                    <span class="fa fa-github"></span>
+                                    Check us out on Github!
+                                </a>
+                            </td>
+                            <td class="col-md-8 col-xs-4"></td>
+                            <td class="text-right align-middle col-sm-2 col-xs-6"> &copy; 2018 - INFT3970_Project</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </nav>
     </div>
 
     <environment include="Development">
