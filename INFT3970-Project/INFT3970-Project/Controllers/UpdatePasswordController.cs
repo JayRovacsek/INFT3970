@@ -40,7 +40,7 @@ namespace INFT3970Project.Controllers
                 {
                     var valid = _databaseHelper.Authenticate(new UpdatingPasswordModel() { Username = Username, Password = Password });
 
-                    if (true)
+                    if (valid == true)
                     {
                         ViewData["Message"] = "Password Changed";
                         return View();
