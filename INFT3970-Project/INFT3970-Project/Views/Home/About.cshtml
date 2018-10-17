@@ -13,21 +13,48 @@
     ViewData["Title"] = "Team Encore is made up of:";
 }
 
-@{ var theTeam = new Dictionary<string, string>()
+@{ var theTeam = new Dictionary<string, INFT3970Project.Models.Misc.TeamMemberModel>()
 {
-{ "Jay Rovacsek","c3146220@uon.edu.au"},
-{ "Dean Morton","c3252227@uon.edu.au"},
-{ "Josh Brown","c3283797@uon.edu.au"},
-{ "Jacob Litherland","c3263482@uon.edu.au"},
-{ "Lee Marron","c3263482@uon.edu.au"},
-{ "Edward Lonsdale","c3252144@uon.edu.au"}
+{ "Jay Rovacsek", new INFT3970Project.Models.Misc.TeamMemberModel("c3146220@uon.edu.au","https://github.com/JayRovacsek","https://www.linkedin.com/in/jayrovacsek") },
+{ "Dean Morton", new INFT3970Project.Models.Misc.TeamMemberModel("c3252227@uon.edu.au","https://github.com/DeanMorty","") },
+{ "Josh Brown", new INFT3970Project.Models.Misc.TeamMemberModel("c3283797@uon.edu.au","https://github.com/ShibbyMonster","") },
+{ "Jacob Litherland", new INFT3970Project.Models.Misc.TeamMemberModel("c3263482@uon.edu.au","https://github.com/Galafrex","") },
+{ "Lee Marron", new INFT3970Project.Models.Misc.TeamMemberModel("c3263482@uon.edu.au","https://github.com/LeeMarron","") },
+{ "Edward Lonsdale", new INFT3970Project.Models.Misc.TeamMemberModel("c3252144@uon.edu.au","https://github.com/FullMetalEd","") }
 };
 }
 
-<h2 class="text-center">@ViewData["Title"]</h2>
-
-@{ foreach (var item in theTeam)
-    {
-        <p class="text-center">@item.Key : @item.Value</p>
-    }
-}
+<div class="panel panel-default align-middle">
+    <div class="panel-heading">@ViewData["Title"]</div>
+    <div class="panel-body">
+        <div class="container-fluid">
+            <div class="navbar-collapse collapse">
+                <table class="col-md-12">
+                    @{ foreach (var item in theTeam)
+                        {
+                            <tr>
+                                <td class="col-md-5">
+                                    <p class="text-left">@item.Key</p>
+                                </td>
+                                <td class="col-md-5">
+                                    <p class="text-left">@item.Value.Email</p>
+                                </td>
+                                <td class="col-md-1">
+                                    <a class="btn btn-social-icon btn-lg btn-github" href="@item.Value.Github">
+                                        <i class="fa fa-github"></i>
+                                    </a>
+                                </td>
+                                <td class="col-md-1">
+                                    <a class="btn btn-social-icon btn-lg btn-linkedin" href="@item.Value.LinkedIn">
+                                        <i class="fa fa-linkedin"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr class="col-md-12"></tr>
+                        }
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
