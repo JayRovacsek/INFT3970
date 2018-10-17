@@ -32,7 +32,7 @@ namespace INFT3970Project.Controllers
             return View();
         }
 
-        public IActionResult _UpdatePassword(string Username, string Password)
+        public IActionResult UpdatePassword(string Username, string Password)
         {
             if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
             {
@@ -50,7 +50,7 @@ namespace INFT3970Project.Controllers
             }
 
             ViewData["Message"] = "Didnt work";
-            return RedirectToAction("Index", "Login");
+            return View();
         }
     }
 }
