@@ -1,19 +1,14 @@
 ﻿using Dapper;
 using INFT3970Project.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Microsoft.Extensions.Configuration;
 using System.Runtime.InteropServices;
-using Microsoft.Win32.SafeHandles;
-using System.Security.Cryptography;
+using System.Text;
 
 namespace INFT3970Project.Helpers
 {
@@ -22,7 +17,7 @@ namespace INFT3970Project.Helpers
         private readonly IConfiguration configuration;
         private readonly string _connectionString;
         public IDbConnection Connection { get; set; }
-        bool disposed = false;
+        private bool disposed;
         SafeHandle handle = new SafeFileHandle(IntPtr.Zero, true);
         string format = "yyyy-MM-dd HH:mm:ss";
 
@@ -102,54 +97,170 @@ namespace INFT3970Project.Helpers
         }
 
         /// <summary>
-        /// Implementation of SHA512 hash function over a password input
+        /// 
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
         /// <returns></returns>
-        public string HashAndSalt(string username, string password)
+        public bool Authenticate(LoginModel model)
         {
-            string salt = null;
-            using (var _databaseHelper = new DatabaseHelper(configuration))
+            if (model.Username != null && model.Password != null)
             {
-                SqlCommand query = new SqlCommand($@"SELECT Salt FROM CustomerPassword p
-                                                    INNER JOIN Customer c ON
-                                                        c.CustomerID = p.CustomerID
-                                                    WHERE c.Email = @Username");
-                query.Parameters.AddWithValue("@Username", username);
-                salt = _databaseHelper.Connection.Query<string>(query.ToString()).FirstOrDefault();
-            }
-            string input = salt + password;
-            using (SHA512 shaHash = new SHA512Managed())
-            {
-                var data = Encoding.UTF8.GetBytes(input);
-                return shaHash.ComputeHash(data).ToString();
-            }
-        }
-
-        public bool Authenticate(string username, string password)
-        {
-            string saltedInput = HashAndSalt(username,password);
-            try
-            {
-                using (var _databaseHelper = new DatabaseHelper(configuration))
+                try
                 {
-                    SqlCommand query = new SqlCommand($@"SELECT CASE WHEN COUNT(1) > 0 THEN 1 ELSE 0 END AS [Value]
-                                                    FROM Customer c
-                                                    INNER JOIN CustomerPassword p ON
-                                                        c.CustomerID = p.CustomerID
-                                                    WHERE p.Password = @HashedInput and c.Email = @Username");
-                    query.Parameters.AddWithValue("@HashedInput", saltedInput);
-                    query.Parameters.AddWithValue("@Username", username);
-                    var result = _databaseHelper.Connection.ExecuteAsync(query.ToString());
-                    return Convert.ToBoolean(result);
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        var command = new SqlCommand
+                        {
+                            Connection = (SqlConnection)_databaseHelper.Connection,
+                            CommandType = CommandType.StoredProcedure,
+                            CommandText = "dbo.UserLogin"
+                        };
+
+                        command.Parameters.AddWithValue("@Email", model.Username);
+                        command.Parameters.AddWithValue("@Password", model.Password);
+
+                        SqlParameter output = new SqlParameter("@responseMessage", SqlDbType.VarChar);
+                        output.Direction = ParameterDirection.Output;
+                        output.Size = 255;
+                        command.Parameters.Add(output);
+
+                        command.Connection.Open();
+                        command.ExecuteNonQuery();
+
+                        var response = command.Parameters["@responseMessage"].Value;
+
+                        var valid = (response.ToString() == "Invalid login Details") ? false :
+                            (response.ToString() == "Wrong Password") ? false : true;
+
+                        return valid;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    // Need to add logger here.
+                    // Need to reimplement
+                    return false;
                 }
             }
-            catch(Exception exception)
-            {
-                // Need to add logger here.
-                return false;
-            }
+
+
+
+            return false;
         }
+
+
+        ///   REGISTER
+
+        public bool Authenticate(RegisterModel model)
+        {
+            if (model.fName != null && model.Password != null)
+            {
+                try
+                {
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        var command = new SqlCommand
+                        {
+                            Connection = (SqlConnection)_databaseHelper.Connection,
+                            CommandType = CommandType.StoredProcedure,
+                            CommandText = "dbo.AddUser"
+                        };
+
+                        command.Parameters.AddWithValue("@fName", model.fName);
+                        command.Parameters.AddWithValue("@lName", model.lName);
+                        command.Parameters.AddWithValue("@ContactNumber", model.ContactNumber);
+                        command.Parameters.AddWithValue("@Email", model.Email);
+                        command.Parameters.AddWithValue("@StreetNum", model.StreetNum);
+                        command.Parameters.AddWithValue("@StreetName", model.StreetName);
+                        command.Parameters.AddWithValue("@Postcode", model.Postcode);
+                        command.Parameters.AddWithValue("@City", model.City);
+                        command.Parameters.AddWithValue("@State", model.State);
+                        command.Parameters.AddWithValue("@Country", model.Country);
+                        command.Parameters.AddWithValue("@HashedPassword", model.Password);
+
+
+                        SqlParameter output = new SqlParameter("@responseMessage", SqlDbType.VarChar);
+                        output.Direction = ParameterDirection.Output;
+                        output.Size = 255;
+                        command.Parameters.Add(output);
+
+                        command.Connection.Open();
+                        command.ExecuteNonQuery();
+
+                        var response = command.Parameters["@responseMessage"].Value;
+
+                        var valid = (response.ToString() == "Invalid login Details") ? false :
+                            (response.ToString() == "Wrong Password") ? false : true;
+
+                        return valid;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    // Need to add logger here.
+                    // Need to reimplement
+                    return false;
+                }
+            }
+
+
+
+            return false;
+        }
+
+        public bool Authenticate(UpdatingPasswordModel model)
+        {
+            if (model.Username != null && model.Password != null)
+            {
+                try
+                {
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        var command = new SqlCommand
+                        {
+                            Connection = (SqlConnection)_databaseHelper.Connection,
+                            CommandType = CommandType.StoredProcedure,
+                            CommandText = "dbo.UpdatingUserPassword"
+                        };
+
+                        command.Parameters.AddWithValue("@Email", model.Username);
+                        command.Parameters.AddWithValue("@HashedPassword", model.Password);
+
+
+                        SqlParameter output = new SqlParameter("@responseMessage", SqlDbType.VarChar);
+                        output.Direction = ParameterDirection.Output;
+                        output.Size = 255;
+                        command.Parameters.Add(output);
+
+                        command.Connection.Open();
+                        command.ExecuteNonQuery();
+
+                        var response = command.Parameters["@responseMessage"].Value;
+
+                        var valid = (response.ToString() == "Invalid email") ? false :
+                            (response.ToString() == "Success") ? true : true;
+
+                        return valid;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    // Need to add logger here.
+                    // Need to reimplement
+                    return false;
+                }
+            }
+
+
+
+            return false;
+        }
+
+
+
+
+
 
 
         /// <summary>
@@ -175,7 +286,7 @@ namespace INFT3970Project.Helpers
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        public TemperatureModel QuerySingleTemperatures(Guid? Id)
+        public TemperatureModel QuerySingleTemperature(Guid? Id)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
@@ -206,6 +317,22 @@ namespace INFT3970Project.Helpers
                 var results = _databaseHelper.Connection.Query<TemperatureModel>(query);
                 return results;
             }
+        }
+
+        public IEnumerable<SensorModel> QueryAllSensors()
+        {
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                _databaseHelper.Connection.Open();
+                var command = new SqlCommand("SELECT * FROM [Sensor];");
+                var results = _databaseHelper.Connection.Query<SensorModel>(command.ToString());
+                return results;
+            }
+        }
+
+        public bool RegisterAccount(string username, string password)
+        {
+            return false;
         }
     }
 }

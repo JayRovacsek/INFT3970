@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using INFT3970Project.Helpers;
 using INFT3970Project.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -36,6 +37,19 @@ namespace INFT3970_Project
             services.TryAddSingleton<DatabaseHelper>();
             services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
+            services.AddDistributedMemoryCache();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    // Cookie settings
+                    options.Cookie.HttpOnly = true;
+                    options.ExpireTimeSpan = TimeSpan.FromHours(1);
+
+                    options.LoginPath = "/Login";
+                    options.AccessDeniedPath = "/Login";
+                    options.SlidingExpiration = true;
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,16 +65,18 @@ namespace INFT3970_Project
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseStaticFiles();
+            app.UseAuthentication();
+            app.UseCookiePolicy(new CookiePolicyOptions() {
+                Secure = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest
+            });
 
+            app.UseStaticFiles();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-                routes.MapRoute(
-                    name: "temperature",
-                    template: "{controller=Temperature}/{action=Index}/{id?}");
+                    template: "{controller}/{action}/{id?}",
+                    defaults: new { controller = "Home", action = "Index" });
             });
         }
     }
