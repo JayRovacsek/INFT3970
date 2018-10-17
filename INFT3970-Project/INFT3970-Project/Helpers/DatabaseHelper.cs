@@ -209,7 +209,7 @@ namespace INFT3970Project.Helpers
             return false;
         }
 
-        public bool Authenticate(UpdatingPasswordModel model)
+        public bool UpdatePassword(UpdatingPasswordModel model)
         {
             if (model.Username != null && model.Password != null)
             {
@@ -228,9 +228,11 @@ namespace INFT3970Project.Helpers
                         command.Parameters.AddWithValue("@Password", model.Password);
 
 
-                        SqlParameter output = new SqlParameter("@responseMessage", SqlDbType.VarChar);
-                        output.Direction = ParameterDirection.Output;
-                        output.Size = 255;
+                        var output = new SqlParameter("@responseMessage", SqlDbType.VarChar)
+                        {
+                            Direction = ParameterDirection.Output,
+                            Size = 255
+                        };
                         command.Parameters.Add(output);
 
                         command.Connection.Open();
@@ -239,7 +241,7 @@ namespace INFT3970Project.Helpers
                         var response = command.Parameters["@responseMessage"].Value;
 
                         var valid = (response.ToString() == "Invalid email") ? false :
-                            (response.ToString() == "Success") ? true : true;
+                            (response.ToString() == "Success") ? true : false;
 
                         return valid;
                     }

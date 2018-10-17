@@ -27,19 +27,26 @@ namespace INFT3970Project.Controllers
             return View();
         }
 
-
         [HttpPost]
-        public IActionResult UpdatePassword(LoginModel model)
+        public IActionResult UpdatePassword(UpdatingPasswordModel model)
         {
-            // UPDATE PASSWORD HERE
-
-            var success = true;
-
-            if (success)
+            if (!string.IsNullOrEmpty(model.Username) && !string.IsNullOrEmpty(model.Username))
             {
-                return RedirectToAction("Index", "User", "Successfully updated password");
+                using (var _databaseHelper = new DatabaseHelper(configuration))
+                {
+                    var valid = _databaseHelper.UpdatePassword(model);
+
+                    if (valid)
+                    {
+                        ViewData["Message"] = "Password Changed";
+                        return View("Manage");
+                    }
+
+                }
             }
-            return RedirectToAction("Index", "User", "Unable to update password");
+
+            ViewData["Message"] = "Didnt work";
+            return View();
         }
     }
 }
