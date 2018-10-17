@@ -6,6 +6,7 @@ using INFT3970Project.Helpers;
 using INFT3970Project.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 
 namespace INFT3970Project.Controllers
@@ -24,24 +25,37 @@ namespace INFT3970Project.Controllers
 
         public IActionResult Manage()
         {
+            var sensors = _databaseHelper.QueryAllSensors();
+
+            var selectlist = new List<SelectListItem>();
+            foreach (var sensor in sensors)
+            {
+                selectlist.Add(new SelectListItem { Text = sensor.Name, Value = sensor.SensorId.ToString() });
+            }
+
+            ViewBag.SelectList = selectlist;
+
             return View();
         }
 
         [HttpPost]
         public IActionResult UpdatePassword(UserAndPasswordModel model)
         {
-            if (!string.IsNullOrEmpty(model.User.Email) && !string.IsNullOrEmpty(model.User.Email))
+            if(model != null)
             {
-                using (var _databaseHelper = new DatabaseHelper(configuration))
+                if (!string.IsNullOrEmpty(model.User.Email) && !string.IsNullOrEmpty(model.User.Email))
                 {
-                    var valid = _databaseHelper.UpdatePassword(model);
-
-                    if (valid)
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
                     {
-                        ViewData["Message"] = "Password Changed";
-                        return View("Manage");
-                    }
+                        var valid = _databaseHelper.UpdatePassword(model);
 
+                        if (valid)
+                        {
+                            ViewData["Message"] = "Password Changed";
+                            return View("Manage");
+                        }
+
+                    }
                 }
             }
 
