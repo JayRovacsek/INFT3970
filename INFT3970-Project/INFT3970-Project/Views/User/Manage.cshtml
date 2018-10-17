@@ -1,0 +1,8 @@
+﻿@{
+    Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-6">@{await Html.RenderPartialAsync("_UpdatePassword");}</div>
+    <div class="col-md-6">@{await Html.RenderPartialAsync("_AddSensor");}</div>
+</div>
