@@ -1,0 +1,205 @@
+\documentclass[a4paper,12pt,headings=normal]{article}
+    \usepackage{url}
+    \usepackage{xcolor}
+    \usepackage{lscape}
+    \usepackage{amssymb}
+    \usepackage{titling}
+    \usepackage{pdfpages}
+    \usepackage{enumitem}
+    \usepackage{graphicx}
+    \usepackage{hyperref}
+    \usepackage{listings}
+    \usepackage{fancybox}
+    \usepackage{enumerate}
+    \usepackage{pdflscape}
+    \usepackage{afterpage}
+    \usepackage{lstautogobble}
+    \usepackage[utf8]{inputenc}
+    \usepackage[english]{babel}
+    \usepackage[toc,page]{appendix}
+    \usepackage{csquotes}
+    \usepackage{comment}
+    \usepackage[normalem]{ulem}
+    \usepackage[margin=0.8in]{geometry}
+    \usepackage[nottoc,notlot,notlof]{tocbibind}
+    \usepackage[
+        backend=biber,
+        style=ieee,
+        citestyle=ieee
+        ]{biblatex}
+
+    \addbibresource{report.bib}
+
+    \DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
+    \DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
+
+    \definecolor{deepblue}{rgb}{0,0,0.5}
+    \definecolor{deepred}{rgb}{0.6,0,0}
+    \definecolor{deepgreen}{rgb}{0,0.5,0}
+
+    \newcommand\gostyle{\lstset{
+        language=Go,
+        autogobble=true,
+        basicstyle=\small,
+        stepnumber=1,
+        keywordstyle=\small\color{deepblue},
+        emph={
+            fmt,
+            gobot,
+            main,
+            tryFlashLED,
+            flashLED,
+            getAvailability,
+            getSensorData,
+            printError
+            },
+        emphstyle=\small\color{deepred},
+        numbers=left,
+        tabsize=4,
+        stringstyle=\color{deepgreen},
+        breaklines=true,
+        frame=tb,
+        showstringspaces=false
+        }}
+
+        % Go environment
+        \lstnewenvironment{Go}[1][]
+        {
+        \gostyle
+        \lstset{#1}
+        }
+        {}
+    
+        % Go for external files
+        \newcommand\gostyleexternal[2][]{{
+            \gostyle
+            \lstinputlisting[#1]{#2}}}
+
+    \renewcommand\maketitlehookd{\vfill\null}
+    \renewcommand\maketitlehooka{\null\mbox{}\vfill}
+
+    \newcounter{num}
+
+    \graphicspath{ {Images/} }
+
+    \title{INFT3970 Major Project Final Report \protect\\
+    Distributed Monitoring System using ESP-12E}
+    \author{
+        Team Encore\\
+        \textit{Thursday 10:00AM - 10:30AM}\\
+        Jay Rovacsek
+        \texttt{c3146220@uon.edu.au}\\
+        Dean Morton
+        \texttt{c3252227@uon.edu.au}\\
+        Josh Brown
+        \texttt{c3283797@uon.edu.au}\\
+        Jacob Litherland
+        \texttt{c3263482@uon.edu.au}\\
+        Lee Marron
+        \texttt{c3263482@uon.edu.au}\\
+        Edward Lonsdale
+        \texttt{c3252144@uon.edu.au}
+    }
+    \date{\today}
+    \hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=magenta,      
+    urlcolor=blue,
+    citecolor=red,
+    linktoc=section,
+    }
+    \pagenumbering{arabic}
+
+    \newlist{legal}{enumerate}{10}
+    \setlist[legal]{label*=\arabic*.}
+
+    \begin{document}
+
+    \begin{titlingpage}
+        \maketitle
+    \end{titlingpage}
+
+    \tableofcontents
+    
+    \newpage
+
+    \section{Executive Summary}
+
+    \newpage
+    \section{Introduction}
+        \subsection{Project Objectives}
+        \subsection{Business Summary}
+
+    \newpage
+    \section{Proposed Solution}
+        \subsection{Outline}
+        \subsection{Technical Requirements}
+        \subsection{Limitations or Constraints}
+
+    \newpage
+    \section{Technical Documentation}
+        \subsection{Database Documentation}
+            \subsubsection{Relational Model}
+            \subsubsection{Data Requirements}
+            \subsubsection{Data Dictionary}
+            \subsubsection{Database Schema}
+
+        \newpage
+        \subsection{ESP12-E Documentation}
+            \subsubsection{Temperature}
+            \subsubsection{Humidity}
+            \subsubsection{Motion}
+            \subsubsection{Issues in Development}
+                One of the first challenges of this project was to ensure we had a viable
+                path to producing a result we deemed desirable, a rused prototype was created
+                on the ESP12-E using arduino code.
+                The code used methods causing blocks on continued execution and for one or 
+                two items being reported this was okay, however to ensure the platform had
+                room to breathe we investigated two routes: non-blocking code using timers 
+                in arduino code, and golang utilising the Gobot framework\cite{GoBot}.
+
+                \medskip
+
+                The Gobot route seemed very promising, prewritten libraries for items 
+                such as the XC-4444\cite{XC-4444} existed, however a mixture of team members 
+                unfamiliar with the Go langauge\cite{Golang} and a number of resources
+                pointing to the DHT-11\cite{DHT11} being severely undersupported\cite{GolangDHT111Issues}.
+                in the Golang space lead us to investigate the alternative option: timers 
+                in arduino code.
+
+                A copy of the Golang Arduino Implementation can be found \hyperref[sec:GolangESP12EImplementation]{\color{blue}here.}
+
+                \medskip
+
+
+        \newpage
+        \subsection{Web Application Documentation}
+            \subsubsection{API Documentation}
+            \subsubsection{Issues in Development}
+
+        \newpage
+        \subsection{General Documentation}
+            \subsubsection{Sequence Diagrams}
+            \subsubsection{Network Diagram}
+
+        \newpage
+        \subsection{Install Proceedures}
+    
+    \newpage
+    \section{User Documentation}
+        \subsection{Installation}
+        \subsection{Accessing Dashboards}
+        \subsection{Account Administration}
+
+    \newpage
+    \printbibliography
+
+    \newpage
+    \appendix
+    \section{Appendix}
+    \subsection{Golang ESP12-E Implementation}
+    \label{sec:GolangESP12EImplementation}
+    \gostyleexternal{Resources/test.go}
+
+    \end{document}
