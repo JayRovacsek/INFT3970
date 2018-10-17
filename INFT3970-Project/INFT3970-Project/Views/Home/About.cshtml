@@ -1,7 +1,33 @@
 ﻿@{
-    ViewData["Title"] = "About";
+    if (User.IsInRole("User"))
+    {
+        Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_UnauthenticatedLayout.cshtml";
+    }
 }
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
 
-<p>Use this area to provide additional information.</p>
+@{
+    ViewData["Title"] = "Team Encore is made up of:";
+}
+
+@{ var theTeam = new Dictionary<string, string>()
+{
+{ "Jay Rovacsek","c3146220@uon.edu.au"},
+{ "Dean Morton","c3252227@uon.edu.au"},
+{ "Josh Brown","c3283797@uon.edu.au"},
+{ "Jacob Litherland","c3263482@uon.edu.au"},
+{ "Lee Marron","c3263482@uon.edu.au"},
+{ "Edward Lonsdale","c3252144@uon.edu.au"}
+};
+}
+
+<h2 class="text-center">@ViewData["Title"]</h2>
+
+@{ foreach (var item in theTeam)
+    {
+        <p class="text-center">@item.Key : @item.Value</p>
+    }
+}

@@ -342,9 +342,7 @@ Documentation/*.out
 *.synctex.gz
 *.fls
 *.out
-Documentation/Project Scope Document/distributed_system_scope_document.synctex.gz
-Documentation/Project Scope Document/distributed_system_scope_document.aux
-Documentation/Project Scope Document/distributed_system_scope_document.fdb_latexmk
-Documentation/Project Scope Document/distributed_system_scope_document.fls
-Documentation/Project Scope Document/distributed_system_scope_document.out
-Documentation/Project Scope Document/distributed_system_scope_document.toc
+*.bbl
+*.bcf
+*.blg
+*.xml
