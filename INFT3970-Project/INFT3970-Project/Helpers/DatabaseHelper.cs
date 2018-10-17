@@ -141,7 +141,7 @@ namespace INFT3970Project.Helpers
             return false;
         }
 
-        public bool Register(RegisterModel model)
+        public async Task<bool> Register(RegisterModel model)
         {
             if (model.fName != null && model.Password != null)
             {
@@ -174,7 +174,7 @@ namespace INFT3970Project.Helpers
                         command.Parameters.Add(output);
 
                         command.Connection.Open();
-                        command.ExecuteNonQuery();
+                        await command.ExecuteNonQueryAsync();
 
                         var response = command.Parameters["@responseMessage"].Value;
 

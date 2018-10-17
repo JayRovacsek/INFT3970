@@ -88,7 +88,29 @@ namespace INFT3970Project.Controllers
 
             ViewData["Message"] = "Please enter your Login details.";
             return View("Index");
+        }
 
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterModel model)
+        {
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                var valid = await _databaseHelper.Register(model);
+
+                if (valid)
+                {
+                    return RedirectToAction("Index", "Login");
+                }
+
+            }
+
+            return View();
         }
     }
 }
