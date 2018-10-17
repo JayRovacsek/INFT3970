@@ -225,7 +225,7 @@ namespace INFT3970Project.Helpers
                         };
 
                         command.Parameters.AddWithValue("@Email", model.Username);
-                        command.Parameters.AddWithValue("@HashedPassword", model.Password);
+                        command.Parameters.AddWithValue("@Password", model.Password);
 
 
                         SqlParameter output = new SqlParameter("@responseMessage", SqlDbType.VarChar);
