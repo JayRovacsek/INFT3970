@@ -38,7 +38,7 @@ namespace INFT3970Project.Controllers
             {
                 using (var _databaseHelper = new DatabaseHelper(configuration))
                 {
-                    var valid = _databaseHelper.Authenticate(new RegisterModel() { fName = fName, lName = lName, ContactNumber = ContactNumber, Email = Email, StreetNum= StreetNum, StreetName = StreetName, Postcode = Postcode, City = City, State = State, Country = Country, Password = Password});
+                    var valid = _databaseHelper.Register(new RegisterModel() { fName = fName, lName = lName, ContactNumber = ContactNumber, Email = Email, StreetNum= StreetNum, StreetName = StreetName, Postcode = Postcode, City = City, State = State, Country = Country, Password = Password});
 
                     if (true)
                     {
