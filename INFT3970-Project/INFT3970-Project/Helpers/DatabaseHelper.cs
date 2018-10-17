@@ -209,6 +209,62 @@ namespace INFT3970Project.Helpers
             return false;
         }
 
+        public bool UpdatePassword(UpdatingPasswordModel model)
+        {
+            if (model.Username != null && model.Password != null)
+            {
+                try
+                {
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        var command = new SqlCommand
+                        {
+                            Connection = (SqlConnection)_databaseHelper.Connection,
+                            CommandType = CommandType.StoredProcedure,
+                            CommandText = "dbo.UpdatingUserPassword"
+                        };
+
+                        command.Parameters.AddWithValue("@Email", model.Username);
+                        command.Parameters.AddWithValue("@Password", model.Password);
+
+
+                        var output = new SqlParameter("@responseMessage", SqlDbType.VarChar)
+                        {
+                            Direction = ParameterDirection.Output,
+                            Size = 255
+                        };
+                        command.Parameters.Add(output);
+
+                        command.Connection.Open();
+                        command.ExecuteNonQuery();
+
+                        var response = command.Parameters["@responseMessage"].Value;
+
+                        var valid = (response.ToString() == "Invalid email") ? false :
+                            (response.ToString() == "Success") ? true : false;
+
+                        return valid;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    // Need to add logger here.
+                    // Need to reimplement
+                    return false;
+                }
+            }
+
+
+
+            return false;
+        }
+
+
+
+
+
+
+
         /// <summary>
         /// Implementation of method to query for all temperatures
         /// </summary>

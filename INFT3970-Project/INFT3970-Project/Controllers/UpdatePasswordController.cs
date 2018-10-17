@@ -3,43 +3,47 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using INFT3970Project.Helpers;
-using INFT3970Project.Models;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using INFT3970Project.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace INFT3970Project.Controllers
 {
-    [Authorize]
-    public class UserController : Controller
+    public class UpdatePasswordController : Controller
     {
         private readonly IConfiguration configuration;
         private DatabaseHelper _databaseHelper;
 
-        public UserController(IConfiguration configuration, DatabaseHelper databaseHelper)
+        public UpdatePasswordController(IConfiguration configuration, DatabaseHelper databaseHelper)
         {
             this.configuration = configuration;
             _databaseHelper = databaseHelper;
         }
 
-        public IActionResult Manage()
+        public IActionResult _UpdatePassword()
         {
+            ViewData["Message"] = "Please enter your details.";
+
             return View();
         }
 
-        [HttpPost]
-        public IActionResult UpdatePassword(UpdatingPasswordModel model)
+        public IActionResult UpdatePassword(string username, string password)
         {
-            if (!string.IsNullOrEmpty(model.Username) && !string.IsNullOrEmpty(model.Username))
+            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
             {
                 using (var _databaseHelper = new DatabaseHelper(configuration))
                 {
-                    var valid = _databaseHelper.UpdatePassword(model);
+                    var valid = _databaseHelper.UpdatePassword(new UpdatingPasswordModel() { Username = username, Password = password });
 
-                    if (valid)
+                    if (valid == true)
                     {
                         ViewData["Message"] = "Password Changed";
-                        return View("Manage");
+                        return View();
                     }
 
                 }
