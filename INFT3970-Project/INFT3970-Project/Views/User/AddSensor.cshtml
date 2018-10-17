@@ -1,0 +1,19 @@
+﻿@model SensorModel
+
+<h3>Add Sensor:</h3>
+<div class="form-group">
+    @using (Html.BeginForm("UpdatePassword", "User", FormMethod.Post, new { @class = "form-group" }))
+    {
+        <div class="form-group row-fluid">
+            @Html.TextBoxFor(model => model.UserId, new { @class = "form-control", @placeholder = "User Id" })
+            @Html.ValidationMessageFor(model => model.UserId)
+        </div>
+        <div class="form-group row-fluid">
+            @Html.TextBoxFor(model => model.SensorId, new { @class = "form-control", @placeholder = "Sensor Id" })
+            @Html.ValidationMessageFor(model => model.SensorId)
+        </div>
+        <div class="form-group row-fluid">
+            <button class="btn btn-lg btn-primary" type="submit">Add Sensor</button>
+        </div>
+    }
+</div>
