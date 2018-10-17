@@ -34,12 +34,6 @@ namespace INFT3970Project.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> UpdatePassword()
-        {
-            return Ok();
-        }
-
-        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
