@@ -32,13 +32,13 @@ namespace INFT3970Project.Controllers
             return View();
         }
 
-        public IActionResult UpdatePassword(string Username, string Password)
+        public IActionResult UpdatePassword(string username, string password)
         {
-            if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
+            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
             {
                 using (var _databaseHelper = new DatabaseHelper(configuration))
                 {
-                    var valid = _databaseHelper.Authenticate(new UpdatingPasswordModel() { Username = Username, Password = Password });
+                    var valid = _databaseHelper.UpdatePassword(new UpdatingPasswordModel() { Username = username, Password = password });
 
                     if (valid == true)
                     {
