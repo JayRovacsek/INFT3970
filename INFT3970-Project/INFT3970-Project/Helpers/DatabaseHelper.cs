@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace INFT3970Project.Helpers
 {
@@ -21,7 +22,7 @@ namespace INFT3970Project.Helpers
         SafeHandle handle = new SafeFileHandle(IntPtr.Zero, true);
         string format = "yyyy-MM-dd HH:mm:ss";
 
-        public DatabaseHelper(IConfiguration configuration) 
+        public DatabaseHelper(IConfiguration configuration)
         {
             this.configuration = configuration;
             _connectionString = configuration.GetConnectionString("AzureConnectionString").ToString();
@@ -143,16 +144,13 @@ namespace INFT3970Project.Helpers
                     return false;
                 }
             }
-
-
-
             return false;
         }
 
 
         ///   REGISTER
 
-        public bool Authenticate(RegisterModel model)
+        public bool Register(RegisterModel model)
         {
             if (model.fName != null && model.Password != null)
             {
@@ -207,6 +205,29 @@ namespace INFT3970Project.Helpers
 
 
             return false;
+        }
+
+        public async Task<IEnumerable<SensorModel>> QueryUserSensors(UserModel model)
+        {
+            if (model != null)
+            {
+                try
+                {
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        var command = new SqlCommand($"SELECT * FROM [Sensor] WHERE [Sensor].[UserID] = {model.UserId};");
+
+                        return await _databaseHelper.Connection.QueryAsync<SensorModel>(command.ToString());
+                    }
+                }
+                catch (Exception exception)
+                {
+                    // Need to add logger here.
+                    // Need to reimplement
+                    return null;
+                }
+            }
+            return null;
         }
 
         public bool UpdatePassword(UserAndPasswordModel model)
