@@ -97,12 +97,6 @@ namespace INFT3970Project.Helpers
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="username"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
         public bool Authenticate(LoginModel model)
         {
             if (model.Username != null && model.Password != null)
@@ -147,9 +141,6 @@ namespace INFT3970Project.Helpers
             return false;
         }
 
-
-        ///   REGISTER
-
         public bool Register(RegisterModel model)
         {
             if (model.fName != null && model.Password != null)
@@ -177,7 +168,6 @@ namespace INFT3970Project.Helpers
                         command.Parameters.AddWithValue("@Country", model.Country);
                         command.Parameters.AddWithValue("@HashedPassword", model.Password);
 
-
                         SqlParameter output = new SqlParameter("@responseMessage", SqlDbType.VarChar);
                         output.Direction = ParameterDirection.Output;
                         output.Size = 255;
@@ -201,9 +191,6 @@ namespace INFT3970Project.Helpers
                     return false;
                 }
             }
-
-
-
             return false;
         }
 
@@ -274,17 +261,8 @@ namespace INFT3970Project.Helpers
                     return false;
                 }
             }
-
-
-
             return false;
         }
-
-
-
-
-
-
 
         /// <summary>
         /// Implementation of method to query for all temperatures
@@ -347,15 +325,11 @@ namespace INFT3970Project.Helpers
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
                 _databaseHelper.Connection.Open();
-                var command = new SqlCommand("SELECT * FROM [Sensor];");
+                var command = new StringBuilder("SELECT * FROM [dbo].[Sensor];");
+
                 var results = _databaseHelper.Connection.Query<SensorModel>(command.ToString());
                 return results;
             }
-        }
-
-        public bool RegisterAccount(string username, string password)
-        {
-            return false;
         }
     }
 }

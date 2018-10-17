@@ -40,18 +40,18 @@ namespace INFT3970Project.Controllers
             return RedirectToAction("Index", "Login");
         }
 
-        public async Task<IActionResult> Login(string username = null, string password = null)
+        public async Task<IActionResult> Login(LoginModel model)
         {
-            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(username))
+            if (!string.IsNullOrEmpty(model.Username) && !string.IsNullOrEmpty(model.Username))
             {
                 using (var _databaseHelper = new DatabaseHelper(configuration))
                 {
-                    var valid = _databaseHelper.Authenticate(new LoginModel() { Username = username, Password = password });
+                    var valid = _databaseHelper.Authenticate(new LoginModel() { Username = model.Username, Password = model.Password });
 
                     if (true)
                     {
                         var claims = new List<Claim> { 
-                                new Claim(ClaimTypes.Name, username),
+                                new Claim(ClaimTypes.Name, model.Username),
                                 new Claim(ClaimTypes.Role, "User"),
                             };
 
@@ -77,8 +77,8 @@ namespace INFT3970Project.Controllers
 
                     var LoginModel = new LoginModel()
                     {
-                        Username = username,
-                        Password = password,
+                        Username = model.Username,
+                        Password = model.Password,
                         SuccessfulLogin = false
                     };
                     return View("Index", LoginModel);
