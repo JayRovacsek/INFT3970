@@ -25,10 +25,7 @@ namespace INFT3970Project.Models
         public string State { get; set; }
         [Required]
         public string Country { get; set; }                     
-
         [Required]
         public string Password { get; set; }
-
-        public bool SuccessfulRegister { get; set; } = false;
     }
 }
