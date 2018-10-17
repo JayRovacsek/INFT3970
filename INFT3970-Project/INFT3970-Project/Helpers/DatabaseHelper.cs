@@ -209,9 +209,9 @@ namespace INFT3970Project.Helpers
             return false;
         }
 
-        public bool UpdatePassword(UpdatingPasswordModel model)
+        public bool UpdatePassword(UserAndPasswordModel model)
         {
-            if (model.Username != null && model.Password != null)
+            if (model.User.Email != null && model.UserPassword.Password != null)
             {
                 try
                 {
@@ -224,8 +224,8 @@ namespace INFT3970Project.Helpers
                             CommandText = "dbo.UpdatingUserPassword"
                         };
 
-                        command.Parameters.AddWithValue("@Email", model.Username);
-                        command.Parameters.AddWithValue("@Password", model.Password);
+                        command.Parameters.AddWithValue("@Email", model.User.Email);
+                        command.Parameters.AddWithValue("@Password", model.UserPassword.Password);
 
 
                         var output = new SqlParameter("@responseMessage", SqlDbType.VarChar)
