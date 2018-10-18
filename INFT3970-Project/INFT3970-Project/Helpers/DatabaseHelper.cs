@@ -10,6 +10,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using DB = INFT3970Project.Models.Database_Entities;
 
 namespace INFT3970Project.Helpers
 {
@@ -94,6 +95,24 @@ namespace INFT3970Project.Helpers
 
                     await result;
                 }
+            }
+        }
+
+        public async Task<int> GetUserIdAsync(string username)
+        {
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                var result = _databaseHelper.Connection.Query<int>($"SELECT [UserID] FROM [Users] WHERE [Email] = '{username}';");
+                return result.FirstOrDefault();
+            }
+        }
+
+        public int GetUserId(string username)
+        {
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                var result = _databaseHelper.Connection.ExecuteScalar<int>($"SELECT [UserID] FROM [Users] WHERE [Email] = '{username}';");
+                return result;
             }
         }
 
@@ -284,6 +303,32 @@ namespace INFT3970Project.Helpers
                 var result = _databaseHelper.Connection.Query<TemperatureModel>(query);
                 return result;
             }
+        }
+
+        public async Task<IEnumerable<DB.TemperatureModel>> QueryUserTemperatures(string userId)
+        {
+            try
+            {
+                var id = Convert.ToInt32(userId);
+
+                if (id != 0)
+                {
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        _databaseHelper.Connection.Open();
+                        var query = new StringBuilder($@"SELECT * FROM [Temperature] t
+                                                        INNER JOIN [Sensor] s ON t.[SensorID] = s.[SensorID]
+                                                        WHERE s.[UserID] = {userId}");
+                        var result = await _databaseHelper.Connection.QueryAsync<DB.TemperatureModel>(query.ToString());
+                        return result;
+                    }
+                }
+            }
+            catch(Exception exception)
+            {
+                return null;
+            }
+            return null;
         }
 
         /// <summary>
