@@ -40,14 +40,13 @@
                         if (HttpContextAccessor.HttpContext.Request.Cookies.ContainsKey("IsAdmin"))
                         {
                             <li><a asp-area="" asp-controller="Dashboard" asp-action="Temperature">Temperature</a></li>
-                            <li><a asp-area="" asp-controller="Dashboard" asp-action="Temperature">(All)</a></li>
+                            <li><a asp-area="" asp-controller="Dashboard" asp-action="AllTemperature">(All)</a></li>
 
                             <li><a asp-area="" asp-controller="Dashboard" asp-action="Humidity">Humidity</a></li>
-                            <li><a asp-area="" asp-controller="Dashboard" asp-action="Humidity">(All)</a></li>
+                            <li><a asp-area="" asp-controller="Dashboard" asp-action="AllHumidity">(All)</a></li>
 
                             <li><a asp-area="" asp-controller="Dashboard" asp-action="Motion">Motion</a></li>
-                            <li><a asp-area="" asp-controller="Dashboard" asp-action="Motion">(All)</a></li>
-
+                            <li><a asp-area="" asp-controller="Dashboard" asp-action="AllMotion">(All)</a></li>
                         }
                         else
                         {
