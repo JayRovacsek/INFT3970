@@ -1,0 +1,33 @@
+﻿@model IEnumerable<INFT3970Project.Models.Database_Entities.HumidityModel>
+
+@{
+    Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
+}
+
+<h2>Humidity</h2>
+<table class="table">
+    <thead class="thead-light">
+
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Humidity</th>
+            <th scope="col">Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var item in Model)
+            {
+                <tr>
+                    <th scope="row">@item.HumidityId</th>
+                    <td>
+                        @item.Humidity %
+                    </td>
+                    <td>
+                        @item.Date
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
