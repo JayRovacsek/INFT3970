@@ -125,9 +125,11 @@ namespace INFT3970Project.Helpers
 
                         var response = command.Parameters["@responseMessage"].Value;
 
-                        var valid = (response.ToString() == "Invalid login Details") ? false :
-                            (response.ToString() == "Wrong Password") ? false : true;
-
+                        var valid = true;
+                        if (response.ToString() == "0")
+                        { valid = false; }
+                        if (response.ToString() == "1")
+                        { valid = true; }
                         return valid;
                     }
                 }
@@ -140,6 +142,8 @@ namespace INFT3970Project.Helpers
             }
             return false;
         }
+
+        
 
         public async Task<bool> Register(RegisterModel model)
         {
