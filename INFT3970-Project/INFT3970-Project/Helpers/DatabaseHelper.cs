@@ -305,13 +305,11 @@ namespace INFT3970Project.Helpers
             }
         }
 
-        public async Task<IEnumerable<DB.TemperatureModel>> QueryUserTemperatures(string userId)
+        public async Task<IEnumerable<DB.TemperatureModel>> QueryUserTemperature(int userId)
         {
             try
             {
-                var id = Convert.ToInt32(userId);
-
-                if (id != 0)
+                if (userId != 0)
                 {
                     using (var _databaseHelper = new DatabaseHelper(configuration))
                     {
@@ -324,7 +322,55 @@ namespace INFT3970Project.Helpers
                     }
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
+            {
+                return null;
+            }
+            return null;
+        }
+
+        public async Task<IEnumerable<DB.HumidityModel>> QueryUserHumidity(int userId)
+        {
+            try
+            {
+                if (userId != 0)
+                {
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        _databaseHelper.Connection.Open();
+                        var query = new StringBuilder($@"SELECT * FROM [Humidity] h
+                                                        INNER JOIN [Sensor] s ON h.[SensorID] = s.[SensorID]
+                                                        WHERE s.[UserID] = {userId}");
+                        var result = await _databaseHelper.Connection.QueryAsync<DB.HumidityModel>(query.ToString());
+                        return result;
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                return null;
+            }
+            return null;
+        }
+
+        public async Task<IEnumerable<DB.MotionModel>> QueryUserMotion(int userId)
+        {
+            try
+            {
+                if (userId != 0)
+                {
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        _databaseHelper.Connection.Open();
+                        var query = new StringBuilder($@"SELECT * FROM [Motion] m
+                                                        INNER JOIN [Sensor] s ON m.[SensorID] = s.[SensorID]
+                                                        WHERE s.[UserID] = {userId}");
+                        var result = await _databaseHelper.Connection.QueryAsync<DB.MotionModel>(query.ToString());
+                        return result;
+                    }
+                }
+            }
+            catch (Exception exception)
             {
                 return null;
             }
