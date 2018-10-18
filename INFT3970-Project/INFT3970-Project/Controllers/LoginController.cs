@@ -68,8 +68,18 @@ namespace INFT3970Project.Controllers
         [Authorize]
         public async Task<IActionResult> Logout()
         {
+            RemoveAllCookies();
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Login");
+        }
+
+        public bool IsAdministrator(int userId)
+        {
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                var result = _databaseHelper.IsUserAdministrator(userId);
+                return result;
+            }
         }
 
         public async Task<IActionResult> Login(LoginModel model)
@@ -82,6 +92,8 @@ namespace INFT3970Project.Controllers
 
                     if (valid)
                     {
+                        RemoveAllCookies();
+
                         var claims = new List<Claim> { 
                                 new Claim(ClaimTypes.Name, model.Username),
                                 new Claim(ClaimTypes.Role, "User"),
@@ -106,6 +118,13 @@ namespace INFT3970Project.Controllers
 
                         SetCookie("UserId", GetUserId(model.Username).ToString(), 60);
 
+                        var userId = GetUserId(model.Username);
+
+                        if (IsAdministrator(userId))
+                        {
+                            SetCookie("IsAdmin", "true", 60);
+                        }
+
                         return RedirectToAction("Index", "Home");
                     }
 
@@ -122,6 +141,14 @@ namespace INFT3970Project.Controllers
 
             ViewData["Message"] = "Please enter your Login details.";
             return View("Index");
+        }
+
+        public void RemoveAllCookies()
+        {
+            foreach (var cookie in Request.Cookies)
+            {
+                RemoveCookie(cookie.Key);
+            }
         }
 
         [HttpGet]
