@@ -1,11 +1,6 @@
 ﻿@model INFT3970Project.Models.RegisterModel
 
-@{
-    if (User.IsInRole("User"))
-    {
-        Layout = "~/Views/Shared/_UnauthenticatedLayout.cshtml";
-    }
-}
+@{Layout = "~/Views/Shared/_UnauthenticatedLayout.cshtml"; }
 
 @{
     ViewData["Title"] = "Register";

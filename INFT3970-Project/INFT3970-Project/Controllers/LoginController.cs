@@ -10,18 +10,41 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace INFT3970Project.Controllers
 {
     public class LoginController : Controller
     {
         private readonly IConfiguration configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private DatabaseHelper _databaseHelper;
 
-        public LoginController(IConfiguration configuration, DatabaseHelper databaseHelper)
+        public LoginController(IConfiguration configuration, DatabaseHelper databaseHelper, IHttpContextAccessor httpContextAccessor)
         {
             this.configuration = configuration;
             _databaseHelper = new DatabaseHelper(configuration);
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        public string GetCookie(string key)
+        {
+            return Request.Cookies[key];
+        }
+
+        public void SetCookie(string key, string value, int? expireTime)
+        {
+            CookieOptions option = new CookieOptions();
+            if (expireTime.HasValue)
+                option.Expires = DateTime.Now.AddMinutes(expireTime.Value);
+            else
+                option.Expires = DateTime.Now.AddMilliseconds(10);
+            Response.Cookies.Append(key, value, option);
+        }
+
+        public void RemoveCookie(string key)
+        {
+            Response.Cookies.Delete(key);
         }
 
         public IActionResult Index()
@@ -31,6 +54,15 @@ namespace INFT3970Project.Controllers
                 return RedirectToAction("Index", "Home");
             }
             return View();
+        }
+
+        public int GetUserId(string username)
+        {
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                var result = _databaseHelper.GetUserId(username);
+                return result;
+            }
         }
 
         [Authorize]
@@ -71,6 +103,8 @@ namespace INFT3970Project.Controllers
                             CookieAuthenticationDefaults.AuthenticationScheme,
                             new ClaimsPrincipal(claimsIdentity),
                             authProperties);
+
+                        SetCookie("UserId", GetUserId(model.Username).ToString(), 60);
 
                         return RedirectToAction("Index", "Home");
                     }
