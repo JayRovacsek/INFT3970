@@ -14,6 +14,12 @@ namespace INFT3970Project.Controllers
         public IConfiguration configuration;
         public IHttpContextAccessor _httpContextAccessor;
         public DatabaseHelper _databaseHelper;
+        public enum ApplicationMode
+        {
+            Admin = 1,
+            User = 2,
+            Demo = 3
+        }
 
         public BaseController(IConfiguration configuration, DatabaseHelper databaseHelper, IHttpContextAccessor httpContextAccessor)
         {
