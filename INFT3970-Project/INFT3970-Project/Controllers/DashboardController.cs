@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using INFT3970Project.Helpers;
 using INFT3970Project.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using DB = INFT3970Project.Models.Database_Entities;
@@ -12,24 +13,15 @@ using DB = INFT3970Project.Models.Database_Entities;
 namespace INFT3970Project.Controllers
 {
     [Authorize]
-    public class DashboardController : Controller
+    public class DashboardController : BaseController
     {
-        private readonly IConfiguration configuration;
-        private DatabaseHelper _databaseHelper;
-
-        public DashboardController(IConfiguration configuration)
+        public DashboardController(IConfiguration configuration, DatabaseHelper databaseHelper, IHttpContextAccessor httpContextAccessor) : base(configuration, databaseHelper, httpContextAccessor)
         {
-            this.configuration = configuration;
-            _databaseHelper = new DatabaseHelper(configuration);
         }
+
         public IActionResult Index()
         {
             return View();
-        }
-
-        public string GetCookie(string key)
-        {
-            return Request.Cookies[key];
         }
 
         public async Task<IActionResult> AllTemperature()
