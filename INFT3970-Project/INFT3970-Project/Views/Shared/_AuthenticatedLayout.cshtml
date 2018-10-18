@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -33,9 +35,28 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Dashboard" asp-action="Humidity">Humidity</a></li>
-                    <li><a asp-area="" asp-controller="Dashboard" asp-action="Motion">Motion</a></li>
-                    <li><a asp-area="" asp-controller="Dashboard" asp-action="Temperature">Temperature</a></li>
+
+                    @{
+                        if (HttpContextAccessor.HttpContext.Request.Cookies.ContainsKey("IsAdmin"))
+                        {
+                            <li><a asp-area="" asp-controller="Dashboard" asp-action="Temperature">Temperature</a></li>
+                            <li><a asp-area="" asp-controller="Dashboard" asp-action="Temperature">(All)</a></li>
+
+                            <li><a asp-area="" asp-controller="Dashboard" asp-action="Humidity">Humidity</a></li>
+                            <li><a asp-area="" asp-controller="Dashboard" asp-action="Humidity">(All)</a></li>
+
+                            <li><a asp-area="" asp-controller="Dashboard" asp-action="Motion">Motion</a></li>
+                            <li><a asp-area="" asp-controller="Dashboard" asp-action="Motion">(All)</a></li>
+
+                        }
+                        else
+                        {
+                            <li><a asp-area="" asp-controller="Dashboard" asp-action="Temperature">Temperature</a></li>
+                            <li><a asp-area="" asp-controller="Dashboard" asp-action="Humidity">Humidity</a></li>
+                            <li><a asp-area="" asp-controller="Dashboard" asp-action="Motion">Motion</a></li>
+                        }
+
+                    }
                     <li><a asp-area="" asp-controller="User" asp-action="Manage">Manage Account</a></li>
                     <li><a asp-area="" asp-controller="Login" asp-action="Logout">Logout</a></li>
                 </ul>
