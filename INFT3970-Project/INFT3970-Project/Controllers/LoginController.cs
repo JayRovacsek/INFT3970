@@ -48,7 +48,7 @@ namespace INFT3970Project.Controllers
                 {
                     var valid = _databaseHelper.Authenticate(new LoginModel() { Username = model.Username, Password = model.Password });
 
-                    if (true)
+                    if (valid)
                     {
                         var claims = new List<Claim> { 
                                 new Claim(ClaimTypes.Name, model.Username),
