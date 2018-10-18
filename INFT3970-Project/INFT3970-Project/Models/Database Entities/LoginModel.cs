@@ -10,5 +10,6 @@ namespace INFT3970Project.Models
         [Required]
         public string Password { get; set; }
         public bool SuccessfulLogin { get; set; } = false;
+        public string admin { get; set; }
     }
 }
