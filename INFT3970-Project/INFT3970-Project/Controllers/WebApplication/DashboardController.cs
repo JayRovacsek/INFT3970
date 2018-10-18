@@ -27,20 +27,25 @@ namespace INFT3970Project.Controllers
         public async Task<IActionResult> AllTemperature()
         {
             if (Convert.ToBoolean(GetCookie("IsAdmin"))){
-                return RedirectToAction("Temperature", true);
+                return RedirectToAction("Temperature", ApplicationMode.Admin);
 
             }
-            return RedirectToAction("Temperature", false);
+            return RedirectToAction("Temperature", ApplicationMode.User);
         }
 
-        public async Task<IActionResult> Temperature(bool all = false)
+        public async Task<IActionResult> Temperature(ApplicationMode mode = ApplicationMode.User)
         {
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
 
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
-                var models = (all) ? await _databaseHelper.QueryAllTemperature() : await _databaseHelper.QueryUserTemperature(userId);
+                var models = (mode == ApplicationMode.Admin) 
+                    ? await _databaseHelper.QueryAllTemperature() 
+                    : (mode == ApplicationMode.User)
+                    ? await _databaseHelper.QueryUserTemperature(userId)
+                    : await _databaseHelper.QueryUserTemperature(userId);
                 return View(models);
+                // NEEED TO FIX THE ABOVE FOR DEMO MODE.
             }
         }
 
@@ -48,19 +53,24 @@ namespace INFT3970Project.Controllers
         {
             if (Convert.ToBoolean(GetCookie("IsAdmin")))
             {
-                return RedirectToAction("Humidity", true);
+                return RedirectToAction("Humidity", ApplicationMode.Admin);
             }
-            return RedirectToAction("Humidity", false);
+            return RedirectToAction("Humidity", ApplicationMode.User);
         }
 
-        public async Task<IActionResult> Humidity(bool all = false)
+        public async Task<IActionResult> Humidity(ApplicationMode mode = ApplicationMode.User)
         {
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
 
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
-                var models = (all) ? await _databaseHelper.QueryAllHumidity() : await _databaseHelper.QueryUserHumidity(userId);
+                var models = (mode == ApplicationMode.Admin) 
+                    ? await _databaseHelper.QueryAllHumidity() 
+                    : (mode == ApplicationMode.User) 
+                    ? await _databaseHelper.QueryUserHumidity(userId)
+                    : await _databaseHelper.QueryUserHumidity(userId);
                 return View(models);
+                // NEEED TO FIX THE ABOVE FOR DEMO MODE.
             }
         }
 
@@ -68,30 +78,26 @@ namespace INFT3970Project.Controllers
         {
             if (Convert.ToBoolean(GetCookie("IsAdmin")))
             {
-                return RedirectToAction("Motion", true);
+                return RedirectToAction("Motion", ApplicationMode.Admin);
             }
-            return RedirectToAction("Motion", false);
+            return RedirectToAction("Motion", ApplicationMode.User);
         }
 
-        public async Task<IActionResult> Motion(bool all = false)
+        public async Task<IActionResult> Motion(ApplicationMode mode = ApplicationMode.User)
         {
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
 
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
-                var models = (all) ? await _databaseHelper.QueryAllMotion() : await _databaseHelper.QueryUserMotion(userId);
+                var models = (mode == ApplicationMode.Admin) 
+                    ? await _databaseHelper.QueryAllMotion() 
+                    : (mode == ApplicationMode.User) 
+                    ? await _databaseHelper.QueryUserMotion(userId) 
+                    : await _databaseHelper.QueryUserMotion(userId);
+                // NEEED TO FIX THE ABOVE FOR DEMO MODE.
 
                 return View(models);
             }
         }
-
-        //public async Task<IEnumerable<DB.TemperatureModel>> GetUserTemperatureModelsAsync(int userId)
-        //{
-        //    using (var _databaseHelper = new DatabaseHelper(configuration))
-        //    {
-        //        var result = await _databaseHelper.QueryUserTemperatures(userId);
-        //        return result;
-        //    }
-        //}
     }
 }
