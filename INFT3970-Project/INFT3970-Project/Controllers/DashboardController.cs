@@ -29,23 +29,35 @@ namespace INFT3970Project.Controllers
 
         public async Task<IActionResult> Temperature()
         {
-            var userId = Request.Cookies["UserId"];
+            var userId = Convert.ToInt32(Request.Cookies["UserId"]);
 
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
-                var temperatureModels = await _databaseHelper.QueryUserTemperatures(userId);
-                return View(temperatureModels);
+                var models = await _databaseHelper.QueryUserTemperature(userId);
+                return View(models);
             }
         }
 
-        public IActionResult Humidity()
+        public async Task<IActionResult> Humidity()
         {
-            return View();
+            var userId = Convert.ToInt32(Request.Cookies["UserId"]);
+
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                var models = await _databaseHelper.QueryUserHumidity(userId);
+                return View(models);
+            }
         }
 
-        public IActionResult Motion()
+        public async Task<IActionResult> Motion()
         {
-            return View();
+            var userId = Convert.ToInt32(Request.Cookies["UserId"]);
+
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                var models = await _databaseHelper.QueryUserMotion(userId);
+                return View(models);
+            }
         }
 
         //public async Task<IEnumerable<DB.TemperatureModel>> GetUserTemperatureModelsAsync(int userId)
