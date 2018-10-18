@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using INFT3970Project.Helpers;
 using INFT3970Project.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
@@ -12,15 +13,10 @@ using Microsoft.Extensions.Configuration;
 namespace INFT3970Project.Controllers
 {
     [Authorize]
-    public class UserController : Controller
+    public class UserController : BaseController
     {
-        private readonly IConfiguration configuration;
-        private DatabaseHelper _databaseHelper;
-
-        public UserController(IConfiguration configuration, DatabaseHelper databaseHelper)
+        public UserController(IConfiguration configuration, DatabaseHelper databaseHelper, IHttpContextAccessor httpContextAccessor) : base(configuration, databaseHelper, httpContextAccessor)
         {
-            this.configuration = configuration;
-            _databaseHelper = databaseHelper;
         }
 
         public IActionResult Manage()
