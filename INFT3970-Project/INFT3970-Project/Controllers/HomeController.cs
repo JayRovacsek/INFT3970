@@ -9,18 +9,14 @@ using Microsoft.AspNetCore.Mvc;
 using INFT3970Project.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace INFT3970Project.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        private readonly IConfiguration configuration;
-        private DatabaseHelper _databaseHelper;
-
-        public HomeController(IConfiguration configuration)
+        public HomeController(IConfiguration configuration, DatabaseHelper databaseHelper, IHttpContextAccessor httpContextAccessor) : base(configuration, databaseHelper, httpContextAccessor)
         {
-            this.configuration = configuration;
-            _databaseHelper = new DatabaseHelper(configuration);
         }
 
         [Authorize]
