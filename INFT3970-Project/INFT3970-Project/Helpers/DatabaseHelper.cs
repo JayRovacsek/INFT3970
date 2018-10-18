@@ -116,6 +116,15 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        public bool IsUserAdministrator(int userId)
+        {
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                var result = _databaseHelper.Connection.ExecuteScalar<string>($"SELECT [IsAdmin] FROM [Users] WHERE [UserID] = '{userId}';");
+                return (result == "N") ? false : true;
+            }
+        }
+
         public bool Authenticate(LoginModel model)
         {
             if (model.Username != null && model.Password != null)
