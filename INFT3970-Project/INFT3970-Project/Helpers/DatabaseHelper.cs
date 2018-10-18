@@ -301,16 +301,23 @@ namespace INFT3970Project.Helpers
         /// </summary>
         /// <typeparam name="TemperatureModel"></typeparam>
         /// <returns></returns>
-        public IEnumerable<TemperatureModel> QueryAllTemperatures<TemperatureModel>()
+        public async Task<IEnumerable<DB.TemperatureModel>> QueryAllTemperature()
         {
-            using (var _databaseHelper = new DatabaseHelper(configuration))
+            try
             {
-                _databaseHelper.Connection.Open();
-                var stringBuilder = new StringBuilder();
-                var query = stringBuilder.ToString();
-                // DO SOME QUERIES
-                var result = _databaseHelper.Connection.Query<TemperatureModel>(query);
-                return result;
+                using (var _databaseHelper = new DatabaseHelper(configuration))
+                {
+                    _databaseHelper.Connection.Open();
+                    var query = new StringBuilder($@"SELECT TOP (1000) * FROM [Temperature] t
+                                                    INNER JOIN [Sensor] s ON t.[SensorID] = s.[SensorID]
+                                                    ORDER BY t.Date desc;");
+                    var result = await _databaseHelper.Connection.QueryAsync<DB.TemperatureModel>(query.ToString());
+                    return result;
+                }
+            }
+            catch (Exception exception)
+            {
+                return null;
             }
         }
 
@@ -323,9 +330,10 @@ namespace INFT3970Project.Helpers
                     using (var _databaseHelper = new DatabaseHelper(configuration))
                     {
                         _databaseHelper.Connection.Open();
-                        var query = new StringBuilder($@"SELECT * FROM [Temperature] t
+                        var query = new StringBuilder($@"SELECT TOP (1000) * FROM [Temperature] t
                                                         INNER JOIN [Sensor] s ON t.[SensorID] = s.[SensorID]
-                                                        WHERE s.[UserID] = {userId}");
+                                                        WHERE s.[UserID] = {userId}
+                                                        ORDER BY t.Date desc;");
                         var result = await _databaseHelper.Connection.QueryAsync<DB.TemperatureModel>(query.ToString());
                         return result;
                     }
@@ -338,6 +346,26 @@ namespace INFT3970Project.Helpers
             return null;
         }
 
+        public async Task<IEnumerable<DB.HumidityModel>> QueryAllHumidity()
+        {
+            try
+            {
+                using (var _databaseHelper = new DatabaseHelper(configuration))
+                {
+                    _databaseHelper.Connection.Open();
+                    var query = new StringBuilder($@"SELECT * FROM [Humidity] h
+                                                        INNER JOIN [Sensor] s ON h.[SensorID] = s.[SensorID]
+                                                        ORDER BY h.Date desc;");
+                    var result = await _databaseHelper.Connection.QueryAsync<DB.HumidityModel>(query.ToString());
+                    return result;
+                }
+            }
+            catch (Exception exception)
+            {
+                return null;
+            }
+        }
+
         public async Task<IEnumerable<DB.HumidityModel>> QueryUserHumidity(int userId)
         {
             try
@@ -347,9 +375,10 @@ namespace INFT3970Project.Helpers
                     using (var _databaseHelper = new DatabaseHelper(configuration))
                     {
                         _databaseHelper.Connection.Open();
-                        var query = new StringBuilder($@"SELECT * FROM [Humidity] h
+                        var query = new StringBuilder($@"SELECT TOP (1000) * FROM [Humidity] h
                                                         INNER JOIN [Sensor] s ON h.[SensorID] = s.[SensorID]
-                                                        WHERE s.[UserID] = {userId}");
+                                                        WHERE s.[UserID] = {userId}
+                                                        ORDER BY h.Date desc;");
                         var result = await _databaseHelper.Connection.QueryAsync<DB.HumidityModel>(query.ToString());
                         return result;
                     }
@@ -362,6 +391,26 @@ namespace INFT3970Project.Helpers
             return null;
         }
 
+        public async Task<IEnumerable<DB.MotionModel>> QueryAllMotion()
+        {
+            try
+            {
+                using (var _databaseHelper = new DatabaseHelper(configuration))
+                {
+                    _databaseHelper.Connection.Open();
+                    var query = new StringBuilder($@"SELECT TOP (1000) * FROM [Motion] m
+                                                        INNER JOIN [Sensor] s ON m.[SensorID] = s.[SensorID]
+                                                        ORDER BY m.Date desc;");
+                    var result = await _databaseHelper.Connection.QueryAsync<DB.MotionModel>(query.ToString());
+                    return result;
+                }
+            }
+            catch (Exception exception)
+            {
+                return null;
+            }
+        }
+
         public async Task<IEnumerable<DB.MotionModel>> QueryUserMotion(int userId)
         {
             try
@@ -371,9 +420,10 @@ namespace INFT3970Project.Helpers
                     using (var _databaseHelper = new DatabaseHelper(configuration))
                     {
                         _databaseHelper.Connection.Open();
-                        var query = new StringBuilder($@"SELECT * FROM [Motion] m
+                        var query = new StringBuilder($@"SELECT TOP (1000) * FROM [Motion] m
                                                         INNER JOIN [Sensor] s ON m.[SensorID] = s.[SensorID]
-                                                        WHERE s.[UserID] = {userId}");
+                                                        WHERE s.[UserID] = {userId}
+                                                        ORDER BY m.Date desc;");
                         var result = await _databaseHelper.Connection.QueryAsync<DB.MotionModel>(query.ToString());
                         return result;
                     }
