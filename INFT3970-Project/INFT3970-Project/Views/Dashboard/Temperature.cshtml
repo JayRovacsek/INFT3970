@@ -5,21 +5,29 @@
 }
 
 <h2>Temperature</h2>
-<table>
-    @{
-        foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    <p>@item.TempId</p>
-                </td>
-                <td>
-                    @item.Temp
-                </td>
-                <td>
-                    @item.Date
-                </td>
-            </tr>
+<table class="table">
+    <thead class="thead-light">
+
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Motion</th>
+            <th scope="col">Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var item in Model)
+            {
+                <tr>
+                    <th scope="row">@item.TempId</th>
+                    <td>
+                        @item.Temp &deg;C
+                    </td>
+                    <td>
+                        @item.Date
+                    </td>
+                </tr>
+            }
         }
-    }
+    </tbody>
 </table>
