@@ -1,22 +1,25 @@
-﻿@model IEnumerable<INFT3970Project.Models.TemperatureModel>
+﻿@model IEnumerable<INFT3970Project.Models.Database_Entities.TemperatureModel>
 
 @{
     Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
 }
 
-@{
-    ViewData["Title"] = "Temperature";
-}
-
 <h2>Temperature</h2>
-
-@* Examples of how the IEnummerable model can be used are: *@
-
-@{
-    @*foreach(var m in Model)
+<table>
+    @{
+        foreach (var item in Model)
         {
-            <h3>@m.Id</h3>
-            <p>The temperature logged was: @m.Temperature</p>
-            <p>The time this was logged was: @m.Timestamp</p>
-        }*@
-}
+            <tr>
+                <td>
+                    <p>@item.TempId</p>
+                </td>
+                <td>
+                    @item.Temp
+                </td>
+                <td>
+                    @item.Date
+                </td>
+            </tr>
+        }
+    }
+</table>
