@@ -45,20 +45,11 @@ namespace INFT3970Project.Controllers
                     : (mode == ApplicationMode.User)
                     ? await _databaseHelper.QueryUserTemperature(userId)
                     : await _databaseHelper.QueryUserTemperature(userId);
-
-                var chartData = new List<Dictionary<int, ChartData>>();
-
-                foreach(var model in models)
+                var chartData = models.Select(x => new ChartData
                 {
-                    chartData.Add(new Dictionary<int, ChartData> { { model.SensorID, new ChartData { x = model.Date.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds, y = model.Temp } } });
-                }
-
-                //var chartData = models.Select(x => new ChartData
-                //{
-                //    x = x.Date.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,
-                //    y = x.Temp
-                //});
-
+                    x = x.Date.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,
+                    y = x.Temp
+                });
                 return View(chartData);
                 // NEEED TO FIX THE ABOVE FOR DEMO MODE.
             }
