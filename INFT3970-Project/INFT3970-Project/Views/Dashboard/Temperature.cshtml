@@ -1,6 +1,6 @@
-﻿@model IEnumerable<INFT3970Project.Models.Database_Entities.TemperatureModel>
+﻿@model IEnumerable<INFT3970Project.Models.ApplicationModels.ChartData>
 
-@{ var temperatures = Model.Select(x => x.Temp).ToArray();}
+@{var temperatures = Model.ToArray();}
 
 @{
     Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
@@ -21,31 +21,26 @@
 <script>
     var array = @Html.Raw(Json.Serialize(temperatures));
 
+    var timeFormat = 'MM/DD/YYYY HH:mm';
+
     var ctx = document.getElementById("chart");
     var chart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['1am', '2am', '3am', '4am', '5am', '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', '11pm', '12am'],
             datasets: [{
                 label: 'My First dataset',
                 data: array,
                 backgroundColor: [ 'rgba(255, 99, 132, 0.2)'],
                 borderColor: ['rgba(255,99,132,1)'],
                 borderWidth: 1
-            }, {
-                label: 'My Second dataset',
-                fill: false,
-                    backgroundColor: ['rgba(54, 162, 235, 0.2)'],
-                    borderColor: ['rgba(54, 162, 235, 1)'],
-                data: [2, 9, 13, 15, 22, 3],
             }]
         },
 
         options: {
             responsive: true,
             title: {
-                display: true,
-                text: 'Chart.js Line Chart'
+                display: false,
+                text: 'Temperature'
             },
             tooltips: {
                 mode: 'index',
@@ -58,16 +53,22 @@
             scales: {
                 xAxes: [{
                     display: true,
+                    type: 'time',
                     scaleLabel: {
                         display: true,
                         labelString: 'Time'
+                    },
+                    time: {
+                        parser: timeFormat,
+                        // round: 'day'
+                        tooltipFormat: 'll HH:mm'
                     }
                 }],
                 yAxes: [{
                     display: true,
                     scaleLabel: {
                         display: true,
-                        labelString: 'Temp'
+                        labelString: 'Temperature'
                     }
                 }]
             }

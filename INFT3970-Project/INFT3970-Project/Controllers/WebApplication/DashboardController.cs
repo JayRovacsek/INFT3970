@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using INFT3970Project.Helpers;
 using INFT3970Project.Models;
+using INFT3970Project.Models.ApplicationModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -44,7 +45,12 @@ namespace INFT3970Project.Controllers
                     : (mode == ApplicationMode.User)
                     ? await _databaseHelper.QueryUserTemperature(userId)
                     : await _databaseHelper.QueryUserTemperature(userId);
-                return View(models);
+                var chartData = models.Select(x => new ChartData
+                {
+                    x = x.Date.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,
+                    y = x.Temp
+                });
+                return View(chartData);
                 // NEEED TO FIX THE ABOVE FOR DEMO MODE.
             }
         }
