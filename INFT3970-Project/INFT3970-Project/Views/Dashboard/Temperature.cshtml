@@ -1,8 +1,21 @@
-﻿@model IEnumerable<INFT3970Project.Models.ApplicationModels.ChartData>
-
-@{var temperatures = Model.ToArray();}
+﻿@model IEnumerable<Dictionary<int, INFT3970Project.Models.ApplicationModels.ChartData>>
 
 @{
+    var sensorIds = Model.Select(x => x.Keys).Distinct();
+
+    var dataSet = new List<List<INFT3970Project.Models.ApplicationModels.ChartData>>();
+
+    foreach (var sensorId in sensorIds)
+    {
+        var dataSetSubset = new List<INFT3970Project.Models.ApplicationModels.ChartData>();
+        var list = Model.Select(x => x).Where(z => z.Keys.Equals(sensorId));
+        foreach (var l in list)
+        {
+            dataSetSubset.AddRange(l.Values);
+        }
+        dataSet.Add(dataSetSubset);
+    }
+
     Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
 }
 
@@ -19,7 +32,7 @@
 <script src="~/lib/chartjs/chart-min.js"></script>
 
 <script>
-    var array = @Html.Raw(Json.Serialize(temperatures));
+    var array = @Html.Raw(Json.Serialize(dataSet));
 
     var timeFormat = 'MM/DD/YYYY HH:mm';
 
@@ -74,31 +87,42 @@
             }
         }
     });
+
+    function addData(chart, data) {
+        chart.data.datasets.forEach((dataset) => {
+            dataset.data.push(data);
+        });
+        chart.update();
+    }
+
+    for (i = 0; i < array.length; i++) {
+        addData(chart, array[i]);
+    }
 </script>
 
 @*<table class="table">
-    <thead class="thead-light">
+        <thead class="thead-light">
 
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Motion</th>
-            <th scope="col">Date</th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            foreach (var item in Model)
-            {
-                <tr>
-                    <th scope="row">@item.TempId</th>
-                    <td>
-                        @item.Temp &deg;C
-                    </td>
-                    <td>
-                        @item.Date
-                    </td>
-                </tr>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Motion</th>
+                <th scope="col">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <th scope="row">@item.TempId</th>
+                        <td>
+                            @item.Temp &deg;C
+                        </td>
+                        <td>
+                            @item.Date
+                        </td>
+                    </tr>
+                }
             }
-        }
-    </tbody>
-</table>*@
+        </tbody>
+    </table>*@
