@@ -411,7 +411,7 @@ namespace INFT3970Project.Helpers
                 using (var _databaseHelper = new DatabaseHelper(configuration))
                 {
                     _databaseHelper.Connection.Open();
-                    var query = new StringBuilder($@"SELECT * FROM [Humidity] h
+                    var query = new StringBuilder($@"SELECT TOP (250) * FROM [Humidity] h
                                                         INNER JOIN [Sensor] s ON h.[SensorID] = s.[SensorID]
                                                         ORDER BY h.Date desc;");
                     var result = await _databaseHelper.Connection.QueryAsync<DB.HumidityModel>(query.ToString());
