@@ -36,61 +36,12 @@ namespace INFT3970Project.Controllers
 
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
 
-            if (Convert.ToBoolean(GetCookie("IsAdmin")) && all)
-            {
-                mode = ApplicationMode.Admin;
-            }
+            var models = await GetTemperatureModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId);
 
-            using (var _databaseHelper = new DatabaseHelper(configuration))
-            {
-                var models = (mode == ApplicationMode.Admin)
-                    ? await _databaseHelper.QueryAllTemperature()
-                    : (mode == ApplicationMode.User)
-                    ? await _databaseHelper.QueryUserTemperature(userId)
-                    : await _databaseHelper.QueryUserTemperature(userId);
+            var chartData = ConvertTemperatureToChart(models);
 
-                var chartData = new ChartDataModel
-                {
-                    datasets = new List<DataSetModel>()
-                };
-
-                foreach (var sensorId in models.Select(x => x.SensorID).Distinct())
-                {
-                    string colour;
-                    var location = _databaseHelper.QuerySensorLocation(sensorId);
-
-                    if (Request.Cookies.ContainsKey($"Sensor{sensorId}Colour"))
-                    {
-                        colour = GetCookie($"Sensor{sensorId}Colour");
-                    }
-                    else
-                    {
-                        colour = GetRandomColour();
-                        SetCookie($"Sensor{sensorId}Colour", colour, 60);
-                    }
-
-                    var ds = models.Select(x => x)
-                        .Where(x => x.SensorID == sensorId).ToList()
-                        .ConvertAll(x => new DataSetModel
-                        {
-                            borderColor = colour,
-                            backgroundColour = colour,
-                            fill = false,
-                            borderWidth = 1,
-                            label = $"Sensor {x.SensorID}: {location}",
-                            data = models.Select(y => y).Where(y => y.SensorID == sensorId).ToList().ConvertAll(y => new ValueModel
-                            {
-                                x = y.Date.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,
-                                y = y.Temp
-                            })
-
-                        });
-                    chartData.datasets.Add(ds.FirstOrDefault());
-                }
-
-                return View(chartData);
-                // NEEED TO FIX THE ABOVE FOR DEMO MODE.
-            }
+            return View(chartData);
+            // NEEED TO FIX THE ABOVE FOR DEMO MODE.
         }
 
         public async Task<IActionResult> AllHumidity()
@@ -102,62 +53,16 @@ namespace INFT3970Project.Controllers
             return RedirectToAction("Humidity", ApplicationMode.User);
         }
 
-        public async Task<IActionResult> Humidity(ApplicationMode mode = ApplicationMode.User)
+        public async Task<IActionResult> Humidity()
         {
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
 
-            using (var _databaseHelper = new DatabaseHelper(configuration))
-            {
-                var models = (mode == ApplicationMode.Admin)
-                    ? await _databaseHelper.QueryAllHumidity()
-                    : (mode == ApplicationMode.User)
-                    ? await _databaseHelper.QueryUserHumidity(userId)
-                    : await _databaseHelper.QueryUserHumidity(userId);
+            var models = await GetHumidityModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId);
 
-                // NEEED TO FIX THE ABOVE FOR DEMO MODE.
+            var chartData = ConvertHumidityToChart(models);
 
-                var chartData = new ChartDataModel
-                {
-                    datasets = new List<DataSetModel>()
-                };
-
-                foreach (var sensorId in models.Select(x => x.SensorID).Distinct())
-                {
-                    string colour;
-                    var location = _databaseHelper.QuerySensorLocation(sensorId);
-
-                    if (Request.Cookies.ContainsKey($"Sensor{sensorId}Colour"))
-                    {
-                        colour = GetCookie($"Sensor{sensorId}Colour");
-                    }
-                    else
-                    {
-                        colour = GetRandomColour();
-                        SetCookie($"Sensor{sensorId}Colour", colour, 60);
-                    }
-
-                    var ds = models.Select(x => x)
-                        .Where(x => x.SensorID == sensorId).ToList()
-                        .ConvertAll(x => new DataSetModel
-                        {
-                            borderColor = colour,
-                            backgroundColour = colour,
-                            fill = false,
-                            borderWidth = 1,
-                            label = $"Sensor {x.SensorID}: {location}",
-                            data = models.Select(y => y).Where(y => y.SensorID == sensorId).ToList().ConvertAll(y => new ValueModel
-                            {
-                                x = y.Date.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,
-                                y = y.Humidity
-                            })
-
-                        });
-                    chartData.datasets.Add(ds.FirstOrDefault());
-                }
-
-                return View(chartData);
-                // NEEED TO FIX THE ABOVE FOR DEMO MODE.
-            }
+            return View(chartData);
+            // NEEED TO FIX THE ABOVE FOR DEMO MODE.
         }
 
         public async Task<IActionResult> AllMotion()
@@ -183,6 +88,172 @@ namespace INFT3970Project.Controllers
                 // NEEED TO FIX THE ABOVE FOR DEMO MODE.
 
                 return View(models);
+            }
+        }
+
+        public async Task<IActionResult> AllCombined()
+        {
+            return RedirectToAction("Temperature", "Dashboard", true);
+        }
+
+        public async Task<IActionResult> Combined()
+        {
+            var userId = Convert.ToInt32(Request.Cookies["UserId"]);
+
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                var chartData = new ChartDataModel
+                {
+                    datasets = new List<DataSetModel>()
+                };
+
+                var temperature = await GetTemperatureModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId);
+                var temperatureChartData = ConvertTemperatureToChart(temperature);
+
+                var humidity = await GetHumidityModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId);
+                var humidityChartData = ConvertHumidityToChart(humidity);
+
+                var motion = await GetMotionModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId);
+                var motionChartData = ConvertMotionToChart(motion);
+
+                //chartData.datasets.Add
+
+                return View(chartData);
+                // NEEED TO FIX THE ABOVE FOR DEMO MODE.
+            }
+        }
+
+        public ChartDataModel ConvertTemperatureToChart(IEnumerable<DB.TemperatureModel> models)
+        {
+            var chartData = new ChartDataModel
+            {
+                datasets = new List<DataSetModel>()
+            };
+
+            foreach (var sensorId in models.Select(x => x.SensorID).Distinct())
+            {
+                string colour;
+                var location = _databaseHelper.QuerySensorLocation(sensorId);
+
+                if (Request.Cookies.ContainsKey($"Sensor{sensorId}Colour"))
+                {
+                    colour = GetCookie($"Sensor{sensorId}Colour");
+                }
+                else
+                {
+                    colour = GetRandomColour();
+                    SetCookie($"Sensor{sensorId}Colour", colour, 60);
+                }
+
+                var ds = models.Select(x => x)
+                    .Where(x => x.SensorID == sensorId).ToList()
+                    .ConvertAll(x => new DataSetModel
+                    {
+                        borderColor = colour,
+                        backgroundColour = colour,
+                        fill = false,
+                        borderWidth = 1,
+                        label = $"Sensor {x.SensorID}: {location}",
+                        data = models.Select(y => y).Where(y => y.SensorID == sensorId).ToList().ConvertAll(y => new ValueModel
+                        {
+                            x = y.Date.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,
+                            y = y.Temp
+                        })
+
+                    });
+                chartData.datasets.Add(ds.FirstOrDefault());
+            }
+            return chartData;
+        }
+
+        public ChartDataModel ConvertHumidityToChart(IEnumerable<DB.HumidityModel> models)
+        {
+            var chartData = new ChartDataModel
+            {
+                datasets = new List<DataSetModel>()
+            };
+
+            foreach (var sensorId in models.Select(x => x.SensorID).Distinct())
+            {
+                string colour;
+                var location = _databaseHelper.QuerySensorLocation(sensorId);
+
+                if (Request.Cookies.ContainsKey($"Sensor{sensorId}Colour"))
+                {
+                    colour = GetCookie($"Sensor{sensorId}Colour");
+                }
+                else
+                {
+                    colour = GetRandomColour();
+                    SetCookie($"Sensor{sensorId}Colour", colour, 60);
+                }
+
+                var ds = models.Select(x => x)
+                    .Where(x => x.SensorID == sensorId).ToList()
+                    .ConvertAll(x => new DataSetModel
+                    {
+                        borderColor = colour,
+                        backgroundColour = colour,
+                        fill = false,
+                        borderWidth = 1,
+                        label = $"Sensor {x.SensorID}: {location}",
+                        data = models.Select(y => y).Where(y => y.SensorID == sensorId).ToList().ConvertAll(y => new ValueModel
+                        {
+                            x = y.Date.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,
+                            y = y.Humidity
+                        })
+
+                    });
+                chartData.datasets.Add(ds.FirstOrDefault());
+            }
+            return chartData;
+        }
+
+        public ChartDataModel ConvertMotionToChart(IEnumerable<DB.MotionModel> models)
+        {
+            var chartData = new ChartDataModel
+            {
+                datasets = new List<DataSetModel>()
+            };
+
+            throw new NotImplementedException();
+
+            return chartData;
+        }
+
+        public async Task<IEnumerable<DB.TemperatureModel>> GetTemperatureModels(bool all, int userId)
+        {
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                var models = (all)
+                    ? _databaseHelper.QueryAllTemperature()
+                    : _databaseHelper.QueryUserTemperature(userId);
+
+                return await models;
+            }
+        }
+
+        public async Task<IEnumerable<DB.HumidityModel>> GetHumidityModels(bool all, int userId)
+        {
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                var models = (all)
+                    ? _databaseHelper.QueryAllHumidity()
+                    : _databaseHelper.QueryUserHumidity(userId);
+
+                return await models;
+            }
+        }
+
+        public async Task<IEnumerable<DB.MotionModel>> GetMotionModels(bool all, int userId)
+        {
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                var models = (all)
+                    ? _databaseHelper.QueryAllMotion()
+                    : _databaseHelper.QueryUserMotion(userId);
+
+                return await models;
             }
         }
     }
