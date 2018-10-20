@@ -25,11 +25,6 @@ namespace INFT3970Project.Controllers
             return View();
         }
 
-        public async Task<IActionResult> AllTemperature()
-        {
-            return RedirectToAction("Temperature", "Dashboard", true);
-        }
-
         public async Task<IActionResult> Temperature(bool all)
         {
             var mode = ApplicationMode.User;
@@ -44,15 +39,6 @@ namespace INFT3970Project.Controllers
             // NEEED TO FIX THE ABOVE FOR DEMO MODE.
         }
 
-        public async Task<IActionResult> AllHumidity()
-        {
-            if (Convert.ToBoolean(GetCookie("IsAdmin")))
-            {
-                return RedirectToAction("Humidity", ApplicationMode.Admin);
-            }
-            return RedirectToAction("Humidity", ApplicationMode.User);
-        }
-
         public async Task<IActionResult> Humidity()
         {
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
@@ -63,15 +49,6 @@ namespace INFT3970Project.Controllers
 
             return View(chartData);
             // NEEED TO FIX THE ABOVE FOR DEMO MODE.
-        }
-
-        public async Task<IActionResult> AllMotion()
-        {
-            if (Convert.ToBoolean(GetCookie("IsAdmin")))
-            {
-                return RedirectToAction("Motion", ApplicationMode.Admin);
-            }
-            return RedirectToAction("Motion", ApplicationMode.User);
         }
 
         public async Task<IActionResult> Motion(ApplicationMode mode = ApplicationMode.User)
@@ -89,11 +66,6 @@ namespace INFT3970Project.Controllers
 
                 return View(models);
             }
-        }
-
-        public async Task<IActionResult> AllCombined()
-        {
-            return RedirectToAction("Temperature", "Dashboard", true);
         }
 
         public async Task<IActionResult> Combined()
@@ -116,7 +88,20 @@ namespace INFT3970Project.Controllers
                 var motion = await GetMotionModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId);
                 var motionChartData = ConvertMotionToChart(motion);
 
-                //chartData.datasets.Add
+                if (temperatureChartData.datasets.Count > 0)
+                {
+                    chartData.datasets.AddRange(temperatureChartData.datasets);
+                }
+
+                if (humidityChartData.datasets.Count > 0)
+                {
+                    chartData.datasets.AddRange(humidityChartData.datasets);
+                }
+
+                if (motionChartData.datasets.Count > 0)
+                {
+                    chartData.datasets.AddRange(motionChartData.datasets);
+                }
 
                 return View(chartData);
                 // NEEED TO FIX THE ABOVE FOR DEMO MODE.
@@ -216,8 +201,39 @@ namespace INFT3970Project.Controllers
                 datasets = new List<DataSetModel>()
             };
 
-            throw new NotImplementedException();
+            foreach (var sensorId in models.Select(x => x.SensorID).Distinct())
+            {
+                string colour;
+                var location = _databaseHelper.QuerySensorLocation(sensorId);
 
+                if (Request.Cookies.ContainsKey($"Sensor{sensorId}Colour"))
+                {
+                    colour = GetCookie($"Sensor{sensorId}Colour");
+                }
+                else
+                {
+                    colour = GetRandomColour();
+                    SetCookie($"Sensor{sensorId}Colour", colour, 60);
+                }
+
+                var ds = models.Select(x => x)
+                    .Where(x => x.SensorID == sensorId).ToList()
+                    .ConvertAll(x => new DataSetModel
+                    {
+                        borderColor = colour,
+                        backgroundColour = colour,
+                        fill = false,
+                        borderWidth = 1,
+                        label = $"Sensor {x.SensorID}: {location}",
+                        data = models.Select(y => y).Where(y => y.SensorID == sensorId).ToList().ConvertAll(y => new ValueModel
+                        {
+                            x = y.Date.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,
+                            y = (y.Motion) ? 100 : 0
+                        })
+
+                    });
+                chartData.datasets.Add(ds.FirstOrDefault());
+            }
             return chartData;
         }
 
