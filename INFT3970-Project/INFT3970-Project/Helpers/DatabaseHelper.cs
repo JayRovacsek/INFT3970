@@ -527,5 +527,17 @@ namespace INFT3970Project.Helpers
             }
 
         }
+
+        public async Task<string> QueryUserEmail (int userId)
+        {
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                var query = $"SELECT [Email] FROM [Users] WHERE [UserID] = {userId}";
+
+                var result = await _databaseHelper.Connection.QueryAsync<string>(query);
+
+                return result.FirstOrDefault();
+            }
+        }
     }
 }
