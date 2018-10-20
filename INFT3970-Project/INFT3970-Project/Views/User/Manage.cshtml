@@ -2,7 +2,11 @@
     Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
 }
 
-<div class="row">
-    <div class="col-md-6">@{await Html.RenderPartialAsync("UpdatePassword");}</div>
-    @*<div class="col-md-6">@{await Html.RenderPartialAsync("AddSensor");}</div>*@
+<div class="panel panel-default">
+    <div class="panel-heading">Account Management Options:</div>
+    <div class="panel-body">
+        @Html.ActionLink("Update Password", "UpdatePassword", "User", null, new { @class = "btn btn-default" })
+        @Html.ActionLink("Add Sensor", "AddSensor", "User", null, new { @class = "btn btn-default" })
+
+    </div>
 </div>

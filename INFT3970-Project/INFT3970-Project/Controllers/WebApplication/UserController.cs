@@ -23,15 +23,31 @@ namespace INFT3970Project.Controllers
         {
             var sensors = _databaseHelper.QueryAllSensors();
 
-            var selectlist = new List<SelectListItem>();
-            foreach (var sensor in sensors)
-            {
-                selectlist.Add(new SelectListItem { Text = sensor.Name, Value = sensor.SensorId.ToString() });
-            }
+            //var selectlist = new List<SelectListItem>();
+            //foreach (var sensor in sensors)
+            //{
+            //    selectlist.Add(new SelectListItem { Text = sensor.Name, Value = sensor.SensorId.ToString() });
+            //}
 
-            ViewBag.SelectList = selectlist;
+            //ViewBag.SelectList = selectlist;
 
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UpdatePassword()
+        {
+            var userId = Convert.ToInt32(Request.Cookies["UserId"]);
+            var username = await _databaseHelper.QueryUserEmail(userId);
+            var userAndPasswordModel = new UserAndPasswordModel
+            {
+                User = new UserModel
+                {
+                    Email = username
+                }
+            };
+
+            return View(userAndPasswordModel);
         }
 
         [HttpPost]
