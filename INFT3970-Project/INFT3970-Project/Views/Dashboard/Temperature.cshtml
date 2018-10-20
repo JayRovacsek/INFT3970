@@ -1,6 +1,4 @@
-﻿@model IEnumerable<INFT3970Project.Models.ApplicationModels.ChartData>
-
-@{var temperatures = Model.ToArray();}
+﻿@model INFT3970Project.Models.ApplicationModels.ChartDataModel
 
 @{
     Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
@@ -19,23 +17,15 @@
 <script src="~/lib/chartjs/chart-min.js"></script>
 
 <script>
-    var array = @Html.Raw(Json.Serialize(temperatures));
+    var dataSet = @Html.Raw(Json.Serialize(Model));
 
     var timeFormat = 'MM/DD/YYYY HH:mm';
+    var i;
 
     var ctx = document.getElementById("chart");
     var chart = new Chart(ctx, {
         type: 'line',
-        data: {
-            datasets: [{
-                label: 'My First dataset',
-                data: array,
-                backgroundColor: [ 'rgba(255, 99, 132, 0.2)'],
-                borderColor: ['rgba(255,99,132,1)'],
-                borderWidth: 1
-            }]
-        },
-
+        data: dataSet,
         options: {
             responsive: true,
             title: {
@@ -77,28 +67,28 @@
 </script>
 
 @*<table class="table">
-    <thead class="thead-light">
+        <thead class="thead-light">
 
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Motion</th>
-            <th scope="col">Date</th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            foreach (var item in Model)
-            {
-                <tr>
-                    <th scope="row">@item.TempId</th>
-                    <td>
-                        @item.Temp &deg;C
-                    </td>
-                    <td>
-                        @item.Date
-                    </td>
-                </tr>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Motion</th>
+                <th scope="col">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <th scope="row">@item.TempId</th>
+                        <td>
+                            @item.Temp &deg;C
+                        </td>
+                        <td>
+                            @item.Date
+                        </td>
+                    </tr>
+                }
             }
-        }
-    </tbody>
-</table>*@
+        </tbody>
+    </table>*@
