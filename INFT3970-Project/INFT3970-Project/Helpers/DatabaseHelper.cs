@@ -308,7 +308,7 @@ namespace INFT3970Project.Helpers
                 using (var _databaseHelper = new DatabaseHelper(configuration))
                 {
                     _databaseHelper.Connection.Open();
-                    var query = new StringBuilder($@"SELECT TOP (200) * FROM [Temperature] t
+                    var query = new StringBuilder($@"SELECT TOP (250) * FROM [Temperature] t
                                                     INNER JOIN [Sensor] s ON t.[SensorID] = s.[SensorID]
                                                     ORDER BY t.Date desc;");
                     var result = await _databaseHelper.Connection.QueryAsync<DB.TemperatureModel>(query.ToString());
@@ -330,7 +330,7 @@ namespace INFT3970Project.Helpers
                     using (var _databaseHelper = new DatabaseHelper(configuration))
                     {
                         _databaseHelper.Connection.Open();
-                        var query = new StringBuilder($@"SELECT TOP (200) * FROM [Temperature] t
+                        var query = new StringBuilder($@"SELECT TOP (250) * FROM [Temperature] t
                                                         INNER JOIN [Sensor] s ON t.[SensorID] = s.[SensorID]
                                                         WHERE s.[UserID] = {userId}
                                                         ORDER BY t.Date desc;");
@@ -375,7 +375,7 @@ namespace INFT3970Project.Helpers
                     using (var _databaseHelper = new DatabaseHelper(configuration))
                     {
                         _databaseHelper.Connection.Open();
-                        var query = new StringBuilder($@"SELECT TOP (200) * FROM [Humidity] h
+                        var query = new StringBuilder($@"SELECT TOP (250) * FROM [Humidity] h
                                                         INNER JOIN [Sensor] s ON h.[SensorID] = s.[SensorID]
                                                         WHERE s.[UserID] = {userId}
                                                         ORDER BY h.Date desc;");
@@ -398,7 +398,7 @@ namespace INFT3970Project.Helpers
                 using (var _databaseHelper = new DatabaseHelper(configuration))
                 {
                     _databaseHelper.Connection.Open();
-                    var query = new StringBuilder($@"SELECT TOP (200) * FROM [Motion] m
+                    var query = new StringBuilder($@"SELECT TOP (250) * FROM [Motion] m
                                                         INNER JOIN [Sensor] s ON m.[SensorID] = s.[SensorID]
                                                         ORDER BY m.Date desc;");
                     var result = await _databaseHelper.Connection.QueryAsync<DB.MotionModel>(query.ToString());
@@ -420,7 +420,7 @@ namespace INFT3970Project.Helpers
                     using (var _databaseHelper = new DatabaseHelper(configuration))
                     {
                         _databaseHelper.Connection.Open();
-                        var query = new StringBuilder($@"SELECT TOP (200) * FROM [Motion] m
+                        var query = new StringBuilder($@"SELECT TOP (250) * FROM [Motion] m
                                                         INNER JOIN [Sensor] s ON m.[SensorID] = s.[SensorID]
                                                         WHERE s.[UserID] = {userId}
                                                         ORDER BY m.Date desc;");
