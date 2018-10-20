@@ -27,17 +27,19 @@ namespace INFT3970Project.Controllers
 
         public async Task<IActionResult> AllTemperature()
         {
-            if (Convert.ToBoolean(GetCookie("IsAdmin")))
-            {
-                return RedirectToAction("Temperature", ApplicationMode.Admin);
-
-            }
-            return RedirectToAction("Temperature", ApplicationMode.User);
+            return RedirectToAction("Temperature", "Dashboard", true);
         }
 
-        public async Task<IActionResult> Temperature(ApplicationMode mode = ApplicationMode.User)
+        public async Task<IActionResult> Temperature(bool all)
         {
+            var mode = ApplicationMode.User;
+
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
+
+            if (Convert.ToBoolean(GetCookie("IsAdmin")) && all)
+            {
+                mode = ApplicationMode.Admin;
+            }
 
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
@@ -46,8 +48,6 @@ namespace INFT3970Project.Controllers
                     : (mode == ApplicationMode.User)
                     ? await _databaseHelper.QueryUserTemperature(userId)
                     : await _databaseHelper.QueryUserTemperature(userId);
-
-                //var chartData = new Dictionary<int, List<ChartDataModel>>();
 
                 var chartData = new ChartDataModel
                 {
@@ -77,33 +77,6 @@ namespace INFT3970Project.Controllers
                     chartData.datasets.Add(ds.FirstOrDefault());
                 }
 
-
-
-                //foreach (var model in models.OrderBy(x => x.SensorID))
-                //{
-
-                //    var data = new ChartDataModel
-                //    {
-                //        x = model.Date.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,
-                //        y = model.Temp
-                //    };
-
-                //    if (!chartData.ContainsKey(model.SensorID))
-                //    {
-                //        chartData.Add(model.SensorID, new List<ChartDataModel>() { data });
-                //    }
-                //    else
-                //    {
-                //        chartData[model.SensorID].Add(data);
-                //    }
-                //}
-
-
-                //var chartData = models.Select(x => new ChartData
-                //{
-                //    x = x.Date.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,
-                //    y = x.Temp
-                //});
                 return View(chartData);
                 // NEEED TO FIX THE ABOVE FOR DEMO MODE.
             }
