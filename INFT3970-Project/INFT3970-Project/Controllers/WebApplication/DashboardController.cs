@@ -56,7 +56,17 @@ namespace INFT3970Project.Controllers
 
                 foreach (var sensorId in models.Select(x => x.SensorID).Distinct())
                 {
-                    var colour = GetRandomColour();
+                    string colour;
+
+                    if (Request.Cookies.ContainsKey($"Sensor{sensorId}Colour"))
+                    {
+                        colour = GetCookie($"Sensor{sensorId}Colour");
+                    }
+                    else
+                    {
+                        colour = GetRandomColour();
+                        SetCookie($"Sensor{sensorId}Colour", colour, 60);
+                    }
 
                     var ds = models.Select(x => x)
                         .Where(x => x.SensorID == sensorId).ToList()
