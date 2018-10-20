@@ -57,6 +57,7 @@ namespace INFT3970Project.Controllers
                 foreach (var sensorId in models.Select(x => x.SensorID).Distinct())
                 {
                     string colour;
+                    var location = _databaseHelper.QuerySensorLocation(sensorId);
 
                     if (Request.Cookies.ContainsKey($"Sensor{sensorId}Colour"))
                     {
@@ -76,7 +77,7 @@ namespace INFT3970Project.Controllers
                             backgroundColour = colour,
                             fill = false,
                             borderWidth = 1,
-                            label = $"Sensor {x.SensorID}",
+                            label = $"Sensor {x.SensorID}: {location}",
                             data = models.Select(y => y).Where(y => y.SensorID == sensorId).ToList().ConvertAll(y => new ValueModel
                             {
                                 x = y.Date.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,

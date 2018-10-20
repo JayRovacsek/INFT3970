@@ -368,6 +368,17 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        public string QuerySensorLocation(int sensorId)
+        {
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                _databaseHelper.Connection.Open();
+                var query = new StringBuilder($@"  SELECT [Description] FROM [Sensor] WHERE [SensorID]={sensorId};");
+                var result = _databaseHelper.Connection.Query<string>(query.ToString());
+                return result.FirstOrDefault();
+            }
+        }
+
         public async Task<IEnumerable<DB.TemperatureModel>> QueryUserTemperature(int userId)
         {
             try
@@ -502,13 +513,14 @@ namespace INFT3970Project.Helpers
                 var command = new SqlCommand
                 {
                     Connection = (SqlConnection)_databaseHelper.Connection,
-                    CommandText = $"INSERT INTO [Logs] VALUES(@Severity,@Message,@UserId,@Location);"
+                    CommandText = $"INSERT INTO [Logs] VALUES(@Severity,@Message,@UserId,@Location,@Datetime);"
                 };
 
                 command.Parameters.AddWithValue("@Severity", severity);
                 command.Parameters.AddWithValue("@Message", message);
                 command.Parameters.AddWithValue("@UserId", userId ?? 0);
                 command.Parameters.AddWithValue("@Location", location);
+                command.Parameters.AddWithValue("@Datetime", DateTime.Now);
 
                 command.Connection.Open();
                 command.ExecuteNonQuery();
