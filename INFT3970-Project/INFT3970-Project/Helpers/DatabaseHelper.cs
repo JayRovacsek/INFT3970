@@ -6,7 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -125,6 +127,15 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public string GetCurrentMethod()
+        {
+            var st = new StackTrace();
+            var sf = st.GetFrame(1);
+
+            return sf.GetMethod().Name;
+        }
+
         public bool Authenticate(LoginModel model)
         {
             if (model.Username != null && model.Password != null)
@@ -153,30 +164,37 @@ namespace INFT3970Project.Helpers
 
                         var response = command.Parameters["@responseMessage"].Value;
 
-                        var valid = true;
-                        if (response.ToString() == "0")
-                        { valid = false; }
-                        if (response.ToString() == "1")
-                        { valid = true; }
-                        return valid;
+                        var valid = (response.ToString() == "0") ? false : true;
+
+                        if (valid)
+                        {
+                            _databaseHelper.Log("Infomation", $"User Login: {model.Username}", null, GetCurrentMethod());
+                            return valid;
+                        }
+                        else
+                        {
+                            _databaseHelper.Log("Warning", $"User Login Failure: {model.Username}", null, GetCurrentMethod());
+                            return valid;
+                        }
                     }
                 }
                 catch (Exception exception)
                 {
-                    // Need to add logger here.
-                    // Need to reimplement
-                    return false;
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        _databaseHelper.Log("Fatal", exception.Message, null, exception.TargetSite.Name);
+                    }
+                        return false;
                 }
             }
             return false;
         }
 
-        
-
         public async Task<bool> Register(RegisterModel model)
         {
             if (model.fName != null && model.Password != null)
             {
+                var success = false;
                 try
                 {
                     using (var _databaseHelper = new DatabaseHelper(configuration))
@@ -213,14 +231,29 @@ namespace INFT3970Project.Helpers
                         var valid = (response.ToString() == "Invalid login Details") ? false :
                             (response.ToString() == "Wrong Password") ? false : true;
 
+                        success = true;
+
                         return valid;
                     }
                 }
                 catch (Exception exception)
                 {
-                    // Need to add logger here.
-                    // Need to reimplement
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        _databaseHelper.Log("Fatal", exception.Message, null, GetCurrentMethod());
+                    }
+                    success = false;
                     return false;
+                }
+                finally
+                {
+                    if (success)
+                    {
+                        using (var _databaseHelper = new DatabaseHelper(configuration))
+                        {
+                            _databaseHelper.Log("Infomation", $"User Registered: {model.Email}", null, GetCurrentMethod());
+                        }
+                    }
                 }
             }
             return false;
@@ -241,8 +274,6 @@ namespace INFT3970Project.Helpers
                 }
                 catch (Exception exception)
                 {
-                    // Need to add logger here.
-                    // Need to reimplement
                     return null;
                 }
             }
@@ -253,6 +284,7 @@ namespace INFT3970Project.Helpers
         {
             if (model.User.Email != null && model.UserPassword.Password != null)
             {
+                var success = false;
                 try
                 {
                     using (var _databaseHelper = new DatabaseHelper(configuration))
@@ -283,14 +315,29 @@ namespace INFT3970Project.Helpers
                         var valid = (response.ToString() == "Invalid email") ? false :
                             (response.ToString() == "Success") ? true : false;
 
+                        success = true;
+
                         return valid;
                     }
                 }
                 catch (Exception exception)
                 {
-                    // Need to add logger here.
-                    // Need to reimplement
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        _databaseHelper.Log("Fatal", exception.Message, null, GetCurrentMethod());
+                    }
+                    success = false;
                     return false;
+                }
+                finally
+                {
+                    if (success)
+                    {
+                        using (var _databaseHelper = new DatabaseHelper(configuration))
+                        {
+                            _databaseHelper.Log("Infomation", $"User Updated Password: {model.User.Email}", model.User.UserId, GetCurrentMethod());
+                        }
+                    }
                 }
             }
             return false;
@@ -436,44 +483,6 @@ namespace INFT3970Project.Helpers
             return null;
         }
 
-        /// <summary>
-        /// Implementation of method to query for single temperature by Guid
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
-        public TemperatureModel QuerySingleTemperature(Guid? Id)
-        {
-            using (var _databaseHelper = new DatabaseHelper(configuration))
-            {
-                _databaseHelper.Connection.Open();
-                var stringBuilder = new StringBuilder();
-                var query = stringBuilder.ToString();
-                // DO SOME QUERIES
-                var result = _databaseHelper.Connection.Query<TemperatureModel>(query).FirstOrDefault();
-                return result;
-            }
-        }
-
-        /// <summary>
-        /// Implementation of method to query for temperatures between two datetime
-        /// </summary>
-        /// <typeparam name="TemperatureModel"></typeparam>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <returns></returns>
-        public IEnumerable<TemperatureModel> QueryDateRangeTemperatures<TemperatureModel>(DateTime startDate, DateTime endDate)
-        {
-            using (var _databaseHelper = new DatabaseHelper(configuration))
-            {
-                _databaseHelper.Connection.Open();
-                var stringBuilder = new StringBuilder();
-                var query = stringBuilder.ToString();
-                // DO SOME QUERIES
-                var results = _databaseHelper.Connection.Query<TemperatureModel>(query);
-                return results;
-            }
-        }
-
         public IEnumerable<SensorModel> QueryAllSensors()
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
@@ -484,6 +493,27 @@ namespace INFT3970Project.Helpers
                 var results = _databaseHelper.Connection.Query<SensorModel>(command.ToString());
                 return results;
             }
+        }
+
+        public void Log(string severity, string message, int? userId, string location)
+        {
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                var command = new SqlCommand
+                {
+                    Connection = (SqlConnection)_databaseHelper.Connection,
+                    CommandText = $"INSERT INTO [Logs] VALUES(@Severity,@Message,@UserId,@Location);"
+                };
+
+                command.Parameters.AddWithValue("@Severity", severity);
+                command.Parameters.AddWithValue("@Message", message);
+                command.Parameters.AddWithValue("@UserId", userId ?? 0);
+                command.Parameters.AddWithValue("@Location", location);
+
+                command.Connection.Open();
+                command.ExecuteNonQuery();
+            }
+
         }
     }
 }
