@@ -47,5 +47,12 @@ namespace INFT3970Project.Controllers
         {
             Response.Cookies.Delete(key);
         }
+
+        public string GetRandomColour()
+        {
+            var random = new Random();
+            var r = random.Next(0, 255);
+            return $"rgba({random.Next(0, 255)}, {random.Next(0, 255)}, {random.Next(0, 255)}, 1)";
+        }
     }
 }
