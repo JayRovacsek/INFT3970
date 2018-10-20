@@ -113,7 +113,49 @@ namespace INFT3970Project.Controllers
                     : (mode == ApplicationMode.User)
                     ? await _databaseHelper.QueryUserHumidity(userId)
                     : await _databaseHelper.QueryUserHumidity(userId);
-                return View(models);
+
+                // NEEED TO FIX THE ABOVE FOR DEMO MODE.
+
+                var chartData = new ChartDataModel
+                {
+                    datasets = new List<DataSetModel>()
+                };
+
+                foreach (var sensorId in models.Select(x => x.SensorID).Distinct())
+                {
+                    string colour;
+                    var location = _databaseHelper.QuerySensorLocation(sensorId);
+
+                    if (Request.Cookies.ContainsKey($"Sensor{sensorId}Colour"))
+                    {
+                        colour = GetCookie($"Sensor{sensorId}Colour");
+                    }
+                    else
+                    {
+                        colour = GetRandomColour();
+                        SetCookie($"Sensor{sensorId}Colour", colour, 60);
+                    }
+
+                    var ds = models.Select(x => x)
+                        .Where(x => x.SensorID == sensorId).ToList()
+                        .ConvertAll(x => new DataSetModel
+                        {
+                            borderColor = colour,
+                            backgroundColour = colour,
+                            fill = false,
+                            borderWidth = 1,
+                            label = $"Sensor {x.SensorID}: {location}",
+                            data = models.Select(y => y).Where(y => y.SensorID == sensorId).ToList().ConvertAll(y => new ValueModel
+                            {
+                                x = y.Date.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,
+                                y = y.Humidity
+                            })
+
+                        });
+                    chartData.datasets.Add(ds.FirstOrDefault());
+                }
+
+                return View(chartData);
                 // NEEED TO FIX THE ABOVE FOR DEMO MODE.
             }
         }
