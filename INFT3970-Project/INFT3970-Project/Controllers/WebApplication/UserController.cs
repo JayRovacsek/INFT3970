@@ -50,6 +50,32 @@ namespace INFT3970Project.Controllers
             return View(userAndPasswordModel);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> UpdateUserDetails()
+        {
+            var userId = Convert.ToInt32(Request.Cookies["UserId"]);
+            var UserDetails = await _databaseHelper.QueryUserDetails(userId);
+            var UpdateUserDetailsModel = new UpdateUserDetailsModel
+            {
+                User = new UpdateUserDetailsModel
+                {
+                    FirstName = ,
+                    LastName = UserDetails.lName,
+                    ContactNumber = UserDetails.ContractNumber,
+                    Email = UserDetails.Email,
+                    Status = UserDetails.Status,
+                    StreetNumber = UserDetails.StreetNum,
+                    StreetName = UserDetails.StreetName,
+                    City = UserDetails.City,
+                    State = UserDetails.State,
+                    Postcode = UserDetails.Postcode,
+                    Country = UserDetails.Country,
+                }
+            };
+
+            return View(UpdateUserDetailsModel);
+        }
+
         [HttpPost]
         public IActionResult UpdatePassword(UserAndPasswordModel model)
         {
