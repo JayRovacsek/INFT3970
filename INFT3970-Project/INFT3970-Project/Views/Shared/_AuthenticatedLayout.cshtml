@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - INFT3970_Project</title>
+    <title>@ViewData["Title"] - INFT3970 Project</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -41,15 +41,17 @@
                     <li><a asp-area="" asp-controller="Dashboard" asp-action="Motion">Motion</a></li>
                     <li><a asp-area="" asp-controller="Dashboard" asp-action="Combined">Combined</a></li>
 
-                    <li><a asp-area="" asp-controller="User" asp-action="Manage">Manage Account</a></li>
-                    <li><a asp-area="" asp-controller="Manage" asp-action="Manage">Admin</a></li>
+                    <li><a asp-area="" asp-controller="User" asp-action="Index">Manage Account</a></li>
+                    <li><a asp-area="" asp-controller="Manage" asp-action="Index">Admin</a></li>
                     <li><a asp-area="" asp-controller="Login" asp-action="Logout">Logout</a></li>
                 </ul>
             </div>
         </div>
     </nav>
     <div class="container body-content">
-        @RenderBody()
+        <div class="col-md-12 col-xs-12" style="padding-top:3rem;padding-bottom:3rem;">
+            @RenderBody()
+        </div>
         <hr />
         <nav class="navbar navbar-fixed-bottom">
             <div class="container-fluid">
