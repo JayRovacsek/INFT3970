@@ -21,15 +21,15 @@ namespace INFT3970Project.Controllers
     
         public IActionResult Manage()
         {
-           // var sensors = _databaseHelper.QueryAllSensors();
+            var sensors = _databaseHelper.QueryAllSensors();
 
-            //var selectlist = new List<SelectListItem>();
-            //foreach (var sensor in sensors)
-            //{
-            //    selectlist.Add(new SelectListItem { Text = sensor.Name, Value = sensor.SensorId.ToString() });
-            //}
+            var selectlist = new List<SelectListItem>();
+            foreach (var sensor in sensors)
+            {
+                selectlist.Add(new SelectListItem { Text = sensor.Name, Value = sensor.SensorId.ToString() });
+            }
 
-            //ViewBag.SelectList = selectlist;
+            ViewBag.SelectList = selectlist;
 
             return View();
         }
@@ -37,6 +37,37 @@ namespace INFT3970Project.Controllers
         [HttpGet]
         public async Task<IActionResult> AddSensor()
         {
+            var user = _databaseHelper.QueryAllUsers();
+
+            IEnumerable<SelectListItem> items = user.Select(c => new SelectListItem
+            {
+                Value = c.UserId.ToString(),
+                Text = c.fName
+            });
+
+            ViewBag.Users = items;
+
+            var rooms = _databaseHelper.QueryAllRooms();
+
+            IEnumerable<SelectListItem> room = rooms.Select(c => new SelectListItem
+            {
+                Value = c.RoomID.ToString(),
+                Text = c.Name
+            });
+
+            ViewBag.AllRooms = room;
+
+            var Sensors = _databaseHelper.QueryAllSensors();
+
+            IEnumerable<SelectListItem> Sensor = Sensors.Select(c => new SelectListItem
+            {
+                Value = c.SensorId.ToString(),
+                Text = c.Name
+            });
+
+            ViewBag.AllSensors = Sensor;
+
+
             return View();
         }
 
@@ -68,13 +99,54 @@ namespace INFT3970Project.Controllers
             return View();
         }
 
-     
-        [HttpGet]
-        public async Task<IActionResult> AddRoom()
+
+        [HttpPost]
+        public ActionResult DeleteSensor(SensorModel model)
         {
+            int a = 1;
+            if (true)
+            {
+                if (model.SensorId != null)
+                {
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        var valid = _databaseHelper.DeleteSensor(model);
+
+                        if (true)
+                        {
+                            ViewData["Message"] = "Sensor Deleted";
+                            return View("Manage");
+                        }
+
+                    }
+                }
+            }
+
+            ViewData["Message"] = "Please fill in all the details";
+            return View("Manage, AddRoom");
+        }
+
+
+
+
+        [HttpGet]
+        public IActionResult AddRoom()
+        {
+
+            var rooms = _databaseHelper.QueryAllRooms();
+
+            IEnumerable<SelectListItem> room = rooms.Select(c => new SelectListItem
+            {
+                Value = c.RoomID.ToString(),
+                Text = c.Name
+            });
+
+            ViewBag.AllRooms = room;
+
+
             return View();
         }
- 
+
         [HttpPost]
         public IActionResult AddRoom(RoomModel model)
         {
@@ -98,6 +170,34 @@ namespace INFT3970Project.Controllers
 
             ViewData["Message"] = "Please fill in all the details";
             return View();
+        }
+
+
+
+        [HttpPost]
+        public ActionResult DeleteRoom(RoomModel model)
+        {
+            int a = 1;
+            if (true)
+            {
+                if (model.RoomID != null)
+                {
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        var valid = _databaseHelper.DeleteRoom(model);
+
+                        if (true)
+                        {
+                            ViewData["Message"] = "Room Deleted";
+                            return View("Manage");
+                        }
+
+                    }
+                }
+            }
+
+            ViewData["Message"] = "Please fill in all the details";
+            return View("Manage, AddRoom");
         }
     }
 }
