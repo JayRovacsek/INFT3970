@@ -50,31 +50,22 @@ namespace INFT3970Project.Controllers
             return View(userAndPasswordModel);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UpdateUserDetails()
+        [HttpGet]
+        public async Task<IActionResult> UpdateDetails()
         {
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
-            var UserDetails = await _databaseHelper.QueryUserDetails(userId);
-            var updateUserDetailsModel = new UpdateUserDetailsModel
-            {
-                UserID = new UpdateUserDetailsModel()
-                {
-                    UserDetails.Value1 = "fName";
+            var models = await _databaseHelper.QueryUserDetails(userId);
+            var model = models.FirstOrDefault();
+            return View(model);
+        }
 
-                    LastName = UserDetails.lName,
-                    ContactNumber = UserDetails.ContractNumber,
-                    Email = UserDetails.Email,
-                    Status = UserDetails.Status,
-                    StreetNumber = UserDetails.StreetNum,
-                    StreetName = UserDetails.StreetName,
-                    City = UserDetails.City,
-                    State = UserDetails.State,
-                    Postcode = UserDetails.Postcode,
-                    Country = UserDetails.Country,
-                }
-            };
+        [HttpPost]
+        public async Task<IActionResult> UpdateDetails(UpdateUserDetailsModel model)
+        {
+            throw new NotImplementedException();
 
-            return View(UserDetails.FirstOrDefault());
+            ViewData["Message"] = "User Details Updated";
+            return View(null);
         }
 
         [HttpPost]
