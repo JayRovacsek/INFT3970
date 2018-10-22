@@ -1,25 +1,35 @@
-﻿
-@model INFT3970Project.Models.UserAndPasswordModel
+﻿@model INFT3970Project.Models.SensorModel
+
 
 <div class="panel panel-default">
-    <div class="panel-heading">Account Management Options:</div>
+    <div class="panel-heading">Admin: Add Sensor:</div>
     <div class="panel-body">
+        
         <div class="form-group">
-            @using (Html.BeginForm("UpdatePassword", "User", FormMethod.Post, new { @class = "form-group" }))
+            @using (Html.BeginForm("AddSensor", "Manage", FormMethod.Post, new { @class = "form-group" }))
             {
                 <div class="form-group row-fluid">
-                    @Html.TextBoxFor(model => model.User.Email, new { @class = "form-control", @value = Model.User.Email, @enabled = "false" })
-                    @Html.ValidationMessageFor(model => model.User.Email)
+                    @Html.TextBoxFor(model => model.UserId, new { @class = "form-control", @placeholder = "UserID", })
+                    @Html.ValidationMessageFor(model => model.UserId)
                 </div>
                 <div class="form-group row-fluid">
-                    @Html.TextBoxFor(model => model.UserPassword.Password, new { @class = "form-control", @placeholder = "Password", @type = "password" })
-                    @Html.ValidationMessageFor(model => model.UserPassword.Password)
+                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @placeholder = "Name", })
+                    @Html.ValidationMessageFor(model => model.Name)
                 </div>
                 <div class="form-group row-fluid">
-                    <button class="btn btn-lg btn-primary" type="submit">Update Password</button>
+                    @Html.TextBoxFor(model => model.Description, new { @class = "form-control", @placeholder = "Description", })
+                    @Html.ValidationMessageFor(model => model.Description)
                 </div>
-            }
-        </div>
-    </div>
+                <div class="form-group row-fluid">
+                    @Html.TextBoxFor(model => model.RoomId, new { @class = "form-control", @placeholder = "RoomID", })
+                    @Html.ValidationMessageFor(model => model.RoomId)
+                </div>
+
+                    <div class="form-group row-fluid">
+                        <button class="btn btn-lg btn-primary" type="submit">Add Sensor</button>
+                    </div>
+                    }
+                </div>
+            </div>
 </div>
 
