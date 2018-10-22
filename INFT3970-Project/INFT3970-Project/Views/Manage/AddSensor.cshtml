@@ -1,10 +1,12 @@
 ﻿@model INFT3970Project.Models.SensorModel
-
-
+@{
+    Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
+}
+<br />
 <div class="panel panel-default">
     <div class="panel-heading">Admin: Add Sensor:</div>
     <div class="panel-body">
-        
+
         <div class="form-group">
             @using (Html.BeginForm("AddSensor", "Manage", FormMethod.Post, new { @class = "form-group" }))
             {
@@ -25,11 +27,13 @@
                     @Html.ValidationMessageFor(model => model.RoomId)
                 </div>
 
-                    <div class="form-group row-fluid">
-                        <button class="btn btn-lg btn-primary" type="submit">Add Sensor</button>
-                    </div>
-                    }
+                <div class="form-group row-fluid">
+                    <button class="btn btn-lg btn-primary" type="submit">Add Sensor</button>
                 </div>
-            </div>
+            }
+            <br />
+            @ViewData["Message"]
+        </div>
+    </div>
 </div>
 

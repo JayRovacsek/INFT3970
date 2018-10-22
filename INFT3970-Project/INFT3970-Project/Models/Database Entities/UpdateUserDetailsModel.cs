@@ -8,6 +8,9 @@ namespace INFT3970Project.Models
 {
     public class UpdateUserDetailsModel
     {
+     
+        [Required]
+        public string UserID { get; set; }
         [Required]
         public string fName { get; set; }
         [Required]
