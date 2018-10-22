@@ -539,5 +539,17 @@ namespace INFT3970Project.Helpers
                 return result.FirstOrDefault();
             }
         }
+
+        public async Task<string> QueryUserDetails(int userId)
+        {
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                var query = $"SELECT [fName,lName,ContactNumber,Email, StreetNum, StreetName,City,State,Postcode,Country] FROM [Users u, UserAddress ua] WHERE [u.UserID = ua.UserID AND u.UserID ] = {userId}";
+
+                var result = await _databaseHelper.Connection.QueryAsync<string>(query);
+
+                return result.FirstOrDefault();
+            }
+        }
     }
 }
