@@ -1,0 +1,25 @@
+﻿
+@model INFT3970Project.Models.UserAndPasswordModel
+
+<div class="panel panel-default">
+    <div class="panel-heading">Account Management Options:</div>
+    <div class="panel-body">
+        <div class="form-group">
+            @using (Html.BeginForm("UpdatePassword", "User", FormMethod.Post, new { @class = "form-group" }))
+            {
+                <div class="form-group row-fluid">
+                    @Html.TextBoxFor(model => model.User.Email, new { @class = "form-control", @value = Model.User.Email, @enabled = "false" })
+                    @Html.ValidationMessageFor(model => model.User.Email)
+                </div>
+                <div class="form-group row-fluid">
+                    @Html.TextBoxFor(model => model.UserPassword.Password, new { @class = "form-control", @placeholder = "Password", @type = "password" })
+                    @Html.ValidationMessageFor(model => model.UserPassword.Password)
+                </div>
+                <div class="form-group row-fluid">
+                    <button class="btn btn-lg btn-primary" type="submit">Update Password</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
