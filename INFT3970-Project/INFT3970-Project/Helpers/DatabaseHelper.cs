@@ -184,7 +184,7 @@ namespace INFT3970Project.Helpers
                     {
                         _databaseHelper.Log("Fatal", exception.Message, null, exception.TargetSite.Name);
                     }
-                        return false;
+                    return false;
                 }
             }
             return false;
@@ -528,7 +528,7 @@ namespace INFT3970Project.Helpers
 
         }
 
-        public async Task<string> QueryUserEmail (int userId)
+        public async Task<string> QueryUserEmail(int userId)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
@@ -568,7 +568,6 @@ namespace INFT3970Project.Helpers
                 return results;
             }
         }
-
 
         // Admin Section
         public bool AddSensor(SensorModel model)
@@ -619,7 +618,7 @@ namespace INFT3970Project.Helpers
                     {
                         using (var _databaseHelper = new DatabaseHelper(configuration))
                         {
-                            _databaseHelper.Log("Infomation", $"User Registered: {model.Name}", null, GetCurrentMethod());
+                            _databaseHelper.Log("Infomation", $"Sensor Modified: {model.SensorId}", null, GetCurrentMethod());
                         }
                     }
                 }
