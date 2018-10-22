@@ -49,32 +49,24 @@ namespace INFT3970Project.Controllers
 
             return View(userAndPasswordModel);
         }
-        // Browny is working on it
-        /*[HttpGet]
-        public async Task<IActionResult> UpdateUserDetails()
+
+        [HttpGet]
+        public async Task<IActionResult> UpdateDetails()
         {
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
-            var UserDetails =  _databaseHelper.QueryUserDetails(userId);
-            var UpdateUserDetailsModel = new UpdateUserDetailsModel
-            {
-                UserID = new UpdateUserDetailsModel
-                {
-                    model.fName = UserDetails.fName,
-                    LastName = UserDetails.lName,
-                    ContactNumber = UserDetails.ContractNumber,
-                    Email = UserDetails.Email,
-                    Status = UserDetails.Status,
-                    StreetNumber = UserDetails.StreetNum,
-                    StreetName = UserDetails.StreetName,
-                    City = UserDetails.City,
-                    State = UserDetails.State,
-                    Postcode = UserDetails.Postcode,
-                    Country = UserDetails.Country,
-                }
-            };
+            var models = await _databaseHelper.QueryUserDetails(userId);
+            var model = models.FirstOrDefault();
+            return View(model);
+        }
 
-            return View(UpdateUserDetailsModel);
-        } */
+        [HttpPost]
+        public async Task<IActionResult> UpdateDetails(UpdateUserDetailsModel model)
+        {
+            throw new NotImplementedException();
+
+            ViewData["Message"] = "User Details Updated";
+            return View(null);
+        }
 
         [HttpPost]
         public IActionResult UpdatePassword(UserAndPasswordModel model)
