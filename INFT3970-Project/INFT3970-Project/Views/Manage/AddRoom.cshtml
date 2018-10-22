@@ -1,0 +1,32 @@
+﻿@model INFT3970Project.Models.RoomModel
+@{
+    Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
+}
+<br />
+<div class="panel panel-default">
+    <div class="panel-heading">Admin: Add Sensor:</div>
+    <div class="panel-body">
+
+        <div class="form-group">
+            @using (Html.BeginForm("AddRoom", "Manage", FormMethod.Post, new { @class = "form-group" }))
+            {
+                <div class="form-group row-fluid">
+                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @placeholder = "Room Name", })
+                    @Html.ValidationMessageFor(model => model.Name)
+                </div>
+                <div class="form-group row-fluid">
+                    @Html.TextBoxFor(model => model.Description, new { @class = "form-control", @placeholder = "Room Description", })
+                    @Html.ValidationMessageFor(model => model.Description)
+                </div>
+
+                <div class="form-group row-fluid">
+                    <button class="btn btn-lg btn-primary" type="submit">Add Room</button>
+                </div>
+            }
+            <br />
+            @ViewData["Message"]
+        </div>
+    </div>
+</div>
+
+
