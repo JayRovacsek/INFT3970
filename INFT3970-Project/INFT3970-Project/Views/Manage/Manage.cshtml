@@ -1,0 +1,11 @@
+﻿@{
+    Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">Admin:</div>
+    <div class="panel-body">
+        @Html.ActionLink("Add Sensor", "AddSensor", "User", null, new { @class = "btn btn-default" })
+
+    </div>
+</div>
