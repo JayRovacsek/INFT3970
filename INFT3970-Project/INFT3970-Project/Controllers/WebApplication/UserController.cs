@@ -59,7 +59,7 @@ namespace INFT3970Project.Controllers
             {
                 User = new UpdateUserDetailsModel
                 {
-                    FirstName = ,
+                    FirstName = UserDetails.,
                     LastName = UserDetails.lName,
                     ContactNumber = UserDetails.ContractNumber,
                     Email = UserDetails.Email,
