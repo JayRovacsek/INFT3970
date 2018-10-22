@@ -7,7 +7,7 @@ namespace INFT3970Project.Models
 {
     public class RoomModel
     {
-        public int Id { get; set; }
+        public string RoomID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
     }

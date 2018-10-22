@@ -3,9 +3,16 @@
 }
 
 <div class="panel panel-default">
-    <div class="panel-heading">Admin:</div>
-    <div class="panel-body">
-        @Html.ActionLink("Add Sensor", "AddSensor", "Manage", null, new { @class = "btn btn-default" })
 
+    <div class="panel-heading">Admin:</div>
+
+    <div class="panel-body">
+
+        
+     
+        @Html.ActionLink("Add Sensor", "AddSensor", "Manage", null, new { @class = "btn btn-default" })
+        @Html.ActionLink("Add Room", "AddRoom", "Manage", null, new { @class = "btn btn-default" })
+        <br />
+        @ViewData["Message"]
     </div>
 </div>
