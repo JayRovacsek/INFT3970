@@ -540,7 +540,7 @@ namespace INFT3970Project.Helpers
             }
         }
 
-        public async Task<string> QueryUserDetails(int userId)
+        /*public async Task<string> QueryUserDetails(int userId)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
@@ -551,6 +551,20 @@ namespace INFT3970Project.Helpers
                 return result.FirstOrDefault();
             }
         }
+        */
+        public IEnumerable<UpdateUserDetailsModel> QueryUserDetails(int userID)
+        {
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                _databaseHelper.Connection.Open();
+                var query = new StringBuilder("SELECT [fName,lName,ContactNumber,Email, StreetNum, StreetName,City,State,Postcode,Country] FROM [Users u, UserAddress ua] WHERE [u.UserID = ua.UserID AND u.UserID ] =" + "{userId}");
+
+                var results = _databaseHelper.Connection.Query<UpdateUserDetailsModel>(query.ToString());
+
+                return results;
+            }
+        }
+
 
         // Admin Section
         public bool AddSensor(SensorModel model)
