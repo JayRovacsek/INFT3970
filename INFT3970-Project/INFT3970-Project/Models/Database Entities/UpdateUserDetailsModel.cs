@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 
-namespace INFT3970Project.Models.Database_Entities
+namespace INFT3970Project.Models
 {
     public class UpdateUserDetailsModel
     {
