@@ -539,5 +539,71 @@ namespace INFT3970Project.Helpers
                 return result.FirstOrDefault();
             }
         }
+
+        // Admin Section
+
+        public bool AddSensor(SensorModel model)
+        {
+            if (model.UserId != null && model.RoomId != null)
+            {
+                var success = false;
+                try
+                {
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        var command = new SqlCommand
+                        {
+                            Connection = (SqlConnection)_databaseHelper.Connection,
+                            CommandType = CommandType.StoredProcedure,
+                            CommandText = "dbo.AddSensor"
+                        };
+
+                        command.Parameters.AddWithValue("@UserID", model.UserId);
+                        command.Parameters.AddWithValue("@Name", model.Name);
+                        command.Parameters.AddWithValue("@Description", model.Description);
+                        command.Parameters.AddWithValue("@RoomID", model.RoomId);
+                        
+                        SqlParameter output = new SqlParameter("@responseMessage", SqlDbType.VarChar);
+                        output.Direction = ParameterDirection.Output;
+                        output.Size = 255;
+
+                        command.Parameters.Add(output);
+
+                        command.Connection.Open();
+                        command.ExecuteNonQuery();
+
+                        var response = command.Parameters["@responseMessage"].Value;
+
+                        var valid = (response.ToString() == "Invalid email") ? false :
+                            (response.ToString() == "Success") ? true : false;
+
+                        success = true;
+
+                        return valid;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        _databaseHelper.Log("Fatal", exception.Message, null, GetCurrentMethod());
+                    }
+                    success = false;
+                    return false;
+                }
+                finally
+                {
+                    if (success)
+                    {
+                        using (var _databaseHelper = new DatabaseHelper(configuration))
+                        {
+                            _databaseHelper.Log("Infomation", $"User Registered: {model.Name}", null, GetCurrentMethod());
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
     }
 }
