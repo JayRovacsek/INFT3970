@@ -184,7 +184,7 @@ namespace INFT3970Project.Helpers
                     {
                         _databaseHelper.Log("Fatal", exception.Message, null, exception.TargetSite.Name);
                     }
-                        return false;
+                    return false;
                 }
             }
             return false;
@@ -528,7 +528,7 @@ namespace INFT3970Project.Helpers
 
         }
 
-        public async Task<string> QueryUserEmail (int userId)
+        public async Task<string> QueryUserEmail(int userId)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
@@ -536,19 +536,22 @@ namespace INFT3970Project.Helpers
 
                 var result = await _databaseHelper.Connection.QueryAsync<string>(query);
 
+
                 return result.FirstOrDefault();
             }
         }
 
-        public async Task<string> QueryUserDetails(int userId)
+
+        public IEnumerable<UpdateUserDetailsModel> QueryUserDetails(int userID)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
-                var query = $"SELECT [fName,lName,ContactNumber,Email, StreetNum, StreetName,City,State,Postcode,Country] FROM [Users u, UserAddress ua] WHERE [u.UserID = ua.UserID AND u.UserID ] = {userId}";
+                _databaseHelper.Connection.Open();
+                var query = new StringBuilder("SELECT [fName,lName,ContactNumber,Email, StreetNum, StreetName,City,State,Postcode,Country] FROM [Users u, UserAddress ua] WHERE [u.UserID = ua.UserID AND u.UserID ] =  {userId }");
 
-                var result = await _databaseHelper.Connection.QueryAsync<string>(query);
+                var results = _databaseHelper.Connection.Query<UpdateUserDetailsModel>(query.ToString());
 
-                return result.FirstOrDefault();
+                return results;
             }
         }
 
@@ -609,5 +612,63 @@ namespace INFT3970Project.Helpers
             return false;
         }
 
+
+
+
+        public bool AddRoom(RoomModel model)
+        {
+            if (model.Name != null && model.RoomID != null)
+            {
+                var success = true;
+                try
+                {
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        var command = new SqlCommand
+                        {
+                            Connection = (SqlConnection)_databaseHelper.Connection,
+                            CommandType = CommandType.StoredProcedure,
+                            CommandText = "dbo.AddRoom"
+                        };
+                        command.Parameters.AddWithValue("@Name", model.Name);
+                        command.Parameters.AddWithValue("@Description", model.Description);
+
+                        SqlParameter output = new SqlParameter("@responseMessage", SqlDbType.VarChar);
+                        output.Direction = ParameterDirection.Output;
+                        output.Size = 255;
+                        command.Parameters.Add(output);
+                        command.Connection.Open();
+                        command.ExecuteNonQuery();
+                        var response = command.Parameters["@responseMessage"].Value;
+                        var valid = (response.ToString() == "Invalid email") ? false :
+                            (response.ToString() == "Success") ? true : false;
+                        success = true;
+                        return valid;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        _databaseHelper.Log("Fatal", exception.Message, null, GetCurrentMethod());
+                    }
+                    success = false;
+                    return false;
+                }
+                finally
+                {
+                    if (success)
+                    {
+                        using (var _databaseHelper = new DatabaseHelper(configuration))
+                        {
+                            _databaseHelper.Log("Infomation", $"User Registered: {model.Name}", null, GetCurrentMethod());
+                        }
+                    }
+                }
+
+            }
+
+            return false;
+        }
     }
 }

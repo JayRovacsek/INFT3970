@@ -49,17 +49,17 @@ namespace INFT3970Project.Controllers
 
             return View(userAndPasswordModel);
         }
-
-        [HttpGet]
+        // Browny is working on it
+        /*[HttpGet]
         public async Task<IActionResult> UpdateUserDetails()
         {
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
-            var UserDetails = await _databaseHelper.QueryUserDetails(userId);
+            var UserDetails =  _databaseHelper.QueryUserDetails(userId);
             var UpdateUserDetailsModel = new UpdateUserDetailsModel
             {
-                User = new UpdateUserDetailsModel
+                UserID = new UpdateUserDetailsModel
                 {
-                    FirstName = UserDetails.,
+                    model.fName = UserDetails.fName,
                     LastName = UserDetails.lName,
                     ContactNumber = UserDetails.ContractNumber,
                     Email = UserDetails.Email,
@@ -74,7 +74,7 @@ namespace INFT3970Project.Controllers
             };
 
             return View(UpdateUserDetailsModel);
-        }
+        } */
 
         [HttpPost]
         public IActionResult UpdatePassword(UserAndPasswordModel model)
