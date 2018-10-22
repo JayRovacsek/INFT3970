@@ -552,14 +552,18 @@ namespace INFT3970Project.Helpers
             }
         }
         */
-        public IEnumerable<UpdateUserDetailsModel> QueryUserDetails(int userID)
+        public async Task<IEnumerable<UpdateUserDetailsModel>> QueryUserDetails(int userId)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
                 _databaseHelper.Connection.Open();
-                var query = new StringBuilder("SELECT [fName,lName,ContactNumber,Email, StreetNum, StreetName,City,State,Postcode,Country] FROM [Users u, UserAddress ua] WHERE [u.UserID = ua.UserID AND u.UserID ] =" + "{userId}");
-
-                var results = _databaseHelper.Connection.Query<UpdateUserDetailsModel>(query.ToString());
+                var query = new StringBuilder($@"SELECT u.fName, u.lName, u.ContactNumber,
+                                                u.Email, ua.StreetNum, ua.StreetName,
+                                                ua.City, ua.State, ua.Postcode, ua.Country
+                                                FROM Users u 
+                                                INNER JOIN UsersAddress ua ON u.UserID = ua.UserID 
+                                                WHERE u.UserID = {userId};");
+                var results = await _databaseHelper.Connection.QueryAsync<UpdateUserDetailsModel>(query.ToString());
 
                 return results;
             }
