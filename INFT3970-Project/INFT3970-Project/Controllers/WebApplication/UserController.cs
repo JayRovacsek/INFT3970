@@ -82,7 +82,7 @@ namespace INFT3970Project.Controllers
                         if (valid)
                         {
                             ViewData["Message"] = "Password Changed";
-                            return View("Manage");
+                            return View("Index");
                         }
                     }
                 }
