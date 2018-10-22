@@ -19,9 +19,9 @@ namespace INFT3970Project.Controllers
         {
         }
 
-        public IActionResult Manage()
+        public IActionResult Index()
         {
-            var sensors = _databaseHelper.QueryAllSensors();
+            //var sensors = _databaseHelper.QueryAllSensors();
 
             //var selectlist = new List<SelectListItem>();
             //foreach (var sensor in sensors)
@@ -66,7 +66,6 @@ namespace INFT3970Project.Controllers
                             ViewData["Message"] = "Password Changed";
                             return View("Manage");
                         }
-
                     }
                 }
             }
