@@ -18,10 +18,10 @@ namespace INFT3970Project.Controllers
         public ManageController(IConfiguration configuration, DatabaseHelper databaseHelper, IHttpContextAccessor httpContextAccessor) : base(configuration, databaseHelper, httpContextAccessor)
         {
         }
-
+    
         public IActionResult Manage()
         {
-            var sensors = _databaseHelper.QueryAllSensors();
+           // var sensors = _databaseHelper.QueryAllSensors();
 
             //var selectlist = new List<SelectListItem>();
             //foreach (var sensor in sensors)
@@ -56,12 +56,47 @@ namespace INFT3970Project.Controllers
                             ViewData["Message"] = "Sensor Added";
                             return View("Manage");
                         }
+                        else { ViewData["Message"] = "Error: Sensor not added";
+                            return View("Manage");
+                        }
 
                     }
                 }
             }
 
-            ViewData["Message"] = "Didnt work";
+            ViewData["Message"] = "Please fill in all the details";
+            return View();
+        }
+
+     
+        [HttpGet]
+        public async Task<IActionResult> AddRoom()
+        {
+            return View();
+        }
+ 
+        [HttpPost]
+        public IActionResult AddRoom(RoomModel model)
+        {
+            if (true)
+            {
+                if (!string.IsNullOrEmpty(model.Name) && !string.IsNullOrEmpty(model.Description))
+                {
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        var valid = _databaseHelper.AddRoom(model);
+
+                        if (valid)
+                        {
+                            ViewData["Message"] = "Room Added";
+                            return View("Manage");
+                        }
+
+                    }
+                }
+            }
+
+            ViewData["Message"] = "Please fill in all the details";
             return View();
         }
     }
