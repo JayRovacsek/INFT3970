@@ -10,7 +10,7 @@
     <div class="panel-body">
         <div class="container">
             <div class="row">
-                @using (Html.BeginForm("UpdateUserDetails", "User", FormMethod.Post, new { @class = "form-group-lg" }))
+                @using (Html.BeginForm("UpdateDetails", "User", FormMethod.Post, new { @class = "form-group-lg" }))
                 {
                     <div class="form-row">
                         <div class="form-group col-md-5">
@@ -55,13 +55,6 @@
                     <div class="form-row">
 
                         <div class="form-group col-md-11">
-                            @*@if (Model != null)
-                                {
-                                    if (!Model.SuccessfulRegister)
-                                    {
-                                        <p class="text-center alert-danger"> Error, could not create user </p>
-                                    }
-                                }*@
                             <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Change Details</button>
                         </div>
                     </div>
