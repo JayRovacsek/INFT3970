@@ -10,20 +10,26 @@
         <div class="form-group">
             @using (Html.BeginForm("AddSensor", "Manage", FormMethod.Post, new { @class = "form-group" }))
             {
-                <div class="form-group row-fluid">
-                    @Html.TextBoxFor(model => model.UserId, new { @class = "form-control", @placeholder = "UserID", })
-                    @Html.ValidationMessageFor(model => model.UserId)
-                </div>
+
                 <div class="form-group row-fluid">
                     @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @placeholder = "Name", })
                     @Html.ValidationMessageFor(model => model.Name)
                 </div>
+
                 <div class="form-group row-fluid">
                     @Html.TextBoxFor(model => model.Description, new { @class = "form-control", @placeholder = "Description", })
                     @Html.ValidationMessageFor(model => model.Description)
                 </div>
+
                 <div class="form-group row-fluid">
-                    @Html.TextBoxFor(model => model.RoomId, new { @class = "form-control", @placeholder = "RoomID", })
+                    @Html.DropDownList("UserId", (IEnumerable<SelectListItem>)ViewBag.Users, "User",
+                    new { @class = "form-control"})
+                    @Html.ValidationMessageFor(model => model.UserId)
+                </div>
+
+                <div class="form-group row-fluid">
+                    @Html.DropDownList("RoomId", (IEnumerable<SelectListItem>)ViewBag.AllRooms, "Rooms",
+                    new { @class = "form-control"})
                     @Html.ValidationMessageFor(model => model.RoomId)
                 </div>
 
@@ -31,6 +37,26 @@
                     <button class="btn btn-lg btn-primary" type="submit">Add Sensor</button>
                 </div>
             }
+
+
+
+            <div class="panel-heading">Admin: Delete Sensor:</div>
+            @using (Html.BeginForm("DeleteSensor", "Manage", FormMethod.Post, new { @class = "form-group" }))
+            {
+                <div class="form-group row-fluid">
+                    @Html.DropDownList("SensorId", (IEnumerable<SelectListItem>)ViewBag.AllSensors, "Sensos",
+                     new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.SensorId)
+                </div>
+
+                <div class="form-group row-fluid">
+                    <button class="btn btn-lg btn-primary" type="submit">Delete Sensor</button>
+                </div>
+            }
+
+
+
+
             <br />
             @ViewData["Message"]
         </div>

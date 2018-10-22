@@ -682,5 +682,55 @@ namespace INFT3970Project.Helpers
             return false;
         }
 
+
+        public IEnumerable<UserModel> QueryAllUsers()
+        {
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                _databaseHelper.Connection.Open();
+                var command = new StringBuilder("SELECT UserID, fName FROM [dbo].[Users];");
+
+                var results = _databaseHelper.Connection.Query<UserModel>(command.ToString());
+                return results;
+            }
+        }
+
+        public IEnumerable<RoomModel> QueryAllRooms()
+        {
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                _databaseHelper.Connection.Open();
+                var command = new StringBuilder("SELECT RoomID, Name FROM [dbo].[Room];");
+
+                var results = _databaseHelper.Connection.Query<RoomModel>(command.ToString());
+                return results;
+            }
+        }
+
+        public IEnumerable<RoomModel> DeleteRoom(RoomModel model)
+        {
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            { 
+                _databaseHelper.Connection.Open();
+                var command = new StringBuilder($"DELETE FROM Room WHERE RoomId = {model.RoomID};");
+              
+
+                var results = _databaseHelper.Connection.Query<RoomModel>(command.ToString());
+                return results;
+            }
+        }
+
+        public IEnumerable<SensorModel> DeleteSensor(SensorModel model)
+        {
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                _databaseHelper.Connection.Open();
+                var command = new StringBuilder($"DELETE FROM Sensor WHERE SensorID = {model.SensorId};");
+
+                var results = _databaseHelper.Connection.Query<SensorModel>(command.ToString());
+                return results;
+            }
+        }
+
     }
 }
