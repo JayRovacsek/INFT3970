@@ -5,15 +5,14 @@
 <div class="panel panel-default">
     <div class="panel-heading">Account Management Options:</div>
     <div class="panel-body">
-        <div class="col-md-1"></div>
-        @Html.ActionLink("Update Password", "UpdatePassword", "User", null, new { @class = "btn btn-default col-md-4 col-xs-12" })
-        <div class="col-md-2"></div>
-        @Html.ActionLink("Add Sensor", "AddSensor", "User", null, new { @class = "btn btn-default col-md-4 col-xs-12" })
-        <div class="col-md-1"></div>
-        <div class="col-md-1"></div>
-        @Html.ActionLink("Update Personal Details", "UpdateDetails", "User", null, new { @class = "btn btn-default col-md-4 col-xs-12" })
-        <div class="col-md-2"></div>
-    </div>
-    <br />
-    <h2> @ViewData["Message"] </h2>
+  
+        @Html.ActionLink("Update Password", "UpdatePassword", "User", null, new { @class = "btn btn-default" })
+
+   
+
+        @Html.ActionLink("Update Personal Details", "UpdateDetails", "User", null, new { @class = "btn btn-default" })
+
 </div>
+</div>
+<br />
+<h2> @ViewData["Message"] </h2>
