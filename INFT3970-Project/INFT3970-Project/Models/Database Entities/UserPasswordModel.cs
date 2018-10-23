@@ -9,6 +9,7 @@ namespace INFT3970Project.Models
     {
         public int UserID { get; set; }
         public string Password { get; set; }
+        public string ConfirmPassword { get; set; }
         public string HashedPassword { get; set; }
         public int Salt { get; set; }
     }
