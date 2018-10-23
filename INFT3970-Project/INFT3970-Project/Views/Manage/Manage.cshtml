@@ -8,10 +8,11 @@
 
     <div class="panel-body">
 
-        
-     
+
+
         @Html.ActionLink("Manage Sensor", "AddSensor", "Manage", null, new { @class = "btn btn-default" })
         @Html.ActionLink("Manage Rooms", "AddRoom", "Manage", null, new { @class = "btn btn-default" })
+        @Html.ActionLink("Logs", "Logs", "Manage", null, new { @class = "btn btn-default" })
         <br />
         @ViewData["Message"]
     </div>

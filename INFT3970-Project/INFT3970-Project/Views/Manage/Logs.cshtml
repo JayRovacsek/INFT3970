@@ -1,0 +1,32 @@
+﻿@model IEnumerable<INFT3970Project.Models.LogsModel>
+@{
+    Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
+}
+
+<h2>Logs</h2>
+<table class="table table-striped">
+    <tr>
+        <th>Log ID</th>
+        <th>Message</th>
+        <th> Serverity</th>
+        <th>Time</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>@item.id</td>
+
+
+        <td> @item.Message</td>
+
+
+
+        <td>@item.Serverity</td>
+
+
+
+        <td> @item.Time</td>
+    </tr>
+    }
+</table>

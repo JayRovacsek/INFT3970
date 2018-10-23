@@ -789,5 +789,17 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        public IEnumerable<LogsModel> QueryAllLogs()
+        {
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                _databaseHelper.Connection.Open();
+                var command = new StringBuilder("SELECT TOP 150 * FROM Logs ORDER BY id DESC;");
+
+                var results = _databaseHelper.Connection.Query<LogsModel>(command.ToString());
+
+                return results;
+            }
+        }
     }
 }
