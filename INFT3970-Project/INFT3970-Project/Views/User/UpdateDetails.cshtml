@@ -13,6 +13,10 @@
                 @using (Html.BeginForm("UpdateDetails", "User", FormMethod.Post, new { @class = "form-group-lg" }))
                 {
                     <div class="form-row">
+                        <div class="form-group row-fluid">
+                            @Html.TextBoxFor(model => model.UserID, new { @class = "form-control", @value = Model.UserID, @style = "display: none" })
+
+                        </div>
                         <div class="form-group col-md-5">
                             @Html.TextBoxFor(model => model.fName, new { @class = "form-control", @placeholder = "First Name" })
                         </div>
@@ -57,9 +61,12 @@
                         <div class="form-group col-md-11">
                             <button class="btn btn-lg btn-primary" type="submit">Update Details</button>
                         </div>
+
                     </div>
                 }
             </div>
         </div>
     </div>
+    <br />
+    @ViewData["Message"]
 </div>
