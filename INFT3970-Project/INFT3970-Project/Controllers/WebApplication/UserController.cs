@@ -75,6 +75,9 @@ namespace INFT3970Project.Controllers
                             ViewData["Message"] = "Details Changed";
                             return View("Index");
                         }
+                        else { ViewData["Message"] = "FAIL ";
+                            return View("Index");
+                        }
                     }
                 }
             }
