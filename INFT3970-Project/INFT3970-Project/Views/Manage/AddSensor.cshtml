@@ -54,11 +54,32 @@
                 </div>
             }
 
-
-
-
             <br />
             @ViewData["Message"]
+            <br />
+            <table class="table table-striped">
+                <tr>
+                    <th>Sensor ID</th>
+                    <th>Sensor Name</th>
+                    <th> Description</th>
+                    <th>User ID</th>
+                </tr>
+                @foreach (var item in ViewBag.AllSensors)
+                {
+                    <tr>
+                        <td>@item.SensorId</td>
+
+                        <td> @item.Name</td>
+
+
+                        <td>@item.Description</td>
+
+
+                        <td> @item.UserId</td>
+                    </tr>
+                }
+            </table>
+
         </div>
     </div>
 </div>
