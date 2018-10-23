@@ -540,18 +540,76 @@ namespace INFT3970Project.Helpers
             }
         }
 
-        /*public async Task<string> QueryUserDetails(int userId)
+        public bool UpdateUserDetailsdb(UpdateUserDetailsModel model)
         {
-            using (var _databaseHelper = new DatabaseHelper(configuration))
+            if (model.fName != null && model.Country != null)
             {
-                var query = $"SELECT [fName,lName,ContactNumber,Email, StreetNum, StreetName,City,State,Postcode,Country] FROM [Users u, UserAddress ua] WHERE [u.UserID = ua.UserID AND u.UserID ] = {userId}";
+                var success = false;
+                try
+                {
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        var command = new SqlCommand
+                        {
+                            Connection = (SqlConnection)_databaseHelper.Connection,
+                            CommandType = CommandType.StoredProcedure,
+                            CommandText = "dbo.UpdateUser"
+                        };
+                        command.Parameters.AddWithValue("@UserID", model.UserID);
+                        command.Parameters.AddWithValue("@fName", model.fName);
+                        command.Parameters.AddWithValue("@lName", model.lName);
+                        command.Parameters.AddWithValue("@ContactNumber", model.ContactNumber);
+                        command.Parameters.AddWithValue("@Email", model.Email);
+                        command.Parameters.AddWithValue("@StreetNum", model.StreetNum);
+                        command.Parameters.AddWithValue("@StreetName", model.StreetName);
+                        command.Parameters.AddWithValue("@Postcode", model.Postcode);
+                        command.Parameters.AddWithValue("@City", model.City);
+                        command.Parameters.AddWithValue("@State", model.State);
+                        command.Parameters.AddWithValue("@Country", model.Country);
 
-                var result = await _databaseHelper.Connection.QueryAsync<string>(query);
+                        SqlParameter output = new SqlParameter("@responseMessage", SqlDbType.VarChar);
+                        output.Direction = ParameterDirection.Output;
+                        output.Size = 255;
+                        command.Parameters.Add(output);
 
-                return result.FirstOrDefault();
+                        command.Connection.Open();
+                        command.ExecuteNonQuery();
+
+                        var response = command.Parameters["@responseMessage"].Value;
+
+                        var valid = (response.ToString() == "Invalid login Details") ? false :
+                            (response.ToString() == "Wrong Details") ? false : true;
+
+                        success = true;
+
+                        return valid;
+                    }
+                }
+
+                catch (Exception exception)
+                {
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        _databaseHelper.Log("Fatal", exception.Message, null, GetCurrentMethod());
+                    }
+                    success = false;
+                    return false;
+                }
+                finally
+                {
+                    if (success)
+                    {
+                        using (var _databaseHelper = new DatabaseHelper(configuration))
+                        {
+                            _databaseHelper.Log("Infomation", $"User Details Updated: {model.Email}", null, GetCurrentMethod());
+                        }
+                    }
+                }
             }
+            return false;
         }
-        */
+         
+
         public async Task<IEnumerable<UpdateUserDetailsModel>> QueryUserDetails(int userId)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
