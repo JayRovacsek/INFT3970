@@ -558,8 +558,7 @@ namespace INFT3970Project.Helpers
                         command.Parameters.AddWithValue("@UserID", model.UserID);
                         command.Parameters.AddWithValue("@fName", model.fName);
                         command.Parameters.AddWithValue("@lName", model.lName);
-                        command.Parameters.AddWithValue("@ContactNumber", model.ContactNumber);
-                        command.Parameters.AddWithValue("@Email", model.Email);
+                        command.Parameters.AddWithValue("@ContactNumber", model.ContactNumber);;
                         command.Parameters.AddWithValue("@StreetNum", model.StreetNum);
                         command.Parameters.AddWithValue("@StreetName", model.StreetName);
                         command.Parameters.AddWithValue("@Postcode", model.Postcode);
@@ -615,7 +614,7 @@ namespace INFT3970Project.Helpers
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
                 _databaseHelper.Connection.Open();
-                var query = new StringBuilder($@"SELECT u.fName, u.lName, u.ContactNumber,
+                var query = new StringBuilder($@"SELECT u.UserID, u.fName, u.lName, u.ContactNumber,
                                                 u.Email, ua.StreetNum, ua.StreetName,
                                                 ua.City, ua.State, ua.Postcode, ua.Country
                                                 FROM Users u 
