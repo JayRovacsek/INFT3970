@@ -199,5 +199,20 @@ namespace INFT3970Project.Controllers
             ViewData["Message"] = "Please fill in all the details";
             return View("Manage, AddRoom");
         }
+
+
+
+        [HttpGet]
+        public IActionResult Logs()
+        {
+            var model = _databaseHelper.QueryAllLogs();
+            return View(model.ToList());
+        }
+
+
+
+
+
+
     }
 }
