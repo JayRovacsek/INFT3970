@@ -35,7 +35,7 @@ namespace INFT3970Project.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> AddSensor()
+        public IActionResult AddSensor()
         {
             var user = _databaseHelper.QueryAllUsers();
 
@@ -66,6 +66,11 @@ namespace INFT3970Project.Controllers
             });
 
             ViewBag.AllSensors = Sensor;
+
+            var AllSensor = new List<SensorModel>();
+            ViewBag.AllSensors = AllSensor;
+
+
 
 
             return View();
@@ -208,8 +213,6 @@ namespace INFT3970Project.Controllers
             var model = _databaseHelper.QueryAllLogs();
             return View(model.ToList());
         }
-
-
 
 
 
