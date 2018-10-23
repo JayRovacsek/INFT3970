@@ -60,12 +60,27 @@ namespace INFT3970Project.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateDetails(UpdateUserDetailsModel model)
+        public IActionResult UpdateDetails(UpdateUserDetailsModel model)
         {
-            throw new NotImplementedException();
+            if (model != null)
+            {
+                if (!string.IsNullOrEmpty(model.fName) && !string.IsNullOrEmpty(model.lName))
+                {
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        var valid = _databaseHelper.UpdateUserDetailsdb(model);
 
-            ViewData["Message"] = "User Details Updated";
-            return View(null);
+                        if (valid)
+                        {
+                            ViewData["Message"] = "Details Changed";
+                            return View("Index");
+                        }
+                    }
+                }
+            }
+
+            ViewData["Message"] = "Didnt work";
+            return View();
         }
 
         [HttpPost]
