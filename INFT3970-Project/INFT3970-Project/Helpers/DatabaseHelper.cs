@@ -804,5 +804,29 @@ namespace INFT3970Project.Helpers
 
 
 
+        //Home Page Top Temp and Huminity 
+        public IEnumerable<CurrentTempModel> QueryCurrent(int userId)
+        {
+
+                using (var _databaseHelper = new DatabaseHelper(configuration))
+                {
+                    _databaseHelper.Connection.Open();
+                    var command = new StringBuilder($@"SELECT TOP 1       h.Humidity, r.Name, t.Temp, s.UserID
+FROM            Humidity h INNER JOIN
+                         Sensor s ON h.SensorID = s.SensorID INNER JOIN
+                         Room r ON s.RoomID = r.RoomID INNER JOIN
+                         Temperature t ON s.SensorID = t.SensorID
+WHERE        s.UserID = 2 
+Order by h.HumidityID DESC, t.TempID DESC
+                                                ");
+
+                    var results = _databaseHelper.Connection.Query<CurrentTempModel>(command.ToString());
+
+                    return results;
+                }
+            
+        }
+
+
     }
 }
