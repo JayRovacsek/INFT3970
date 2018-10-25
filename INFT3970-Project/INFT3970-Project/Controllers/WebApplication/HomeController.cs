@@ -22,8 +22,11 @@ namespace INFT3970Project.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            return View();
+            var userId = Convert.ToInt32(Request.Cookies["UserId"]);
+            var model = _databaseHelper.QueryCurrent(userId);
+            return View(model.ToList());
         }
+
 
         public IActionResult About()
         {
