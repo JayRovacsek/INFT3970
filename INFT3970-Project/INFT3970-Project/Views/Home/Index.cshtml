@@ -1,9 +1,34 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model IEnumerable<INFT3970Project.Models.CurrentTempModel>
+
 
 @{
     Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
 }
 
-<p>Home sweet ~.</p>
+<h2>Current Temperature and Humidity</h2>
+<table class="table table-striped">
+    <tr>
+        <th>Room</th>
+        <th> Temperature</th>
+        <th>Humidity</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+
+
+            <td>@item.Temp</td>
+
+
+
+            <td> @item.Humidity</td>
+        </tr>
+    }
+
+
+
+
+
+</table>

@@ -67,12 +67,6 @@ namespace INFT3970Project.Controllers
 
             ViewBag.AllSensors = Sensor;
 
-            var AllSensor = new List<SensorModel>();
-            ViewBag.AllSensors = AllSensor;
-
-
-
-
             return View();
         }
 
@@ -108,7 +102,6 @@ namespace INFT3970Project.Controllers
         [HttpPost]
         public ActionResult DeleteSensor(SensorModel model)
         {
-            int a = 1;
             if (true)
             {
                 if (model.SensorId != null)
