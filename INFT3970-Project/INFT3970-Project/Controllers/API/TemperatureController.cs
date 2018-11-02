@@ -42,7 +42,7 @@ namespace INFT3970Project.Controllers
             try
             {
                 model.Timestamp = DateTime.Now;
-                _databaseHelper.CreateRecord(model);
+                _databaseHelper.CreateRecordAsync(model);
             }
             catch(Exception exception)
             {

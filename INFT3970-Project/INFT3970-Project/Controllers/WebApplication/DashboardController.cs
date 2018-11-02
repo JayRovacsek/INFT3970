@@ -58,10 +58,10 @@ namespace INFT3970Project.Controllers
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
                 var models = (mode == ApplicationMode.Admin)
-                    ? await _databaseHelper.QueryAllMotion()
+                    ? await _databaseHelper.QueryAllMotionAsync(250)
                     : (mode == ApplicationMode.User)
-                    ? await _databaseHelper.QueryUserMotion(userId)
-                    : await _databaseHelper.QueryUserMotion(userId);
+                    ? await _databaseHelper.QueryUserMotionAsync(userId, 250)
+                    : await _databaseHelper.QueryUserMotionAsync(userId, 250);
                 // NEEED TO FIX THE ABOVE FOR DEMO MODE.
 
                 return View(models);
@@ -118,7 +118,7 @@ namespace INFT3970Project.Controllers
             foreach (var sensorId in models.Select(x => x.SensorID).Distinct())
             {
                 string colour;
-                var location = _databaseHelper.QuerySensorLocation(sensorId);
+                var location = _databaseHelper.QuerySensorLocation(sensorId).FirstOrDefault().Description;
 
                 if (Request.Cookies.ContainsKey($"Sensor{sensorId}Colour"))
                 {
@@ -161,7 +161,7 @@ namespace INFT3970Project.Controllers
             foreach (var sensorId in models.Select(x => x.SensorID).Distinct())
             {
                 string colour;
-                var location = _databaseHelper.QuerySensorLocation(sensorId);
+                var location = _databaseHelper.QuerySensorLocation(sensorId).FirstOrDefault().Description;
 
                 if (Request.Cookies.ContainsKey($"Sensor{sensorId}Colour"))
                 {
@@ -204,7 +204,7 @@ namespace INFT3970Project.Controllers
             foreach (var sensorId in models.Select(x => x.SensorID).Distinct())
             {
                 string colour;
-                var location = _databaseHelper.QuerySensorLocation(sensorId);
+                var location = _databaseHelper.QuerySensorLocation(sensorId).FirstOrDefault().Description;
 
                 if (Request.Cookies.ContainsKey($"Sensor{sensorId}Colour"))
                 {
@@ -242,8 +242,8 @@ namespace INFT3970Project.Controllers
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
                 var models = (all)
-                    ? _databaseHelper.QueryAllTemperature()
-                    : _databaseHelper.QueryUserTemperature(userId);
+                    ? _databaseHelper.QueryAllTemperatureAsync()
+                    : _databaseHelper.QueryUserTemperatureAsync(userId);
 
                 return await models;
             }
@@ -254,8 +254,8 @@ namespace INFT3970Project.Controllers
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
                 var models = (all)
-                    ? _databaseHelper.QueryAllHumidity()
-                    : _databaseHelper.QueryUserHumidity(userId);
+                    ? _databaseHelper.QueryAllHumidityAsync()
+                    : _databaseHelper.QueryUserHumidityAsync(userId);
 
                 return await models;
             }
@@ -266,8 +266,8 @@ namespace INFT3970Project.Controllers
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
                 var models = (all)
-                    ? _databaseHelper.QueryAllMotion()
-                    : _databaseHelper.QueryUserMotion(userId);
+                    ? _databaseHelper.QueryAllMotionAsync()
+                    : _databaseHelper.QueryUserMotionAsync(userId);
 
                 return await models;
             }
