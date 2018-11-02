@@ -137,7 +137,7 @@ namespace INFT3970Project.Controllers
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
-                var valid = await _databaseHelper.Register(model);
+                var valid = await _databaseHelper.RegisterAsync(model);
 
                 if (valid)
                 {

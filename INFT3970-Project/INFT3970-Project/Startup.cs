@@ -68,7 +68,7 @@ namespace INFT3970_Project
 
             app.UseAuthentication();
             app.UseCookiePolicy(new CookiePolicyOptions() {
-                Secure = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest
+                Secure = CookieSecurePolicy.SameAsRequest
             });
 
             app.UseStaticFiles();

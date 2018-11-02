@@ -38,7 +38,7 @@ namespace INFT3970Project.Controllers
         public async Task<IActionResult> UpdatePassword()
         {
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
-            var username = await _databaseHelper.QueryUserEmail(userId);
+            var username = await _databaseHelper.QueryUserEmailAsync(userId);
             var userAndPasswordModel = new UserAndPasswordModel
             {
                 User = new UserModel
@@ -54,7 +54,7 @@ namespace INFT3970Project.Controllers
         public async Task<IActionResult> UpdateDetails()
         {
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
-            var models = await _databaseHelper.QueryUserDetails(userId);
+            var models = await _databaseHelper.QueryUserDetailsAsync(userId);
             var model = models.FirstOrDefault();
             return View(model);
         }
@@ -68,14 +68,14 @@ namespace INFT3970Project.Controllers
                 {
                     using (var _databaseHelper = new DatabaseHelper(configuration))
                     {
-                        var valid = _databaseHelper.UpdateUserDetailsdb(model);
+                        var valid = _databaseHelper.UpdateUserDetails(model);
 
                         if (valid)
                         {
                             ViewData["Message"] = "Details Changed";
                             return View("Index");
                         }
-                        else { ViewData["Message"] = "FAIL ";
+                        else { ViewData["Message"] = "FAIL";
                             return View("Index");
                         }
                     }
