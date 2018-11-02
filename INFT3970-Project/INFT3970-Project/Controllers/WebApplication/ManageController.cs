@@ -102,21 +102,18 @@ namespace INFT3970Project.Controllers
         [HttpPost]
         public ActionResult DeleteSensor(SensorModel model)
         {
-            if (true)
+            if (model != null)
             {
-                if (model.SensorId != null)
+                using (var _databaseHelper = new DatabaseHelper(configuration))
                 {
-                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    var valid = _databaseHelper.DeleteSensor(model);
+
+                    if (true)
                     {
-                        var valid = _databaseHelper.DeleteSensor(model);
-
-                        if (true)
-                        {
-                            ViewData["Message"] = "Sensor Deleted";
-                            return View("Manage");
-                        }
-
+                        ViewData["Message"] = "Sensor Deleted";
+                        return View("Manage");
                     }
+
                 }
             }
 
@@ -203,7 +200,7 @@ namespace INFT3970Project.Controllers
         [HttpGet]
         public IActionResult Logs()
         {
-            var model = _databaseHelper.QueryAllLogs();
+            var model = _databaseHelper.QueryAllLogs(100);
             return View(model.ToList());
         }
 

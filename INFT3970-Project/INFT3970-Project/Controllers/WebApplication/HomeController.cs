@@ -20,13 +20,12 @@ namespace INFT3970Project.Controllers
         }
 
         [Authorize]
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
-            var model = _databaseHelper.QueryCurrent(userId);
-            return View(model.ToList());
+            var models = await _databaseHelper.QueryCurrentAsync(userId);
+            return View(models);
         }
-
 
         public IActionResult About()
         {

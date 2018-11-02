@@ -16,19 +16,15 @@
     @foreach (var item in Model)
     {
         <tr>
-            <td>@item.Name</td>
-
-
-            <td>@item.Temp</td>
-
-
-
-            <td> @item.Humidity</td>
+            <td>
+                @item.RoomName
+            </td>
+            <td>
+                @item.Temperature
+            </td>
+            <td>
+                @item.Humidity
+            </td>
         </tr>
     }
-
-
-
-
-
 </table>
