@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace INFT3970Project.Models
 {
-    public class LogsModel
+    public class LogModel
     {
-
-        public int id { get; set; }
+        public int Id { get; set; }
         public string Serverity { get; set; }
         public string Message { get; set; }
         public int Userid { get; set; }

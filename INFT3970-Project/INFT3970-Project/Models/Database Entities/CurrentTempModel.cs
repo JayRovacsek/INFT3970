@@ -8,11 +8,11 @@ namespace INFT3970Project.Models
 {
     public class CurrentTempModel
     {
-        public string Temp { get; set; }
-        public string Humidity { get; set; }
+        public decimal Temperature { get; set; }
+        public decimal Humidity { get; set; }
         // Room Name
-        public string Expr1 { get; set; }
+        public string RoomName { get; set; }
         // Sensor Name
-        public string Name { get; set; }
+        public string SensorName { get; set; }
     }
 }
