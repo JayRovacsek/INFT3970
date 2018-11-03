@@ -9,7 +9,7 @@
     <div class="panel-body">
 
         <div class="form-group">
-            @using (Html.BeginForm("AddRoom", "Manage", FormMethod.Post, new { @class = "form-group" }))
+            @using (Html.BeginForm("AddRoom", "Admin", FormMethod.Post, new { @class = "form-group" }))
             {
                 <div class="form-group row-fluid">
                     @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @placeholder = "Room Name", })
@@ -26,7 +26,7 @@
             }
 
             <div class="panel-heading">Admin: Delete Room:</div>
-            @using (Html.BeginForm("DeleteRoom", "Manage", FormMethod.Post, new { @class = "form-group" }))
+            @using (Html.BeginForm("DeleteRoom", "Admin", FormMethod.Post, new { @class = "form-group" }))
             {
                 <div class="form-group row-fluid">
                     @Html.DropDownList("RoomID", (IEnumerable<SelectListItem>)ViewBag.AllRooms, "Rooms",
