@@ -8,13 +8,14 @@
     <tr>
         <th>Log ID</th>
         <th>Message</th>
-        <th> Serverity</th>
+        <th> Severity</th>
         <th>Time</th>
     </tr>
 
     @foreach (var item in Model)
     {
-        <tr>
+
+        <tr class="@(@item.Severity.Equals("Warning") ? "warning" : @item.Severity.Equals("Fatal") ? "danger" : "default")">
             <td>
                 @item.Id
             </td>
@@ -22,7 +23,7 @@
                 @item.Message
             </td>
             <td>
-                @item.Serverity
+                @item.Severity
             </td>
             <td>
                 @item.Time
