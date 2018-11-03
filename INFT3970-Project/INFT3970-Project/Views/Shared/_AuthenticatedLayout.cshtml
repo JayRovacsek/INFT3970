@@ -45,7 +45,7 @@
                     @{
                         if (HttpContextAccessor.HttpContext.Request.Cookies.ContainsKey("IsAdmin"))
                         {
-                            <li><a asp-area="" asp-controller="Manage" asp-action="Manage">Admin</a></li>
+                            <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin</a></li>
                         }
                     }
                     <li><a asp-area="" asp-controller="Login" asp-action="Logout">Logout</a></li>
@@ -54,8 +54,14 @@
         </div>
     </nav>
     <div class="container body-content">
-        <div class="col-md-12 col-xs-12" style="padding-top:3rem;padding-bottom:3rem;">
-            @RenderBody()
+        <div class="container h-100" style="padding-top:3rem; padding-bottom:3rem">
+            <div class="row align-items-center h-100">
+                <div class="col-12 mx-auto">
+                    <div>
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
         </div>
         <hr />
         <nav class="navbar navbar-fixed-bottom">
