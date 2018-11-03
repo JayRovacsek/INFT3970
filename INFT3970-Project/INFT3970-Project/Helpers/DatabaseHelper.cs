@@ -415,7 +415,7 @@ namespace INFT3970Project.Helpers
                 using (var _databaseHelper = new DatabaseHelper(configuration))
                 {
                     _databaseHelper.Connection.Open();
-                    var query = (count == 0)
+                    var query = (count != 0)
                         ? $@"SELECT TOP ({count}) * FROM [Temperature] t
                             INNER JOIN [Sensor] s ON t.[SensorID] = s.[SensorID]
                             ORDER BY t.Date DESC;"
@@ -470,7 +470,7 @@ namespace INFT3970Project.Helpers
                     {
                         _databaseHelper.Connection.Open();
 
-                        var query = (count == 0)
+                        var query = (count != 0)
                             ? $@"SELECT TOP ({count}) * FROM [Temperature] t
                                 INNER JOIN [Sensor] s ON t.[SensorID] = s.[SensorID]
                                 WHERE s.[UserID] = {userId}
@@ -506,7 +506,7 @@ namespace INFT3970Project.Helpers
                 {
                     _databaseHelper.Connection.Open();
 
-                    var query = (count == 0)
+                    var query = (count != 0)
                         ? $@"SELECT TOP ({count}) * FROM [Humidity] h
                             INNER JOIN [Sensor] s ON h.[SensorID] = s.[SensorID]
                             ORDER BY h.Date DESC;"
@@ -540,7 +540,7 @@ namespace INFT3970Project.Helpers
                     {
                         _databaseHelper.Connection.Open();
 
-                        var query = (count == 0)
+                        var query = (count != 0)
                             ? $@"SELECT TOP ({count}) * FROM [Humidity] h
                                 INNER JOIN [Sensor] s ON h.[SensorID] = s.[SensorID]
                                 WHERE s.[UserID] = {userId}
@@ -576,7 +576,7 @@ namespace INFT3970Project.Helpers
                 {
                     _databaseHelper.Connection.Open();
 
-                    var query = (count == 0)
+                    var query = (count != 0)
                         ? $@"SELECT TOP ({count}) * FROM [Motion] m
                             INNER JOIN [Sensor] s ON m.[SensorID] = s.[SensorID]
                             ORDER BY m.Date DESC;"
@@ -610,7 +610,7 @@ namespace INFT3970Project.Helpers
                     {
                         _databaseHelper.Connection.Open();
 
-                        var query = (count == 0)
+                        var query = (count != 0)
                             ? $@"SELECT TOP ({count}) * FROM [Motion] m
                                 INNER JOIN [Sensor] s ON m.[SensorID] = s.[SensorID]
                                 WHERE s.[UserID] = {userId}
@@ -954,7 +954,7 @@ namespace INFT3970Project.Helpers
                 var command = $@"SELECT TOP({count}) * 
                                 FROM [Temperature] 
                                 WHERE [SensorID] = {sensorId}
-                                ORDER BY Id DESC;";
+                                ORDER BY [TempID] DESC;";
 
                 var results = await _databaseHelper.Connection.QueryAsync<DB.TemperatureModel>(command.ToString());
 
@@ -970,7 +970,7 @@ namespace INFT3970Project.Helpers
                 var command = $@"SELECT TOP({count}) * 
                                 FROM [Humidity] 
                                 WHERE [SensorID] = {sensorId}
-                                ORDER BY Id DESC;";
+                                ORDER BY [HumidityID] DESC;";
 
                 var results = await _databaseHelper.Connection.QueryAsync<DB.HumidityModel>(command.ToString());
 
@@ -986,7 +986,7 @@ namespace INFT3970Project.Helpers
                 var command = $@"SELECT TOP({count}) * 
                                 FROM [Motion] 
                                 WHERE [SensorID] = {sensorId}
-                                ORDER BY Id DESC;";
+                                ORDER BY [MotionID] DESC;";
 
                 var results = await _databaseHelper.Connection.QueryAsync<DB.MotionModel>(command.ToString());
 
@@ -1005,6 +1005,8 @@ namespace INFT3970Project.Helpers
                 var humidityResults = await QuerySensorHumidity(sensor.SensorId, 1);
                 var temperatureResults = await QuerySensorTemperature(sensor.SensorId, 1);
                 var locationResults = QuerySensorLocation(sensor.SensorId);
+
+                if(humidityResults.Any() && temperatureResults.Any() && locationResults.Any())
 
                 results.Add(new CurrentTempModel
                 {
