@@ -20,7 +20,7 @@ namespace INFT3970Project.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> IndexAsync()
+        public async Task<IActionResult> Index()
         {
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
             var models = await _databaseHelper.QueryCurrentAsync(userId);
