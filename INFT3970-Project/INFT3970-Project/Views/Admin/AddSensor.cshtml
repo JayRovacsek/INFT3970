@@ -8,7 +8,7 @@
     <div class="panel-body">
 
         <div class="form-group">
-            @using (Html.BeginForm("AddSensor", "Manage", FormMethod.Post, new { @class = "form-group" }))
+            @using (Html.BeginForm("AddSensor", "Admin", FormMethod.Post, new { @class = "form-group" }))
             {
 
                 <div class="form-group row-fluid">
@@ -41,7 +41,7 @@
 
 
             <div class="panel-heading">Admin: Delete Sensor:</div>
-            @using (Html.BeginForm("DeleteSensor", "Manage", FormMethod.Post, new { @class = "form-group" }))
+            @using (Html.BeginForm("DeleteSensor", "Admin", FormMethod.Post, new { @class = "form-group" }))
             {
                 <div class="form-group row-fluid">
                     @Html.DropDownList("SensorId", (IEnumerable<SelectListItem>)ViewBag.AllSensors, "Sensos",

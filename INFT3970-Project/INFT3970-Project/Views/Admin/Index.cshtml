@@ -1,0 +1,28 @@
+﻿@{
+    Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
+}
+
+<div class="panel panel-default">
+
+    <div class="panel-heading">Admin:</div>
+
+    <div class="panel-body">
+        <div class="form-group">
+            <div class="form-group row-fluid">
+                @Html.ActionLink("Manage Sensor", "AddSensor", "Admin", null, new { @class = "btn btn-default col-md-12 col-xs-12" })
+                <br />
+            </div>
+            <div class="form-group row-fluid">
+                @Html.ActionLink("Manage Rooms", "AddRoom", "Admin", null, new { @class = "btn btn-default col-md-12 col-xs-12" })
+                <br />
+            </div>
+            <div class="form-group row-fluid">
+                @Html.ActionLink("Logs", "Logs", "Admin", null, new { @class = "btn btn-default col-md-12 col-xs-12" })
+                <br />
+            </div>
+            <br />
+            @ViewData["Message"]
+
+        </div>
+    </div>
+</div>
