@@ -55,17 +55,15 @@ namespace INFT3970Project.Controllers
         {
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
 
-            using (var _databaseHelper = new DatabaseHelper(configuration))
-            {
-                var models = (mode == ApplicationMode.Admin)
-                    ? await _databaseHelper.QueryAllMotionAsync(250)
-                    : (mode == ApplicationMode.User)
-                    ? await _databaseHelper.QueryUserMotionAsync(userId, 250)
-                    : await _databaseHelper.QueryUserMotionAsync(userId, 250);
+            var models = await GetMotionModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId);
+
+            var chartData = ConvertMotionToChart(models);
+
+            return View(chartData);
+            
                 // NEEED TO FIX THE ABOVE FOR DEMO MODE.
 
-                return View(models);
-            }
+           
         }
 
         public async Task<IActionResult> Combined()
