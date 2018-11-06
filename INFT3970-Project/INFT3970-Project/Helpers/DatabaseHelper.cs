@@ -498,25 +498,53 @@ namespace INFT3970Project.Helpers
             return null;
         }
 
-        public async Task<IEnumerable<DB.HumidityModel>> QueryAllHumidityAsync(int? count = 250)
+        public async Task<IEnumerable<AverageHumidityModelWithId>> QueryAllHumidityAsync(DateTime? startTime, DateTime? endTime)
         {
+            startTime = startTime.Equals(null) ? DateTime.Now.Subtract(TimeSpan.FromHours(24)) : startTime;
+            endTime = endTime.Equals(null) ? DateTime.Now : endTime;
+
+            var sensors = QueryAllSensors();
+
+            var results = new List<AverageHumidityModelWithId>();
+
             try
             {
                 using (var _databaseHelper = new DatabaseHelper(configuration))
                 {
                     _databaseHelper.Connection.Open();
 
-                    var query = (count != 0)
-                        ? $@"SELECT TOP ({count}) * FROM [Humidity] h
-                            INNER JOIN [Sensor] s ON h.[SensorID] = s.[SensorID]
-                            ORDER BY h.Date DESC;"
+                    foreach (var sensor in sensors)
+                    {
+                        var command = $@"SELECT AVG(Humidity) AS Humidity, StartTime, EndTime	
+                                        FROM (
+		                                    SELECT HumidityID, StartTime, Humidity, StartTime + '00:59:59' AS EndTime		   
+                                            FROM (
+				                                SELECT HumidityID, DATEADD(hh,DATEDIFF(hh,0,t.[Date]),0) AS StartTime, Humidity, s.SensorID, s.UserID
+				                               FROM Humidity t
+				                               INNER JOIN Sensor s ON  s.SensorID = t.SensorID
+				                               WHERE s.SensorID = {sensor.SensorId} AND t.[Date] 
+                                                BETWEEN '{startTime.Value.ToUniversalTime().ToString(format)}' AND '{endTime.Value.ToUniversalTime().ToString(format)}'
+				                               GROUP BY t.HumidityID, t.[Date], t.Humidity, s.SensorID, s.UserID) Humidity				
+                                            INNER JOIN Sensor s ON s.SensorID = Humidity.SensorId 
+		                                    GROUP BY HumidityID, StartTime, Humidity) Humidity
+	                                    WHERE StartTime BETWEEN StartTime AND EndTime
+	                                    GROUP BY StartTime, EndTime
+                                    ORDER BY EndTime";
 
-                        : $@"SELECT * FROM [Humidity] h
-                            INNER JOIN [Sensor] s ON h.[SensorID] = s.[SensorID]
-                            ORDER BY h.Date DESC;";
+                        var dbResult = _databaseHelper.Connection.Query<AverageHumidityModel>(command);
 
-                    var result = await _databaseHelper.Connection.QueryAsync<DB.HumidityModel>(query.ToString());
-                    return result;
+                        foreach (var result in dbResult)
+                        {
+                            results.Add(new AverageHumidityModelWithId
+                            {
+                                SensorId = sensor.SensorId,
+                                Humidity = result.Humidity,
+                                StartTime = result.StartTime,
+                                EndTime = result.EndTime
+                            });
+                        }
+                    }
+                    return results;
                 }
             }
             catch (Exception exception)
@@ -528,6 +556,7 @@ namespace INFT3970Project.Helpers
 
                 return null;
             }
+            return null;
         }
 
         public async Task<IEnumerable<DB.HumidityModel>> QueryUserHumidityAsync(int userId, int? count = 250)
@@ -553,6 +582,69 @@ namespace INFT3970Project.Helpers
 
                         var result = await _databaseHelper.Connection.QueryAsync<DB.HumidityModel>(query.ToString());
                         return result;
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                using (var _databaseHelper = new DatabaseHelper(configuration))
+                {
+                    _databaseHelper.Log("Fatal", exception.Message, null, GetCurrentMethod());
+                }
+
+                return null;
+            }
+            return null;
+        }
+
+        public async Task<IEnumerable<AverageHumidityModelWithId>> QueryUserHumidityAsync(int userId, DateTime? startTime, DateTime? endTime)
+        {
+            startTime = startTime.Equals(null) ? DateTime.Now.Subtract(TimeSpan.FromHours(24)) : startTime;
+            endTime = endTime.Equals(null) ? DateTime.Now : endTime;
+
+            var sensors = QueryUserSensorsAsync(userId);
+            var results = new List<AverageHumidityModelWithId>();
+
+            try
+            {
+                if (userId != 0)
+                {
+                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    {
+                        _databaseHelper.Connection.Open();
+
+                        foreach (var sensor in await sensors)
+                        {
+                            var command = $@"SELECT AVG(Humidity) AS HourlyAverage, StartTime, EndTime	
+                                    FROM (
+		                                SELECT HumidityID, StartTime, Humidity, StartTime + '00:59:59' AS EndTime		   
+                                        FROM (
+				                            SELECT HumidityID, DATEADD(hh,DATEDIFF(hh,0,t.[Date]),0) AS StartTime, Humidity, s.SensorID, s.UserID
+				                            FROM Humidity t
+				                            INNER JOIN Sensor s ON  s.SensorID = t.SensorID
+				                            WHERE s.SensorID = {sensor.SensorId} AND t.[Date] 
+                                            BETWEEN '{startTime.Value.ToUniversalTime().ToString(format)}' AND '{endTime.Value.ToUniversalTime().ToString(format)}'
+				                            GROUP BY t.HumidityID, t.[Date], t.Humidity, s.SensorID, s.UserID) Humidity				
+                                        INNER JOIN Sensor s ON s.SensorID = Humidity.SensorId 
+		                                GROUP BY HumidityID, StartTime, Humidity) Humidity
+	                                WHERE StartTime BETWEEN StartTime AND EndTime
+	                                GROUP BY StartTime, EndTime
+                                ORDER BY EndTime";
+
+                            var dbResult = _databaseHelper.Connection.Query<AverageHumidityModel>(command);
+
+                            foreach (var result in dbResult)
+                            {
+                                results.Add(new AverageHumidityModelWithId
+                                {
+                                    SensorId = sensor.SensorId,
+                                    Humidity = result.Humidity,
+                                    StartTime = result.StartTime,
+                                    EndTime = result.EndTime
+                                });
+                            }
+                        }
+                        return results;
                     }
                 }
             }
@@ -947,7 +1039,7 @@ namespace INFT3970Project.Helpers
         }
 
         public async Task<IEnumerable<DB.TemperatureModel>> QuerySensorTemperature(int sensorId, int? count = 250)
-         {
+        {
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
                 _databaseHelper.Connection.Open();
@@ -978,30 +1070,30 @@ namespace INFT3970Project.Helpers
             }
         }
 
-        public async Task<IEnumerable<DB.MotionModel>> QuerySensorMotion(int sensorId, int? count = 250)
+        public async Task<IEnumerable<DB.MotionModel>> QuerySensorMotion(int sensorId, DateTime? startDate, DateTime? endDate, int? count = 250)
         {
+            startDate = startDate.Equals(null) ? DateTime.Now.Subtract(TimeSpan.FromHours(24)) : startDate;
+            endDate = startDate.Equals(null) ? DateTime.Now : endDate;
+
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
-                var startDate = "2018-11-05";
-                var endDate = "2018-11-06";
                 var userID = 2;
                 var sensorID = 9;
                 var command = new SqlCommand
-
                 {
                     Connection = (SqlConnection)_databaseHelper.Connection,
                     CommandType = CommandType.StoredProcedure,
                     CommandText = "dbo.MotionCount"
                 };
-                command.Parameters.AddWithValue("@UserID", userID );
+                command.Parameters.AddWithValue("@UserID", userID);
                 command.Parameters.AddWithValue("@SensorID", sensorID);
                 command.Parameters.AddWithValue("@SearchStartTime", startDate);
                 command.Parameters.AddWithValue("@SearchEndTime", endDate);
 
+                // The return of the proc needs to either being a datareader which you parse, or you should define a model to use.
+                //var results = await _databaseHelper.Connection.QueryAsync<DB.MotionModel>(command.ToString());
 
-                var results = await _databaseHelper.Connection.QueryAsync<DB.MotionModel>(command.ToString());
-
-                return results;
+                return null;
             }
         }
 
@@ -1017,15 +1109,15 @@ namespace INFT3970Project.Helpers
                 var temperatureResults = await QuerySensorTemperature(sensor.SensorId, 1);
                 var locationResults = QuerySensorLocation(sensor.SensorId);
 
-                if(humidityResults.Any() && temperatureResults.Any() && locationResults.Any())
+                if (humidityResults.Any() && temperatureResults.Any() && locationResults.Any())
 
-                results.Add(new CurrentTempModel
-                {
-                    Humidity = humidityResults.FirstOrDefault().Humidity,
-                    Temperature = temperatureResults.FirstOrDefault().Temp,
-                    RoomName = locationResults.FirstOrDefault().Name,
-                    SensorName = sensor.Description
-                });
+                    results.Add(new CurrentTempModel
+                    {
+                        Humidity = humidityResults.FirstOrDefault().Humidity,
+                        Temperature = temperatureResults.FirstOrDefault().Temp,
+                        RoomName = locationResults.FirstOrDefault().Name,
+                        SensorName = sensor.Description
+                    });
             }
 
             return results;
