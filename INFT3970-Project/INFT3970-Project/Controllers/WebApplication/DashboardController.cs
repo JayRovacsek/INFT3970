@@ -31,7 +31,7 @@ namespace INFT3970Project.Controllers
 
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
 
-            var models = await GetTemperatureModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId);
+            var models = await GetTemperatureModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId, null);
 
             var chartData = ConvertTemperatureToChart(models);
 
@@ -72,49 +72,48 @@ namespace INFT3970Project.Controllers
 
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
-                //var chartData = new ChartDataModel
-                //{
-                //    datasets = new List<DataSetModel>()
-                //};
+                var chartData = new ChartDataModel
+                {
+                    datasets = new List<DataSetModel>()
+                };
 
-                //var temperature = await GetTemperatureModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId);
-                //var temperatureChartData = ConvertTemperatureToChart(temperature);
+                var temperature = await GetTemperatureModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId, null);
+                var temperatureChartData = ConvertTemperatureToChart(temperature);
 
-                ////var humidity = await GetHumidityModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId);
-                ////var humidityChartData = ConvertHumidityToChart(humidity);
+                var humidity = await GetHumidityModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId, null);
+                var humidityChartData = ConvertHumidityToChart(humidity);
 
-                //var motion = await GetMotionModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId);
-                //var motionChartData = ConvertMotionToChart(motion);
+                var motion = await GetMotionModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId);
+                var motionChartData = ConvertMotionToChart(motion);
 
-                //if (temperatureChartData.datasets.Count > 0)
-                //{
-                //    chartData.datasets.AddRange(temperatureChartData.datasets);
-                //}
+                if (temperatureChartData.datasets.Count > 0)
+                {
+                    chartData.datasets.AddRange(temperatureChartData.datasets);
+                }
 
-                //if (humidityChartData.datasets.Count > 0)
-                //{
-                //    chartData.datasets.AddRange(humidityChartData.datasets);
-                //}
+                if (humidityChartData.datasets.Count > 0)
+                {
+                    chartData.datasets.AddRange(humidityChartData.datasets);
+                }
 
-                //if (motionChartData.datasets.Count > 0)
-                //{
-                //    chartData.datasets.AddRange(motionChartData.datasets);
-                //}
+                if (motionChartData.datasets.Count > 0)
+                {
+                    chartData.datasets.AddRange(motionChartData.datasets);
+                }
 
-                //return View(chartData);
-                return View(null);
+                return View(chartData);
                 // NEEED TO FIX THE ABOVE FOR DEMO MODE.
             }
         }
 
-        public ChartDataModel ConvertTemperatureToChart(IEnumerable<DB.TemperatureModel> models)
+        public ChartDataModel ConvertTemperatureToChart(IEnumerable<AverageTemperatureModelWithId> models)
         {
             var chartData = new ChartDataModel
             {
                 datasets = new List<DataSetModel>()
             };
 
-            foreach (var sensorId in models.Select(x => x.SensorID).Distinct())
+            foreach (var sensorId in models.Select(x => x.SensorId).Distinct())
             {
                 string colour;
                 var location = _databaseHelper.QuerySensorLocation(sensorId).FirstOrDefault().Description;
@@ -130,18 +129,18 @@ namespace INFT3970Project.Controllers
                 }
 
                 var ds = models.Select(x => x)
-                    .Where(x => x.SensorID == sensorId).ToList()
+                    .Where(x => x.SensorId == sensorId).ToList()
                     .ConvertAll(x => new DataSetModel
                     {
                         borderColor = colour,
                         backgroundColour = colour,
                         fill = false,
                         borderWidth = 1,
-                        label = $"Sensor {x.SensorID}: {location}",
-                        data = models.Select(y => y).Where(y => y.SensorID == sensorId).ToList().ConvertAll(y => new ValueModel
+                        label = $"Sensor {x.SensorId}: {location}",
+                        data = models.Select(y => y).Where(y => y.SensorId == sensorId).ToList().ConvertAll(y => new ValueModel
                         {
-                            x = y.Date.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,
-                            y = y.Temp
+                            x = y.EndTime.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,
+                            y = y.Temperature
                         })
 
                     });
@@ -236,13 +235,13 @@ namespace INFT3970Project.Controllers
             return chartData;
         }
 
-        public async Task<IEnumerable<DB.TemperatureModel>> GetTemperatureModels(bool all, int userId)
+        public async Task<IEnumerable<AverageTemperatureModelWithId>> GetTemperatureModels(bool all, int userId, DateTime? startTime)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
                 var models = (all)
-                    ? _databaseHelper.QueryAllTemperatureAsync()
-                    : _databaseHelper.QueryUserTemperatureAsync(userId);
+                    ? _databaseHelper.QueryAllTemperatureAsync(startTime, null)
+                    : _databaseHelper.QueryUserTemperatureAsync(userId, startTime, null);
 
                 return await models;
             }
