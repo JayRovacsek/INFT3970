@@ -44,7 +44,7 @@
             @using (Html.BeginForm("DeleteSensor", "Admin", FormMethod.Post, new { @class = "form-group" }))
             {
                 <div class="form-group row-fluid">
-                    @Html.DropDownList("SensorId", (IEnumerable<SelectListItem>)ViewBag.AllSensors, "Sensos",
+                    @Html.DropDownList("SensorId", (IEnumerable<SelectListItem>)ViewBag.AllSensors, "Sensors",
                      new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.SensorId)
                 </div>
