@@ -14,5 +14,6 @@ namespace INFT3970Project.Models.ApplicationModels
         public bool fill { get; set; }
         public int borderWidth { get; set; }
         public List<ValueModel> data { get; set; }
+        public string type { get; set; } = "line";
     }
 }

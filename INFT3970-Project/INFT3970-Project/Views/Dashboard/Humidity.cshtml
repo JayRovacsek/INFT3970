@@ -20,7 +20,6 @@
     var dataSet = @Html.Raw(Json.Serialize(Model));
 
     var timeFormat = 'MM/DD/YYYY HH:mm';
-    var i;
 
     var ctx = document.getElementById("chart");
     var chart = new Chart(ctx, {
@@ -50,7 +49,7 @@
                     },
                     time: {
                         parser: timeFormat,
-                        // round: 'day'
+                        round: 'hour',
                         tooltipFormat: 'll HH:mm'
                     }
                 }],
