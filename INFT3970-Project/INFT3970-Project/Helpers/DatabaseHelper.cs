@@ -947,7 +947,7 @@ namespace INFT3970Project.Helpers
         }
 
         public async Task<IEnumerable<DB.TemperatureModel>> QuerySensorTemperature(int sensorId, int? count = 250)
-        {
+         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
                 _databaseHelper.Connection.Open();
@@ -982,11 +982,22 @@ namespace INFT3970Project.Helpers
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
-                _databaseHelper.Connection.Open();
-                var command = $@"SELECT TOP({count}) * 
-                                FROM [Motion] 
-                                WHERE [SensorID] = {sensorId}
-                                ORDER BY [MotionID] DESC;";
+                var startDate = "2018-11-05";
+                var endDate = "2018-11-06";
+                var userID = 2;
+                var sensorID = 9;
+                var command = new SqlCommand
+
+                {
+                    Connection = (SqlConnection)_databaseHelper.Connection,
+                    CommandType = CommandType.StoredProcedure,
+                    CommandText = "dbo.MotionCount"
+                };
+                command.Parameters.AddWithValue("@UserID", userID );
+                command.Parameters.AddWithValue("@SensorID", sensorID);
+                command.Parameters.AddWithValue("@SearchStartTime", startDate);
+                command.Parameters.AddWithValue("@SearchEndTime", endDate);
+
 
                 var results = await _databaseHelper.Connection.QueryAsync<DB.MotionModel>(command.ToString());
 
