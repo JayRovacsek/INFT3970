@@ -612,7 +612,6 @@ namespace INFT3970Project.Helpers
 
                 return null;
             }
-            return null;
         }
 
         public async Task<IEnumerable<DB.HumidityModel>> QueryUserHumidityAsync(int userId, int? count = 250)
@@ -716,25 +715,54 @@ namespace INFT3970Project.Helpers
             return null;
         }
 
-        public async Task<IEnumerable<DB.MotionModel>> QueryAllMotionAsync(int? count = 250)
+        public async Task<IEnumerable<MotionCountModelWithId>> QueryAllMotionAsync(DateTime? startTime, DateTime? endTime)
         {
+            startTime = startTime.Equals(null) ? DateTime.Now.Subtract(TimeSpan.FromHours(24)) : startTime;
+            endTime = endTime.Equals(null) ? DateTime.Now : endTime;
+
+            var sensors = QueryAllSensors();
+
+            var results = new List<MotionCountModelWithId>();
+
             try
             {
                 using (var _databaseHelper = new DatabaseHelper(configuration))
                 {
                     _databaseHelper.Connection.Open();
 
-                    var query = (count != 0)
-                        ? $@"SELECT TOP ({count}) * FROM [Motion] m
-                            INNER JOIN [Sensor] s ON m.[SensorID] = s.[SensorID]
-                            ORDER BY m.Date DESC;"
+                    foreach (var sensor in sensors)
+                    {
+                        var command = $@"SELECT Count(Motion) AS MotionCount, StartTime, EndTime
+	                                    FROM (
+		                                    SELECT MotionID, StartTime, Motion, StartTime + '00:59:59' AS EndTime
+		                                        FROM (
+				                                    SELECT MotionID, DATEADD(hh,DATEDIFF(hh,0,m.[Date]),0) AS StartTime, Motion, s.SensorID
+                                                        FROM Motion m
+                                                        INNER JOIN Sensor s ON  s.SensorID = m.SensorID
+                                                        WHERE s.SensorID = {sensor.SensorId} AND m.[Date] 
+                                                        BETWEEN '{startTime.Value.ToUniversalTime().ToString(format)}' 
+                                                        AND '{endTime.Value.ToUniversalTime().ToString(format)}'
+                                                        GROUP BY m.MotionID, m.[Date], m.Motion, s.SensorID) Motion
+				                                    INNER JOIN Sensor s ON s.SensorID = Motion.SensorId 
+		                                      GROUP BY MotionID, StartTime, Motion) Motion
+	                                    WHERE StartTime between StartTime and EndTime
+	                                    GROUP BY StartTime, EndTime
+	                                    ORDER BY EndTime";
 
-                        : $@"SELECT * FROM [Motion] m
-                            INNER JOIN [Sensor] s ON m.[SensorID] = s.[SensorID]
-                            ORDER BY m.Date DESC;";
+                        var dbResult = _databaseHelper.Connection.Query<MotionCountModel>(command);
 
-                    var result = await _databaseHelper.Connection.QueryAsync<DB.MotionModel>(query.ToString());
-                    return result;
+                        foreach (var result in dbResult)
+                        {
+                            results.Add(new MotionCountModelWithId
+                            {
+                                SensorId = sensor.SensorId,
+                                MotionCount = result.MotionCount,
+                                StartTime = result.StartTime,
+                                EndTime = result.EndTime
+                            });
+                        }
+                    }
+                    return results;
                 }
             }
             catch (Exception exception)
@@ -748,30 +776,54 @@ namespace INFT3970Project.Helpers
             }
         }
 
-        public async Task<IEnumerable<DB.MotionModel>> QueryUserMotionAsync(int userId, int? count = 250)
+        public async Task<IEnumerable<MotionCountModelWithId>> QueryUserMotionAsync(int userId, DateTime? startTime, DateTime? endTime)
         {
+            startTime = startTime.Equals(null) ? DateTime.Now.Subtract(TimeSpan.FromHours(24)) : startTime;
+            endTime = endTime.Equals(null) ? DateTime.Now : endTime;
+
+            var sensors = QueryAllSensors();
+
+            var results = new List<MotionCountModelWithId>();
+
             try
             {
-                if (userId != 0)
+                using (var _databaseHelper = new DatabaseHelper(configuration))
                 {
-                    using (var _databaseHelper = new DatabaseHelper(configuration))
+                    _databaseHelper.Connection.Open();
+
+                    foreach (var sensor in sensors)
                     {
-                        _databaseHelper.Connection.Open();
+                        var command = $@"SELECT Count(Motion) AS MotionCount, StartTime, EndTime
+	                                    FROM (
+		                                    SELECT MotionID, StartTime, Motion, StartTime + '00:59:59' AS EndTime
+		                                        FROM (
+				                                    SELECT MotionID, DATEADD(hh,DATEDIFF(hh,0,m.[Date]),0) AS StartTime, Motion, s.SensorID
+                                                        FROM Motion m
+                                                        INNER JOIN Sensor s ON  s.SensorID = m.SensorID
+                                                        WHERE s.SensorID = {sensor.SensorId} AND m.[Date] 
+                                                        BETWEEN '{startTime.Value.ToUniversalTime().ToString(format)}' 
+                                                        AND '{endTime.Value.ToUniversalTime().ToString(format)}'
+                                                        GROUP BY m.MotionID, m.[Date], m.Motion, s.SensorID) Motion
+				                                    INNER JOIN Sensor s ON s.SensorID = Motion.SensorId 
+		                                      GROUP BY MotionID, StartTime, Motion) Motion
+	                                    WHERE StartTime between StartTime and EndTime
+	                                    GROUP BY StartTime, EndTime
+	                                    ORDER BY EndTime";
 
-                        var query = (count != 0)
-                            ? $@"SELECT TOP ({count}) * FROM [Motion] m
-                                INNER JOIN [Sensor] s ON m.[SensorID] = s.[SensorID]
-                                WHERE s.[UserID] = {userId}
-                                ORDER BY m.Date DESC;"
+                        var dbResult = _databaseHelper.Connection.Query<MotionCountModel>(command);
 
-                            : $@"SELECT TOP ({count}) * FROM [Motion] m
-                                INNER JOIN [Sensor] s ON m.[SensorID] = s.[SensorID]
-                                WHERE s.[UserID] = {userId}
-                                ORDER BY m.Date DESC;";
-
-                        var result = await _databaseHelper.Connection.QueryAsync<DB.MotionModel>(query.ToString());
-                        return result;
+                        foreach (var result in dbResult)
+                        {
+                            results.Add(new MotionCountModelWithId
+                            {
+                                SensorId = sensor.SensorId,
+                                MotionCount = result.MotionCount,
+                                StartTime = result.StartTime,
+                                EndTime = result.EndTime
+                            });
+                        }
                     }
+                    return results;
                 }
             }
             catch (Exception exception)
@@ -783,7 +835,6 @@ namespace INFT3970Project.Helpers
 
                 return null;
             }
-            return null;
         }
 
         public IEnumerable<SensorModel> QueryAllSensors()

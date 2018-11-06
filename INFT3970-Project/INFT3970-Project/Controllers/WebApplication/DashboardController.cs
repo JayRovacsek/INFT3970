@@ -51,19 +51,17 @@ namespace INFT3970Project.Controllers
             // NEEED TO FIX THE ABOVE FOR DEMO MODE.
         }
 
-        public async Task<IActionResult> Motion(ApplicationMode mode = ApplicationMode.User)
+        public async Task<IActionResult> Motion()
         {
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
 
-            var models = await GetMotionModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId);
+            var models = await GetMotionModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId,null);
 
             var chartData = ConvertMotionToChart(models);
 
             return View(chartData);
 
             // NEEED TO FIX THE ABOVE FOR DEMO MODE.
-
-
         }
 
         public async Task<IActionResult> Combined()
@@ -83,7 +81,7 @@ namespace INFT3970Project.Controllers
                 var humidity = await GetHumidityModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId, null);
                 var humidityChartData = ConvertHumidityToChart(humidity);
 
-                var motion = await GetMotionModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId);
+                var motion = await GetMotionModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId, null);
                 var motionChartData = ConvertMotionToChart(motion);
 
                 if (temperatureChartData.datasets.Count > 0)
@@ -132,6 +130,7 @@ namespace INFT3970Project.Controllers
                     .Where(x => x.SensorId == sensorId).ToList()
                     .ConvertAll(x => new DataSetModel
                     {
+                        type = "line",
                         borderColor = colour,
                         backgroundColour = colour,
                         fill = false,
@@ -175,6 +174,7 @@ namespace INFT3970Project.Controllers
                     .Where(x => x.SensorId == sensorId).ToList()
                     .ConvertAll(x => new DataSetModel
                     {
+                        type = "line",
                         borderColor = colour,
                         backgroundColour = colour,
                         fill = false,
@@ -192,14 +192,14 @@ namespace INFT3970Project.Controllers
             return chartData;
         }
 
-        public ChartDataModel ConvertMotionToChart(IEnumerable<DB.MotionModel> models)
+        public ChartDataModel ConvertMotionToChart(IEnumerable<MotionCountModelWithId> models)
         {
             var chartData = new ChartDataModel
             {
                 datasets = new List<DataSetModel>()
             };
 
-            foreach (var sensorId in models.Select(x => x.SensorID).Distinct())
+            foreach (var sensorId in models.Select(x => x.SensorId).Distinct())
             {
                 string colour;
                 var location = _databaseHelper.QuerySensorLocation(sensorId).FirstOrDefault().Description;
@@ -214,19 +214,25 @@ namespace INFT3970Project.Controllers
                     SetCookie($"Sensor{sensorId}Colour", colour, 60);
                 }
 
+                var maxMotion = models.Select(x => x)
+                    .Where(x => x.SensorId == sensorId)
+                    .Select(x => x.MotionCount).ToList()
+                    .OrderByDescending(x => x).FirstOrDefault();
+
                 var ds = models.Select(x => x)
-                    .Where(x => x.SensorID == sensorId).ToList()
+                    .Where(x => x.SensorId == sensorId).ToList()
                     .ConvertAll(x => new DataSetModel
                     {
+                        type = "bar",
                         borderColor = colour,
                         backgroundColour = colour,
                         fill = false,
                         borderWidth = 1,
-                        label = $"Sensor {x.SensorID}: {location}",
-                        data = models.Select(y => y).Where(y => y.SensorID == sensorId).ToList().ConvertAll(y => new ValueModel
+                        label = $"Sensor {x.SensorId}: {location}",
+                        data = models.Select(y => y).Where(y => y.SensorId == sensorId).ToList().ConvertAll(y => new ValueModel
                         {
-                            x = y.Date.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,
-                            y = (y.Motion) ? 100 : 0
+                            x = y.EndTime.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,
+                            y = (y.MotionCount / maxMotion) * 100
                         })
 
                     });
@@ -259,13 +265,13 @@ namespace INFT3970Project.Controllers
             }
         }
 
-        public async Task<IEnumerable<DB.MotionModel>> GetMotionModels(bool all, int userId)
+        public async Task<IEnumerable<MotionCountModelWithId>> GetMotionModels(bool all, int userId, DateTime? startTime)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
                 var models = (all)
-                    ? _databaseHelper.QueryAllMotionAsync()
-                    : _databaseHelper.QueryUserMotionAsync(userId);
+                    ? _databaseHelper.QueryAllMotionAsync(startTime, null)
+                    : _databaseHelper.QueryUserMotionAsync(userId, startTime, null);
 
                 return await models;
             }
