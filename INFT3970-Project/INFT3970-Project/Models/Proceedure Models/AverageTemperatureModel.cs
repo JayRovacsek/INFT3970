@@ -7,7 +7,7 @@ namespace INFT3970Project.Models
 {
     public class AverageTemperatureModel
     {
-        public double Temperature { get; set; }
+        public decimal Temperature { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
     }
