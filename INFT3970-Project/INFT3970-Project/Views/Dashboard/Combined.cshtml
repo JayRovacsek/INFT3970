@@ -17,16 +17,57 @@
 <script src="~/lib/chartjs/chart-min.js"></script>
 
 <script>
-    var dataSet = @Html.Raw(Json.Serialize(Model));
-
-    var timeFormat = 'MM/DD/YYYY HH:mm';
-    var i;
-
-    var ctx = document.getElementById("chart");
+  var ctx = document.getElementById("chart");
     var chart = new Chart(ctx, {
-        type: 'line',
-        data: dataSet,
-        options: {
+        type: 'bar',
+        data: {
+            datasets: [{
+                label: 'Motion',
+                data: [12, 19, 3, 5],
+                borderColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ], 
+
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ]
+            }, {
+                label: 'Tempature',
+                    data: [15, 26, 42, 30],
+                    borderColor: [
+                        'rgba(153, 102, 255, 1)',
+                    ],
+                    backgroundColor: [
+                        'rgba(220, 220, 220, 0)',
+                    ],
+                    
+                 type: 'line'
+            },
+            {
+                label: 'Humidity',
+                data: [10, 22, 40, 10],
+                borderColor: [
+                    'rgba(255, 159, 64, 1)'
+                ],
+                backgroundColor: [
+                    'rgba(220, 220, 220, 0)',
+                ],
+                type: 'line'
+                }],
+            labels: ['1am', '2am', '3am', '4am']
+        
+            
+        @*options: {
             responsive: true,
             title: {
                 display: false,
@@ -61,7 +102,7 @@
                         labelString: 'Temperature / Humidity / Motion'
                     }
                 }]
-            }
+            }*@
         }
     });
 </script>
