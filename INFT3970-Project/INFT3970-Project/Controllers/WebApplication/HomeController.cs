@@ -47,37 +47,37 @@ namespace INFT3970Project.Controllers
                     var dashboardController = new DashboardController(configuration, _databaseHelper, _httpContextAccessor);
 
                     var temperatureTask = dashboardController.GetTemperatureModels(false, true, 12, DateTime.Now.Subtract(new TimeSpan(0, 5, 0)));
-                    var humidityTask = dashboardController.GetHumidityModels(false, 12, DateTime.Now.Subtract(new TimeSpan(0,5,0)));
-                    var motionTask = dashboardController.GetMotionModels(false, 12, DateTime.Now.Subtract(new TimeSpan(0, 5, 0)));
+                    //var humidityTask = dashboardController.GetHumidityModels(false, 12, DateTime.Now.Subtract(new TimeSpan(0,5,0)));
+                    //var motionTask = dashboardController.GetMotionModels(false, 12, DateTime.Now.Subtract(new TimeSpan(0, 5, 0)));
 
                     var temperature = await temperatureTask;
-                    var humidity = await humidityTask;
-                    var motion = await motionTask;
+                    //var humidity = await humidityTask;
+                    //var motion = await motionTask;
 
                     var temperatureChartData = dashboardController.ConvertTemperatureToChart(temperature);
-                    var humidityChartData = dashboardController.ConvertHumidityToChart(humidity);
-                    var motionChartData = dashboardController.ConvertMotionToChart(motion);
+                    //var humidityChartData = dashboardController.ConvertHumidityToChart(humidity);
+                    //var motionChartData = dashboardController.ConvertMotionToChart(motion);
 
                     if (temperatureChartData.datasets.Count > 0)
                     {
                         chartData.datasets.AddRange(temperatureChartData.datasets);
                     }
 
-                    if (humidityChartData.datasets.Count > 0)
-                    {
-                        chartData.datasets.AddRange(humidityChartData.datasets);
-                    }
+                    //if (humidityChartData.datasets.Count > 0)
+                    //{
+                    //    chartData.datasets.AddRange(humidityChartData.datasets);
+                    //}
 
-                    if (motionChartData.datasets.Count > 0)
-                    {
-                        chartData.datasets.AddRange(motionChartData.datasets);
-                    }
+                    //if (motionChartData.datasets.Count > 0)
+                    //{
+                    //    chartData.datasets.AddRange(motionChartData.datasets);
+                    //}
 
                     return View(chartData);
                 }
 
             }
-            catch
+            catch(Exception exception)
             {
                 return View(null);
             }

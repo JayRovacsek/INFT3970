@@ -113,18 +113,8 @@ namespace INFT3970Project.Controllers
 
             foreach (var sensorId in models.Select(x => x.SensorId).Distinct())
             {
-                string colour;
+                var colour = GetRandomColour();
                 var location = _databaseHelper.QuerySensorLocation(sensorId).FirstOrDefault().Description;
-
-                if (Request.Cookies.ContainsKey($"Sensor{sensorId}Colour"))
-                {
-                    colour = GetCookie($"Sensor{sensorId}Colour");
-                }
-                else
-                {
-                    colour = GetRandomColour();
-                    SetCookie($"Sensor{sensorId}Colour", colour, 60);
-                }
 
                 var ds = models.Select(x => x)
                     .Where(x => x.SensorId == sensorId).ToList()
