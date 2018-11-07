@@ -575,7 +575,7 @@ namespace INFT3970Project.Helpers
 
                     foreach (var sensor in sensors)
                     {
-                        var command = $@"SELECT AVG(Humidity) AS Humidity, StartTime, EndTime	
+                        var command = $@"SELECT AVG(Humidity) AS 'Humidity', StartTime, EndTime	
                                         FROM (
 		                                    SELECT HumidityID, StartTime, Humidity, StartTime + '00:59:59' AS EndTime		   
                                             FROM (
@@ -662,7 +662,7 @@ namespace INFT3970Project.Helpers
             startTime = startTime.Equals(null) ? DateTime.Now.Subtract(TimeSpan.FromHours(24)) : startTime;
             endTime = endTime.Equals(null) ? DateTime.Now : endTime;
 
-            var sensors = QueryUserSensorsAsync(userId);
+            var sensors = await QueryUserSensorsAsync(userId);
             var results = new List<AverageHumidityModelWithId>();
 
             try
@@ -673,9 +673,9 @@ namespace INFT3970Project.Helpers
                     {
                         _databaseHelper.Connection.Open();
 
-                        foreach (var sensor in await sensors)
+                        foreach (var sensor in sensors)
                         {
-                            var command = $@"SELECT AVG(Humidity) AS HourlyAverage, StartTime, EndTime	
+                            var command = $@"SELECT AVG(Humidity) AS 'Humidity', StartTime, EndTime	
                                     FROM (
 		                                SELECT HumidityID, StartTime, Humidity, StartTime + '00:59:59' AS EndTime		   
                                         FROM (
