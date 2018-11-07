@@ -43,7 +43,7 @@ namespace INFT3970Project.Controllers
         {
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
 
-            var models = await GetHumidityModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId, null);
+            var models = await GetHumidityModels(Convert.ToBoolean(GetCookie("IsAdmin")), false, userId, null);
 
             var chartData = ConvertHumidityToChart(models);
 
@@ -55,7 +55,7 @@ namespace INFT3970Project.Controllers
         {
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
 
-            var models = await GetMotionModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId,null);
+            var models = await GetMotionModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId, null);
 
             var chartData = ConvertMotionToChart(models);
 
@@ -78,7 +78,7 @@ namespace INFT3970Project.Controllers
                 var temperature = await GetTemperatureModels(Convert.ToBoolean(GetCookie("IsAdmin")), false, userId, null);
                 var temperatureChartData = ConvertTemperatureToChart(temperature);
 
-                var humidity = await GetHumidityModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId, null);
+                var humidity = await GetHumidityModels(Convert.ToBoolean(GetCookie("IsAdmin")),false, userId, null);
                 var humidityChartData = ConvertHumidityToChart(humidity);
 
                 var motion = await GetMotionModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId, null);
@@ -243,13 +243,13 @@ namespace INFT3970Project.Controllers
             }
         }
 
-        public async Task<IEnumerable<AverageHumidityModelWithId>> GetHumidityModels(bool all, int userId, DateTime? startTime)
+        public async Task<IEnumerable<AverageHumidityModelWithId>> GetHumidityModels(bool all, bool demo, int userId, DateTime? startTime)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
                 var models = (all)
                     ? _databaseHelper.QueryAllHumidityAsync(startTime, null)
-                    : _databaseHelper.QueryUserHumidityAsync(userId, startTime, null);
+                    : _databaseHelper.QueryUserHumidityAsync(userId, demo, startTime, null);
 
                 return await models;
             }
