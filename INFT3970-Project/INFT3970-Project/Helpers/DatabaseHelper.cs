@@ -40,6 +40,11 @@ namespace INFT3970Project.Helpers
 
         protected virtual void Dispose(bool disposing)
         {
+            if(Connection.State != ConnectionState.Closed)
+            {
+                Connection.Close();
+            }
+
             if (disposed)
                 return;
 
