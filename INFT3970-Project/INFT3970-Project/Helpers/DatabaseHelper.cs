@@ -489,12 +489,12 @@ namespace INFT3970Project.Helpers
             }
         }
 
-        public async Task<IEnumerable<AverageTemperatureModelWithId>> QueryUserTemperatureAsync(int userId, DateTime? startTime, DateTime? endTime)
+        public async Task<IEnumerable<AverageTemperatureModelWithId>> QueryUserTemperatureAsync(int userId, bool demo, DateTime? startTime, DateTime? endTime)
         {
             startTime = startTime.Equals(null) ? DateTime.Now.Subtract(TimeSpan.FromHours(24)) : startTime;
             endTime = endTime.Equals(null) ? DateTime.Now : endTime;
 
-            var sensors = QueryAllSensors();
+            var sensors = await QueryUserSensorsAsync(userId);
 
             var results = new List<AverageTemperatureModelWithId>();
 
@@ -508,7 +508,34 @@ namespace INFT3970Project.Helpers
 
                         foreach (var sensor in sensors)
                         {
-                            var command = $@"SELECT AVG(Temp) AS 'Temperature', StartTime, EndTime
+                            var command = string.Empty;
+
+                            if (demo)
+                            {
+                                command = $@"SELECT AVG(Temp) AS 'Temperature', StartTime, EndTime
+                                            FROM (
+	                                            SELECT TempID, StartTime, Temp, StartTime + '00:01:00' AS EndTime
+		                                            FROM (
+				                                            SELECT TempID, DATEADD(MINUTE,DATEDIFF(MINUTE,0,t.[Date]),0) AS StartTime, Temp, s.SensorID
+				                                            FROM Temperature t
+				                                            INNER JOIN Sensor s ON  s.SensorID = t.SensorID
+				                                            WHERE s.SensorID = {sensor.SensorId} AND t.[Date] 
+                                                            BETWEEN '{startTime.Value.ToUniversalTime().ToString(format)}' 
+                                                            AND '{endTime.Value.ToUniversalTime().ToString(format)}'
+				                                            GROUP BY t.TempID, t.[Date], t.Temp, s.SensorID	  
+			                                            ) 
+			                                            Temperature
+			                                            INNER JOIN Sensor s ON s.SensorID = Temperature.SensorId 
+		                                            GROUP BY TempID, StartTime, Temp 
+	                                            )
+	                                            Temperature
+                                            WHERE StartTime BETWEEN StartTime AND EndTime
+                                            GROUP BY StartTime, EndTime
+                                            ORDER BY EndTime";
+                            }
+                            else
+                            {
+                                command = $@"SELECT AVG(Temp) AS 'Temperature', StartTime, EndTime
 	                                        FROM (
 		                                        SELECT TempID, StartTime, Temp, StartTime + '00:59:59' AS EndTime
 		                                            FROM (
@@ -528,6 +555,7 @@ namespace INFT3970Project.Helpers
 	                                        WHERE StartTime BETWEEN StartTime AND EndTime
 	                                        GROUP BY StartTime, EndTime
 	                                        ORDER BY EndTime";
+                            }
 
                             var dbResult = _databaseHelper.Connection.Query<AverageTemperatureModel>(command);
 
@@ -662,7 +690,8 @@ namespace INFT3970Project.Helpers
             startTime = startTime.Equals(null) ? DateTime.Now.Subtract(TimeSpan.FromHours(24)) : startTime;
             endTime = endTime.Equals(null) ? DateTime.Now : endTime;
 
-            var sensors = await QueryUserSensorsAsync(userId);
+            var userSensors = QueryUserSensorsAsync(userId);
+
             var results = new List<AverageHumidityModelWithId>();
 
             try
@@ -672,6 +701,8 @@ namespace INFT3970Project.Helpers
                     using (var _databaseHelper = new DatabaseHelper(configuration))
                     {
                         _databaseHelper.Connection.Open();
+
+                        var sensors = await userSensors;
 
                         foreach (var sensor in sensors)
                         {
@@ -786,7 +817,7 @@ namespace INFT3970Project.Helpers
             startTime = startTime.Equals(null) ? DateTime.Now.Subtract(TimeSpan.FromHours(24)) : startTime;
             endTime = endTime.Equals(null) ? DateTime.Now : endTime;
 
-            var sensors = QueryAllSensors();
+            var userSensors = QueryUserSensorsAsync(userId);
 
             var results = new List<MotionCountModelWithId>();
 
@@ -795,6 +826,8 @@ namespace INFT3970Project.Helpers
                 using (var _databaseHelper = new DatabaseHelper(configuration))
                 {
                     _databaseHelper.Connection.Open();
+
+                    var sensors = await userSensors;
 
                     foreach (var sensor in sensors)
                     {
