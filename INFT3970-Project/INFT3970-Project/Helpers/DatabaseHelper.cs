@@ -647,6 +647,91 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        public async Task<IEnumerable<AverageHumidityModelWithId>> QueryUserHumidityAsync(int userId, bool demo, DateTime? startTime, DateTime? endTime)
+        {
+            startTime = startTime.Equals(null) ? DateTime.Now.Subtract(TimeSpan.FromHours(24)) : startTime;
+            endTime = endTime.Equals(null) ? DateTime.Now : endTime;
+
+            var userSensors = QueryUserSensorsAsync(userId);
+
+            var results = new List<AverageHumidityModelWithId>();
+
+            try
+            {
+                using (var _databaseHelper = new DatabaseHelper(configuration))
+                {
+                    _databaseHelper.Connection.Open();
+                    var sensors = await userSensors;
+                    foreach (var sensor in sensors)
+                    {
+                        var command = string.Empty;
+
+                        if (demo)
+                        {
+                            command = $@"SELECT AVG(Humidity) AS 'Humidity', StartTime, EndTime	
+                                        FROM (
+		                                    SELECT HumidityID, StartTime, Humidity, StartTime + '00:01:00' AS EndTime		   
+                                            FROM (
+				                                SELECT HumidityID, DATEADD(MINUTE,DATEDIFF(MINUTE,0,t.[Date]),0) AS StartTime, Humidity, s.SensorID, s.UserID
+				                               FROM Humidity t
+				                               INNER JOIN Sensor s ON  s.SensorID = t.SensorID
+				                               WHERE s.SensorID = {sensor.SensorId} AND t.[Date] 
+                                                BETWEEN '{startTime.Value.ToUniversalTime().ToString(format)}' 
+                                                AND '{endTime.Value.ToUniversalTime().ToString(format)}'
+				                               GROUP BY t.HumidityID, t.[Date], t.Humidity, s.SensorID, s.UserID) Humidity				
+                                            INNER JOIN Sensor s ON s.SensorID = Humidity.SensorId 
+		                                    GROUP BY HumidityID, StartTime, Humidity) Humidity
+	                                    WHERE StartTime BETWEEN StartTime AND EndTime
+	                                    GROUP BY StartTime, EndTime
+                                    ORDER BY EndTime";
+                        }
+                        else
+                        {
+                            command = $@"SELECT AVG(Humidity) AS 'Humidity', StartTime, EndTime	
+                                        FROM (
+		                                    SELECT HumidityID, StartTime, Humidity, StartTime + '00:59:59' AS EndTime		   
+                                            FROM (
+				                                SELECT HumidityID, DATEADD(hh,DATEDIFF(hh,0,t.[Date]),0) AS StartTime, Humidity, s.SensorID, s.UserID
+				                               FROM Humidity t
+				                               INNER JOIN Sensor s ON  s.SensorID = t.SensorID
+				                               WHERE s.SensorID = {sensor.SensorId} AND t.[Date] 
+                                                BETWEEN '{startTime.Value.ToUniversalTime().ToString(format)}' 
+                                                AND '{endTime.Value.ToUniversalTime().ToString(format)}'
+				                               GROUP BY t.HumidityID, t.[Date], t.Humidity, s.SensorID, s.UserID) Humidity				
+                                            INNER JOIN Sensor s ON s.SensorID = Humidity.SensorId 
+		                                    GROUP BY HumidityID, StartTime, Humidity) Humidity
+	                                    WHERE StartTime BETWEEN StartTime AND EndTime
+	                                    GROUP BY StartTime, EndTime
+                                    ORDER BY EndTime";
+                        }
+
+                        var dbResult = _databaseHelper.Connection.Query<AverageHumidityModel>(command);
+
+                        foreach (var result in dbResult)
+                        {
+                            results.Add(new AverageHumidityModelWithId
+                            {
+                                SensorId = sensor.SensorId,
+                                Humidity = result.Humidity,
+                                StartTime = result.StartTime,
+                                EndTime = result.EndTime
+                            });
+                        }
+                    }
+                    return results;
+                }
+            }
+            catch (Exception exception)
+            {
+                using (var _databaseHelper = new DatabaseHelper(configuration))
+                {
+                    _databaseHelper.Log("Fatal", exception.Message, null, GetCurrentMethod());
+                }
+
+                return null;
+            }
+        }
+
         public async Task<IEnumerable<DB.HumidityModel>> QueryUserHumidityAsync(int userId, int? count = 250)
         {
             try
