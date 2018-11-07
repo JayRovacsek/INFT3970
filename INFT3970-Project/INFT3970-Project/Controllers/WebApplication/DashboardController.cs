@@ -31,7 +31,7 @@ namespace INFT3970Project.Controllers
 
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
 
-            var models = await GetTemperatureModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId, null);
+            var models = await GetTemperatureModels(Convert.ToBoolean(GetCookie("IsAdmin")), false, userId, null);
 
             var chartData = ConvertTemperatureToChart(models);
 
@@ -75,7 +75,7 @@ namespace INFT3970Project.Controllers
                     datasets = new List<DataSetModel>()
                 };
 
-                var temperature = await GetTemperatureModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId, null);
+                var temperature = await GetTemperatureModels(Convert.ToBoolean(GetCookie("IsAdmin")), false, userId, null);
                 var temperatureChartData = ConvertTemperatureToChart(temperature);
 
                 var humidity = await GetHumidityModels(Convert.ToBoolean(GetCookie("IsAdmin")), userId, null);
@@ -241,13 +241,13 @@ namespace INFT3970Project.Controllers
             return chartData;
         }
 
-        public async Task<IEnumerable<AverageTemperatureModelWithId>> GetTemperatureModels(bool all, int userId, DateTime? startTime)
+        public async Task<IEnumerable<AverageTemperatureModelWithId>> GetTemperatureModels(bool all, bool demo, int userId, DateTime? startTime)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
                 var models = (all)
                     ? _databaseHelper.QueryAllTemperatureAsync(startTime, null)
-                    : _databaseHelper.QueryUserTemperatureAsync(userId, startTime, null);
+                    : _databaseHelper.QueryUserTemperatureAsync(userId, demo, startTime, null);
 
                 return await models;
             }
