@@ -451,7 +451,7 @@ namespace INFT3970Project.Helpers
 	                                    GROUP BY StartTime, EndTime
 	                                    ORDER BY EndTime";
 
-                        var dbResult = _databaseHelper.Connection.Query<AverageTemperatureModel>(command);
+                        var dbResult = _databaseHelper.Connection.Query<AverageTemperatureforAnlysisModel>(command);
 
                         foreach (var result in dbResult)
                         {
@@ -557,7 +557,7 @@ namespace INFT3970Project.Helpers
 	                                        ORDER BY EndTime";
                             }
 
-                            var dbResult = _databaseHelper.Connection.Query<AverageTemperatureModel>(command);
+                            var dbResult = _databaseHelper.Connection.Query<AverageTemperatureforAnlysisModel>(command);
 
                             foreach (var result in dbResult)
                             {
@@ -1351,6 +1351,77 @@ namespace INFT3970Project.Helpers
             }
 
             return results;
+        }
+
+        public async Task<IEnumerable<AverageTemperatureforAnlysisModel>> TemperatureAnalysis (int userId)
+        {
+            var sensors = await QueryUserSensorsAsync(userId);
+
+            var results = new List<AverageTemperatureforAnlysisModel>();
+
+            try
+            {
+                using (var _databaseHelper = new DatabaseHelper(configuration))
+                {
+                    _databaseHelper.Connection.Open();
+
+                    foreach (var sensor in sensors)
+                    {
+                                        
+                        var command = $@"declare @SearchEndTime datetime;
+                                        set @SearchEndTime = CURRENT_TIMESTAMP 
+                                        declare @SearchStartTime datetime;
+                                        set @SearchStartTime = DATEADD(week,-1,@SearchEndTime)
+                                        declare @SensorID int;
+                                        set @SensorID = {sensor}
+
+                                        SELECT AVG(Temp) AS HourlyAverage, StartTime
+	                                        FROM (
+		                                        SELECT TempID, StartTime, Temp, StartTime + '00:59:59' AS EndTime
+		                                           FROM (
+				                                         SELECT TempID, DATEADD(hh,DATEDIFF(hh,0,t.[Date]),0) AS StartTime, Temp, s.SensorID
+				                                           FROM Temperature t
+				                                           INNER JOIN Sensor s ON  s.SensorID = t.SensorID
+				                                           WHERE s.SensorID = @SensorID t.[Date] BETWEEN @SearchStartTime AND @SearchEndTime 
+				                                           GROUP BY t.TempID, t.[Date], t.Temp, s.SensorID	  
+				                                        ) 
+				                                        Temperature
+				                                        INNER JOIN Sensor s ON s.SensorID = Temperature.SensorId 
+		                                          GROUP BY TempID, StartTime, Temp 
+		                                        )
+		                                        Temperature
+	                                        WHERE StartTime BETWEEN StartTime AND EndTime
+	                                        GROUP BY StartTime, EndTime
+	                                        ORDER BY EndTime";
+
+                                      
+                                      
+
+                        var dbResult = _databaseHelper.Connection.Query<AverageTemperatureforAnlysisModel>(command);
+
+                        foreach (var result in dbResult)
+                        {
+                            results.Add(new AverageTemperatureforAnlysisModel
+                            {
+                                SensorId = sensor.SensorId,
+                                Temperature = result.Temperature,
+                                StartTime = result.StartTime,
+                            });
+                        }
+                        
+                    }
+                    return results;
+                }
+            }
+            catch (Exception exception)
+            {
+                using (var _databaseHelper = new DatabaseHelper(configuration))
+                {
+                    _databaseHelper.Log("Fatal", exception.Message, null, GetCurrentMethod());
+                }
+
+                return null;
+            }
         }
     }
 }
