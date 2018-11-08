@@ -156,7 +156,7 @@ namespace INFT3970Project.Controllers
                         backgroundColour = colour,
                         fill = false,
                         borderWidth = 1,
-                        label = $"Sensor {x.SensorId}: {location}",
+                        label = $"Sensor {x.SensorId}: {location} (Temperature)",
                         data = models.Select(y => y).Where(y => y.SensorId == sensorId).ToList().ConvertAll(y => new ValueModel
                         {
                             x = y.EndTime.Equals(default(DateTime)) ? y.StartTime.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds : y.EndTime.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,
@@ -178,18 +178,8 @@ namespace INFT3970Project.Controllers
 
             foreach (var sensorId in models.Select(x => x.SensorId).Distinct())
             {
-                string colour;
+                var colour = GetRandomColour();
                 var location = _databaseHelper.QuerySensorLocation(sensorId).FirstOrDefault().Description;
-
-                if (Request.Cookies.ContainsKey($"Sensor{sensorId}Colour"))
-                {
-                    colour = GetCookie($"Sensor{sensorId}Colour");
-                }
-                else
-                {
-                    colour = GetRandomColour();
-                    SetCookie($"Sensor{sensorId}Colour", colour, 60);
-                }
 
                 var ds = models.Select(x => x)
                     .Where(x => x.SensorId == sensorId).ToList()
@@ -200,7 +190,7 @@ namespace INFT3970Project.Controllers
                         backgroundColour = colour,
                         fill = false,
                         borderWidth = 1,
-                        label = $"Sensor {x.SensorId}: {location}",
+                        label = $"Sensor {x.SensorId}: {location} (Humidity)",
                         data = models.Select(y => y).Where(y => y.SensorId == sensorId).ToList().ConvertAll(y => new ValueModel
                         {
                             x = y.EndTime.Equals(default(DateTime)) ? y.StartTime.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds : y.EndTime.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,

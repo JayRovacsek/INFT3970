@@ -14,5 +14,6 @@ namespace INFT3970Project.Models
         public string RoomName { get; set; }
         // Sensor Name
         public string SensorName { get; set; }
+        public string MostRecentMovement { get; set; }
     }
 }
