@@ -25,18 +25,32 @@ namespace INFT3970Project.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Temperature(bool all)
+        public async Task<IActionResult> Temperature()
         {
-            var mode = ApplicationMode.User;
-
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
 
             var models = await GetTemperatureModels(Convert.ToBoolean(GetCookie("IsAdmin")), false, userId, null);
 
-            var chartData = ConvertTemperatureToChart(models);
+            var predictiveModels = await GetPredictiveTemperatureModels(userId);
 
-            return View(chartData);
-            // NEEED TO FIX THE ABOVE FOR DEMO MODE.
+            var chartData = ConvertTemperatureToChart(models);
+            var predictiveChartData = ConvertTemperatureToChart(predictiveModels);
+
+            var viewModels = new Tuple<ChartDataModel, ChartDataModel>(chartData, predictiveChartData);
+
+            return View(viewModels);
+        }
+
+        private async Task<IEnumerable<AverageTemperatureModelWithId>> GetPredictiveTemperatureModels(int userId)
+        {
+            var results = new List<AverageTemperatureModelWithId>();
+
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                results.AddRange(await _databaseHelper.QueryPredicitiveTemperatureAsync(userId));
+            }
+
+            return results;
         }
 
         public async Task<IActionResult> Humidity()
@@ -263,34 +277,6 @@ namespace INFT3970Project.Controllers
                     ? _databaseHelper.QueryAllMotionAsync(startTime, null)
                     : _databaseHelper.QueryUserMotionAsync(userId, startTime, null);
 
-                return await models;
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> StartAnalysis(AverageTemperatureforAnlysisModel model)
-        {
-            if (model == null)
-            {
-                var userId = Convert.ToInt32(Request.Cookies["UserId"]);
-
-                var models = await GetTemperatureAverageModels(userId);
-
-                //var chartData = ConvertHumidityToChart(models);
-
-                //*return View(chartData);
-            }
-
-            ViewData["Message"] = "Didn't work";
-            return View();
-        }
-
-        public async Task<IEnumerable<AverageTemperatureforAnlysisModel>> GetTemperatureAverageModels(int userId)
-        {
-            using (var _databaseHelper = new DatabaseHelper(configuration))
-            {
-                var models = _databaseHelper.TemperatureAnalysis(userId);
-                
                 return await models;
             }
         }

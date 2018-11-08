@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 
 namespace INFT3970Project.Models
 {
-    public class AverageTemperatureforAnlysisModel
+    public class AverageTemperatureModel
     {
         public decimal Temperature { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public int SensorId { get; internal set; }
     }
 }
