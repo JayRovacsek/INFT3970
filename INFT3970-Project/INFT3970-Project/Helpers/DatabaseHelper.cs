@@ -1372,7 +1372,8 @@ namespace INFT3970Project.Helpers
                                         SET @SearchEndTime = CURRENT_TIMESTAMP 
                                         DECLARE @SearchStartTime datetime;
                                         SET @SearchStartTime = DATEADD(week,-1,@SearchEndTime)
-		                                SELECT StartTime, LAG(PredictedValue, 1, PredictedValue) OVER (ORDER BY StartTime) + (LAG(PredictedValue, 1, 0) OVER (ORDER BY StartTime) * (PercentChange)) AS PredictedValue
+
+		                                SELECT StartTime, LAG(PredictedValue, 1, PredictedValue) OVER (ORDER BY StartTime) + (LAG(PredictedValue, 1, 0) OVER (ORDER BY StartTime) * (PercentChange)) AS 'Temperature'
 		                                FROM (
 		                                    SELECT HourlyAverage, StartTime,  PercentChange, ID, HourlyAverage as PredictedValue
 		                                    FROM (
