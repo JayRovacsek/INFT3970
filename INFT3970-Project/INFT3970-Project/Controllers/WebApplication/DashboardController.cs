@@ -266,5 +266,33 @@ namespace INFT3970Project.Controllers
                 return await models;
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> StartAnalysis(AverageTemperatureforAnlysisModel model)
+        {
+            if (model == null)
+            {
+                var userId = Convert.ToInt32(Request.Cookies["UserId"]);
+
+                var models = await GetTemperatureAverageModels(userId);
+
+                //var chartData = ConvertHumidityToChart(models);
+
+                //*return View(chartData);
+            }
+
+            ViewData["Message"] = "Didn't work";
+            return View();
+        }
+
+        public async Task<IEnumerable<AverageTemperatureforAnlysisModel>> GetTemperatureAverageModels(int userId)
+        {
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                var models = _databaseHelper.TemperatureAnalysis(userId);
+                
+                return await models;
+            }
+        }
     }
 }
