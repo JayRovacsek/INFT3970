@@ -82,7 +82,7 @@ namespace INFT3970Project.Controllers
                 }
             }
 
-            ViewData["Message"] = "Didnt work";
+            ViewData["Message"] = "Didn't work";
             return View();
         }
 
@@ -106,7 +106,7 @@ namespace INFT3970Project.Controllers
                 }
             }
 
-            ViewData["Message"] = "Didnt work";
+            ViewData["Message"] = "Didn't work";
             return View();
         }
     }
