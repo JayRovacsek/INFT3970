@@ -47,7 +47,7 @@ namespace INFT3970Project.Controllers
 
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
-                results.AddRange(await _databaseHelper.QueryPredicitiveTemperatureAsync(userId));
+                results.AddRange(await _databaseHelper.QueryPredictiveTemperatureAsync(userId));
             }
 
             return results;
@@ -59,10 +59,27 @@ namespace INFT3970Project.Controllers
 
             var models = await GetHumidityModels(Convert.ToBoolean(GetCookie("IsAdmin")), false, userId, null);
 
-            var chartData = ConvertHumidityToChart(models);
+            var predictiveModels = await GetPredictiveHumidityModels(userId);
 
-            return View(chartData);
+            var chartData = ConvertHumidityToChart(models);
+            var predictiveChartData = ConvertHumidityToChart(predictiveModels);
+
+            var viewModels = new Tuple<ChartDataModel, ChartDataModel>(chartData, predictiveChartData);
+
+            return View(viewModels);
             // NEEED TO FIX THE ABOVE FOR DEMO MODE.
+        }
+
+        private async Task<IEnumerable<AverageHumidityModelWithId>> GetPredictiveHumidityModels(int userId)
+        {
+            var results = new List<AverageHumidityModelWithId>();
+
+            using (var _databaseHelper = new DatabaseHelper(configuration))
+            {
+                results.AddRange(await _databaseHelper.QueryPredictiveHumidityAsync(userId));
+            }
+
+            return results;
         }
 
         public async Task<IActionResult> Motion()
