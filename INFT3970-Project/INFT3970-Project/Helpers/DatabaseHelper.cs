@@ -1374,29 +1374,32 @@ namespace INFT3970Project.Helpers
                                         SET @SearchEndTime = CURRENT_TIMESTAMP 
                                         DECLARE @SearchStartTime datetime;
                                         SET @SearchStartTime = DATEADD(week,-1,@SearchEndTime)
-
-                                        SELECT StartTime, LAG(PredictedValue, 1, PredictedValue) OVER (ORDER BY StartTime) + (LAG(PredictedValue, 1, 0) OVER (ORDER BY StartTime) * (PercentChange)) as 'Humidity'
-                                        FROM (
-	                                        SELECT HourlyAverage, StartTime,  PercentChange, ID, HourlyAverage as PredictedValue
+                                        SELECT StartTime, Humidity = Case when Humidity1 >= 100 then 95 when Humidity1 < 100 then Humidity1 end 
+                                        From (
+	                                        SELECT StartTime, LAG(PredictedValue, 1, PredictedValue) OVER (ORDER BY StartTime) + (LAG(PredictedValue, 1, 0) OVER (ORDER BY StartTime) * (PercentChange)) as Humidity1
 	                                        FROM (
-		                                        SELECT HourlyAverage, StartTime,- 1 * (1 - Lag(HourlyAverage, 1, 0) OVER (ORDER BY StartTime) / HourlyAverage) AS PercentChange, ID, EndTime
+		                                        SELECT HourlyAverage, StartTime,  PercentChange, ID, HourlyAverage as PredictedValue
 		                                        FROM (
-			                                        SELECT AVG(Humidity) AS HourlyAverage, StartTime, ROW_NUMBER() OVER (ORDER BY StartTime) AS ID, EndTime
+			                                        SELECT HourlyAverage, StartTime,- 1 * (1 - Lag(HourlyAverage, 1, 0) OVER (ORDER BY StartTime) / HourlyAverage) AS PercentChange, ID, EndTime
 			                                        FROM (
-				                                        SELECT HumidityID, StartTime, Humidity, StartTime + '00:59:59' AS EndTime
+				                                        SELECT AVG(Humidity) AS HourlyAverage, StartTime, ROW_NUMBER() OVER (ORDER BY StartTime) AS ID, EndTime
 				                                        FROM (
-					                                        SELECT HumidityID, DATEADD(hh,DATEDIFF(hh,0,h.[Date]),0) AS StartTime, Humidity, s.SensorID
-					                                        FROM Humidity h
-					                                        INNER JOIN Sensor s ON  s.SensorID = h.SensorID
-					                                        WHERE h.SensorID = {sensor.SensorId} and  h.[Date] BETWEEN @SearchStartTime AND @SearchEndTime 
-		                                        GROUP BY h.HumidityID, h.[Date], h.Humidity, s.SensorID ) Humidity
-		                                        INNER JOIN Sensor s ON s.SensorID = Humidity.SensorId 
-		                                        GROUP BY HumidityID, StartTime, Humidity ) Humidity
+					                                        SELECT HumidityID, StartTime, Humidity, StartTime + '00:59:59' AS EndTime
+					                                        FROM (
+						                                        SELECT HumidityID, DATEADD(hh,DATEDIFF(hh,0,h.[Date]),0) AS StartTime, Humidity, s.SensorID
+						                                        FROM Humidity h
+						                                        INNER JOIN Sensor s ON  s.SensorID = h.SensorID
+						                                        WHERE h.SensorID = {sensor.SensorId} and  h.[Date] BETWEEN @SearchStartTime AND @SearchEndTime 
+			                                        GROUP BY h.HumidityID, h.[Date], h.Humidity, s.SensorID ) Humidity
+			                                        INNER JOIN Sensor s ON s.SensorID = Humidity.SensorId 
+			                                        GROUP BY HumidityID, StartTime, Humidity ) Humidity
+		                                        WHERE StartTime BETWEEN StartTime AND EndTime
+		                                        GROUP BY StartTime, EndTime) Humidity
 	                                        WHERE StartTime BETWEEN StartTime AND EndTime
-	                                        GROUP BY StartTime, EndTime) Humidity
-                                        WHERE StartTime BETWEEN StartTime AND EndTime
-                                        GROUP BY HourlyAverage, StartTime, ID, EndTime ) Humidity
-                                        GROUP BY HourlyAverage, StartTime, PercentChange, ID ) Humidity 
+	                                        GROUP BY HourlyAverage, StartTime, ID, EndTime ) Humidity
+	                                        GROUP BY HourlyAverage, StartTime, PercentChange, ID ) Humidity 
+                                        )Humidity 
+                                        GROUP BY StartTime, Humidity1
                                         ORDER BY StartTime";
 
                         var dbResult = _databaseHelper.Connection.Query<AverageHumidityModel>(command);
