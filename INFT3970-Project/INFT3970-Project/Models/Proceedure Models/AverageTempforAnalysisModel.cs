@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace INFT3970Project.Models
+namespace INFT3970Project.Models.Proceedure_Models
 {
-    public class AverageTemperatureforAnlysisModel
+    public class AverageTempforAnalysisModel
     {
+        public int SensorId { get; set; }
         public decimal Temperature { get; set; }
         public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
-        public int SensorId { get; internal set; }
+
     }
 }
