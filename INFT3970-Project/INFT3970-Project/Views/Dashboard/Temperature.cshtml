@@ -79,7 +79,7 @@
 <script>
     var dataSet = @Html.Raw(Json.Serialize(Model.Item2));
 
-    var timeFormat = 'MM/DD/YYYY HH:mm';
+    var timeFormat = 'MM/DD';
     var i;
 
     var ctx = document.getElementById("predictiveChart");
@@ -110,8 +110,8 @@
                     },
                     time: {
                         parser: timeFormat,
-                        // round: 'day'
-                        tooltipFormat: 'll HH:mm'
+                        round: 'hour',
+                        tooltipFormat: 'MMM DD'
                     }
                 }],
                 yAxes: [{

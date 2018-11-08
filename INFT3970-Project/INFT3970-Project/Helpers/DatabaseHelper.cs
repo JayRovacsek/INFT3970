@@ -1353,7 +1353,82 @@ namespace INFT3970Project.Helpers
             return results;
         }
 
-        public async Task<IEnumerable<AverageTemperatureModelWithId>> QueryPredicitiveTemperatureAsync(int userId)
+        //QueryPredictiveHumidityAsync
+
+        public async Task<IEnumerable<AverageHumidityModelWithId>> QueryPredictiveHumidityAsync(int userId)
+        {
+            var userSensors = QueryUserSensorsAsync(userId);
+            var results = new List<AverageHumidityModelWithId>();
+
+            try
+            {
+                using (var _databaseHelper = new DatabaseHelper(configuration))
+                {
+                    _databaseHelper.Connection.Open();
+
+                    var sensors = await userSensors;
+
+                    foreach (var sensor in sensors)
+                    {
+                        var command = $@"DECLARE @SearchEndTime datetime;
+                                        SET @SearchEndTime = CURRENT_TIMESTAMP 
+                                        DECLARE @SearchStartTime datetime;
+                                        SET @SearchStartTime = DATEADD(week,-1,@SearchEndTime)
+
+		                                SELECT StartTime, LAG(PredictedValue, 1, PredictedValue) OVER (ORDER BY StartTime) + (LAG(PredictedValue, 1, 0) OVER (ORDER BY StartTime) * (PercentChange)) AS 'Temperature'
+		                                FROM (
+		                                    SELECT HourlyAverage, StartTime,  PercentChange, ID, HourlyAverage as PredictedValue
+		                                    FROM (
+						                        SELECT HourlyAverage, StartTime,- 1 * (1 - Lag(HourlyAverage, 1, 0) OVER (Order by StartTime) / HourlyAverage) AS PercentChange, ID, EndTime
+						                        FROM (
+								                    SELECT AVG(Temp) AS HourlyAverage, StartTime, ROW_NUMBER() OVER (ORDER BY StartTime) AS ID, EndTime
+								                    FROM (
+										                SELECT TempID, StartTime, Temp, StartTime + '00:59:59' AS EndTime
+										                FROM (
+										                    SELECT TempID, DATEADD(hh,DATEDIFF(hh,0,t.[Date]),0) AS StartTime, Temp, s.SensorID
+										                    FROM Temperature t
+										                    INNER JOIN Sensor s ON  s.SensorID = t.SensorID
+										                    WHERE t.SensorID = {sensor.SensorId} and  t.[Date] BETWEEN @SearchStartTime AND @SearchEndTime 
+										                    GROUP BY t.TempID, t.[Date], t.Temp, s.SensorID ) Temperature
+										                INNER JOIN Sensor s ON s.SensorID = Temperature.SensorId 
+									                    GROUP BY TempID, StartTime, Temp ) Temperature
+								                        WHERE StartTime BETWEEN StartTime AND EndTime
+								                    GROUP BY StartTime, EndTime ) Temperature
+							                        WHERE StartTime BETWEEN StartTime AND EndTime
+							                    GROUP BY HourlyAverage, StartTime, ID, EndTime )			
+					                        Temperature
+					                        GROUP BY HourlyAverage, StartTime, PercentChange, ID ) Temperature
+                                            ORDER BY StartTime";
+
+                        var dbResult = _databaseHelper.Connection.Query<AverageHumidityModel>(command);
+
+                        foreach (var result in dbResult)
+                        {
+                            results.Add(new AverageHumidityModelWithId
+                            {
+                                SensorId = sensor.SensorId,
+                                Humidity = result.Humidity,
+                                StartTime = result.StartTime,
+                                EndTime = result.EndTime
+                            });
+                        }
+                    }
+                    return results;
+                }
+            }
+            catch (Exception exception)
+            {
+                using (var _databaseHelper = new DatabaseHelper(configuration))
+                {
+                    _databaseHelper.Log("Fatal", exception.Message, null, GetCurrentMethod());
+                }
+
+                return null;
+            }
+        }
+
+
+        public async Task<IEnumerable<AverageTemperatureModelWithId>> QueryPredictiveTemperatureAsync(int userId)
         {
             var userSensors = QueryUserSensorsAsync(userId);
             var results = new List<AverageTemperatureModelWithId>();
