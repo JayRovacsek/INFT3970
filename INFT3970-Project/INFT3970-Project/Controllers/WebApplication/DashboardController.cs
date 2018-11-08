@@ -274,7 +274,7 @@ namespace INFT3970Project.Controllers
             {
                 var userId = Convert.ToInt32(Request.Cookies["UserId"]);
 
-                var models = await GetTemperatureAverageModels(userId);
+                var avergageValues = await GetTemperatureAverageModels(userId);
 
                 //var chartData = ConvertHumidityToChart(models);
 
@@ -289,9 +289,9 @@ namespace INFT3970Project.Controllers
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
-                var models = _databaseHelper.TemperatureAnalysis(userId);
+                var averageValues = _databaseHelper.TemperatureAnalysis(userId);
                 
-                return await models;
+                return await averageValues;
             }
         }
     }
