@@ -186,7 +186,7 @@ namespace INFT3970Project.Controllers
                         label = $"Sensor {x.SensorId}: {location}",
                         data = models.Select(y => y).Where(y => y.SensorId == sensorId).ToList().ConvertAll(y => new ValueModel
                         {
-                            x = y.EndTime.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,
+                            x = y.EndTime.Equals(default(DateTime)) ? y.StartTime.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds : y.EndTime.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds,
                             y = y.Humidity
                         })
 
