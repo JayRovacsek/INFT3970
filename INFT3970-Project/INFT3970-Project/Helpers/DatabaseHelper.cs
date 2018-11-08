@@ -1302,17 +1302,28 @@ namespace INFT3970Project.Helpers
 
         public async Task<IEnumerable<DB.MotionModel>> QuerySensorMotion(int sensorId, DateTime? startDate, DateTime? endDate, int? count = 250)
         {
+            startDate = startDate.Equals(null) ? DateTime.Now.Subtract(TimeSpan.FromHours(24)) : startDate;
+            endDate = startDate.Equals(null) ? DateTime.Now : endDate;
+
             using (var _databaseHelper = new DatabaseHelper(configuration))
             {
-                _databaseHelper.Connection.Open();
-                var command = $@"SELECT TOP({count}) * 
-                                FROM [Motion] 
-                                WHERE [SensorID] = {sensorId}
-                                ORDER BY [MotionID] DESC;";
+                var userID = 2;
+                var sensorID = 9;
+                var command = new SqlCommand
+                {
+                    Connection = (SqlConnection)_databaseHelper.Connection,
+                    CommandType = CommandType.StoredProcedure,
+                    CommandText = "dbo.MotionCount"
+                };
+                command.Parameters.AddWithValue("@UserID", userID);
+                command.Parameters.AddWithValue("@SensorID", sensorID);
+                command.Parameters.AddWithValue("@SearchStartTime", startDate);
+                command.Parameters.AddWithValue("@SearchEndTime", endDate);
 
-                var results = await _databaseHelper.Connection.QueryAsync<DB.MotionModel>(command.ToString());
+                // The return of the proc needs to either being a datareader which you parse, or you should define a model to use.
+                //var results = await _databaseHelper.Connection.QueryAsync<DB.MotionModel>(command.ToString());
 
-                return results;
+                return null;
             }
         }
 
@@ -1327,7 +1338,6 @@ namespace INFT3970Project.Helpers
                 var humidityResults = await QuerySensorHumidity(sensor.SensorId, 1);
                 var temperatureResults = await QuerySensorTemperature(sensor.SensorId, 1);
                 var locationResults = QuerySensorLocation(sensor.SensorId);
-                var movementResults = await QuerySensorMotion(sensor.SensorId,null,null,1);
 
                 if (humidityResults.Any() && temperatureResults.Any() && locationResults.Any())
 
@@ -1336,13 +1346,14 @@ namespace INFT3970Project.Helpers
                         Humidity = humidityResults.FirstOrDefault().Humidity,
                         Temperature = temperatureResults.FirstOrDefault().Temp,
                         RoomName = locationResults.FirstOrDefault().Name,
-                        SensorName = sensor.Description,
-                        MostRecentMovement = movementResults.Any() ? movementResults.FirstOrDefault().Date.ToLocalTime().ToString("MM/dd/yy H:mm:ss") : "No Movement"
+                        SensorName = sensor.Description
                     });
             }
 
             return results;
         }
+
+        //QueryPredictiveHumidityAsync
 
         public async Task<IEnumerable<AverageHumidityModelWithId>> QueryPredictiveHumidityAsync(int userId)
         {

@@ -81,6 +81,8 @@ namespace INFT3970Project.Controllers
             {
                 return View(null);
             }
+
+            return View();
         }
     }
 }
