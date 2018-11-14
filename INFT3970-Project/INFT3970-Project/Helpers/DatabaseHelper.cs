@@ -57,7 +57,7 @@ namespace INFT3970Project.Helpers
         }
 
         /// <summary>
-        /// Implementation to create a record async
+        /// Asynchronous Implementation to create a record
         /// </summary>
         /// <param name="model"></param>
         public async void CreateRecordAsync(object model)
@@ -105,6 +105,11 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        /// <summary>
+        /// Asynchronous method to get userId
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public async Task<int> GetUserIdAsync(string username)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
@@ -121,12 +126,14 @@ namespace INFT3970Project.Helpers
                 var result = await command.ExecuteScalarAsync();
 
                 return (int)result;
-
-                //var result = _databaseHelper.Connection.Query<int>($"SELECT [UserID] FROM [Users] WHERE [Email] = '{username}';");
-                //return result.FirstOrDefault();
             }
         }
 
+        /// <summary>
+        /// Synchronous method to get user Id
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public int GetUserId(string username)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
@@ -146,6 +153,11 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        /// <summary>
+        /// Synchronous method to check if the user is an administrator
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public bool IsUserAdministrator(int userId)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
@@ -165,6 +177,10 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        /// <summary>
+        /// Method to return method name of exceptions
+        /// </summary>
+        /// <returns></returns>
         [MethodImpl(MethodImplOptions.NoInlining)]
         public string GetCurrentMethod()
         {
@@ -174,6 +190,11 @@ namespace INFT3970Project.Helpers
             return sf.GetMethod().Name;
         }
 
+        /// <summary>
+        /// Synchronous method to authenticate
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public bool Authenticate(LoginModel model)
         {
             if (model.Username != null && model.Password != null)
@@ -228,6 +249,11 @@ namespace INFT3970Project.Helpers
             return false;
         }
 
+        /// <summary>
+        /// Asynchronous method to register given valid model
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task<bool> RegisterAsync(RegisterModel model)
         {
             if (model.fName != null && model.Password != null)
@@ -297,6 +323,11 @@ namespace INFT3970Project.Helpers
             return false;
         }
 
+        /// <summary>
+        /// Asynchronous method to query user associated sensors
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<SensorModel>> QueryUserSensorsAsync(UserModel model)
         {
             if (model != null)
@@ -323,6 +354,11 @@ namespace INFT3970Project.Helpers
             return null;
         }
 
+        /// <summary>
+        /// Asynchronous method to query user associated sensors
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<SensorModel>> QueryUserSensorsAsync(int userId)
         {
             try
@@ -345,6 +381,11 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        /// <summary>
+        /// Synchronous method to update user password
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public bool UpdatePassword(UserAndPasswordModel model)
         {
             if (model.User.Email != null && model.UserPassword.Password != null)
@@ -409,7 +450,7 @@ namespace INFT3970Project.Helpers
         }
 
         /// <summary>
-        /// Implementation of method to query for all temperatures
+        /// Asynchronous method to query for all temperatures
         /// </summary>
         /// <typeparam name="TemperatureModel"></typeparam>
         /// <returns></returns>
@@ -478,6 +519,11 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        /// <summary>
+        /// Synchronous method to query location of a sensor
+        /// </summary>
+        /// <param name="sensorId"></param>
+        /// <returns></returns>
         public IEnumerable<RoomModel> QuerySensorLocation(int sensorId)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
@@ -489,6 +535,14 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        /// <summary>
+        /// Asynchronous method to return average temperature models over a timespan
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="demo"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<AverageTemperatureModelWithId>> QueryUserTemperatureAsync(int userId, bool demo, DateTime? startTime, DateTime? endTime)
         {
             startTime = startTime.Equals(null) ? DateTime.Now.Subtract(TimeSpan.FromHours(24)) : startTime;
@@ -586,6 +640,12 @@ namespace INFT3970Project.Helpers
             return null;
         }
 
+        /// <summary>
+        /// Asynchronous method to query all humidity 
+        /// </summary>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<AverageHumidityModelWithId>> QueryAllHumidityAsync(DateTime? startTime, DateTime? endTime)
         {
             startTime = startTime.Equals(null) ? DateTime.Now.Subtract(TimeSpan.FromHours(24)) : startTime;
@@ -647,6 +707,14 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        /// <summary>
+        /// Asynchronous method to query a user's associated sensors for humidity
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="demo"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<AverageHumidityModelWithId>> QueryUserHumidityAsync(int userId, bool demo, DateTime? startTime, DateTime? endTime)
         {
             startTime = startTime.Equals(null) ? DateTime.Now.Subtract(TimeSpan.FromHours(24)) : startTime;
@@ -732,6 +800,13 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        /// <summary>
+        /// Asynchronous method to return n humidity records
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        [Obsolete]
         public async Task<IEnumerable<DB.HumidityModel>> QueryUserHumidityAsync(int userId, int? count = 250)
         {
             try
@@ -770,6 +845,13 @@ namespace INFT3970Project.Helpers
             return null;
         }
 
+        /// <summary>
+        /// Asynchronous method to query user assoicated sensors for humidity in a time range
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<AverageHumidityModelWithId>> QueryUserHumidityAsync(int userId, DateTime? startTime, DateTime? endTime)
         {
             startTime = startTime.Equals(null) ? DateTime.Now.Subtract(TimeSpan.FromHours(24)) : startTime;
@@ -836,6 +918,12 @@ namespace INFT3970Project.Helpers
             return null;
         }
 
+        /// <summary>
+        /// Asynchronous method to query all motion in timeframe
+        /// </summary>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<MotionCountModelWithId>> QueryAllMotionAsync(DateTime? startTime, DateTime? endTime)
         {
             startTime = startTime.Equals(null) ? DateTime.Now.Subtract(TimeSpan.FromHours(24)) : startTime;
@@ -897,6 +985,13 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        /// <summary>
+        /// Asynchronous method to query user assoicated sensors for motion in timeframe
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<MotionCountModelWithId>> QueryUserMotionAsync(int userId, DateTime? startTime, DateTime? endTime)
         {
             startTime = startTime.Equals(null) ? DateTime.Now.Subtract(TimeSpan.FromHours(24)) : startTime;
@@ -960,6 +1055,10 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        /// <summary>
+        /// Synchronous method to query for all sensors
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<SensorModel> QueryAllSensors()
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
@@ -972,6 +1071,13 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        /// <summary>
+        /// Synchronous method to log activity / errors
+        /// </summary>
+        /// <param name="severity"></param>
+        /// <param name="message"></param>
+        /// <param name="userId"></param>
+        /// <param name="location"></param>
         public void Log(string severity, string message, int? userId, string location)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
@@ -994,6 +1100,11 @@ namespace INFT3970Project.Helpers
 
         }
 
+        /// <summary>
+        /// Asynchronous task to determine user email based on userId
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<string> QueryUserEmailAsync(int userId)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
@@ -1006,6 +1117,11 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        /// <summary>
+        /// Synchronous method to update user details
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public bool UpdateUserDetails(UpdateUserDetailsModel model)
         {
             if (model.fName != null && model.Country != null)
@@ -1074,7 +1190,11 @@ namespace INFT3970Project.Helpers
             return false;
         }
 
-
+        /// <summary>
+        /// Asynchronous method to query user details
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<UpdateUserDetailsModel>> QueryUserDetailsAsync(int userId)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
@@ -1092,7 +1212,11 @@ namespace INFT3970Project.Helpers
             }
         }
 
-        // Admin Section
+        /// <summary>
+        /// Synchronous method to add sensor
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public bool AddSensor(SensorModel model)
         {
             if (model != null)
@@ -1149,7 +1273,11 @@ namespace INFT3970Project.Helpers
             return false;
         }
 
-
+        /// <summary>
+        /// Synchronous method to add room
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public bool AddRoom(RoomModel model)
         {
             if (model.Name != null && model.Description != null)
@@ -1205,7 +1333,10 @@ namespace INFT3970Project.Helpers
             return false;
         }
 
-
+        /// <summary>
+        /// Synchronous method to query for all users
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<UserModel> QueryAllUsers()
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
@@ -1218,6 +1349,10 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        /// <summary>
+        /// Synchronous method to query all rooms
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<RoomModel> QueryAllRooms()
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
@@ -1230,6 +1365,11 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        /// <summary>
+        /// Synchronous method to delete room given valid model
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public IEnumerable<RoomModel> DeleteRoom(RoomModel model)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
@@ -1243,6 +1383,11 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        /// <summary>
+        /// Synchronous method to delete sensor given valid model
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public IEnumerable<SensorModel> DeleteSensor(SensorModel model)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
@@ -1255,6 +1400,11 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        /// <summary>
+        /// Synchronous method to query for number of logs
+        /// </summary>
+        /// <param name="count"></param>
+        /// <returns></returns>
         public IEnumerable<LogModel> QueryAllLogs(int? count = 250)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
@@ -1268,6 +1418,12 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        /// <summary>
+        /// Asynchronous method to query specific sensor related temperature
+        /// </summary>
+        /// <param name="sensorId"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<DB.TemperatureModel>> QuerySensorTemperature(int sensorId, int? count = 250)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
@@ -1284,6 +1440,12 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        /// <summary>
+        /// Asynchronous method to query specific sensor related humidity
+        /// </summary>
+        /// <param name="sensorId"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<DB.HumidityModel>> QuerySensorHumidity(int sensorId, int? count = 250)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
@@ -1300,6 +1462,14 @@ namespace INFT3970Project.Helpers
             }
         }
 
+        /// <summary>
+        /// Asynchronous method to query specific sensor related motion
+        /// </summary>
+        /// <param name="sensorId"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<DB.MotionModel>> QuerySensorMotion(int sensorId, DateTime? startDate, DateTime? endDate, int? count = 250)
         {
             startDate = startDate.Equals(null) ? DateTime.Now.Subtract(TimeSpan.FromHours(24)) : startDate;
@@ -1313,15 +1483,17 @@ namespace INFT3970Project.Helpers
                                 WHERE [SensorID] = {sensorId}
                                 ORDER BY [MotionID] DESC;";
 
-                // The return of the proc needs to either being a datareader which you parse, or you should define a model to use.
-                //var results = await _databaseHelper.Connection.QueryAsync<DB.MotionModel>(command.ToString());
                 var results = await _databaseHelper.Connection.QueryAsync<DB.MotionModel>(command);
 
                 return results;
             }
         }
 
-        //Home Page Top Temp and Huminity 
+        /// <summary>
+        /// Asynchronous method to query most recent sensor related metrics
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<CurrentStatusModel>> QueryCurrentAsync(int userId)
         {
             var sensors = await QueryUserSensorsAsync(userId);
@@ -1349,8 +1521,11 @@ namespace INFT3970Project.Helpers
             return results;
         }
 
-        //QueryPredictiveHumidityAsync
-
+        /// <summary>
+        /// Asynchronous method to query for predictive data
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<AverageHumidityModelWithId>> QueryPredictiveHumidityAsync(int userId)
         {
             var userSensors = QueryUserSensorsAsync(userId);
@@ -1425,7 +1600,11 @@ namespace INFT3970Project.Helpers
             }
         }
 
-
+        /// <summary>
+        /// Asynchronous method to query for predictive data
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<AverageTemperatureModelWithId>> QueryPredictiveTemperatureAsync(int userId)
         {
             var userSensors = QueryUserSensorsAsync(userId);
