@@ -110,10 +110,8 @@ namespace INFT3970Project.Controllers
                         SuccessfulLogin = false
                     };
                     return View("Index", LoginModel);
-
                 }
             }
-
             ViewData["Message"] = "Please enter your Login details.";
             return View("Index");
         }
@@ -143,9 +141,7 @@ namespace INFT3970Project.Controllers
                 {
                     return RedirectToAction("Index", "Login");
                 }
-
             }
-
             return View();
         }
     }

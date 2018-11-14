@@ -21,16 +21,6 @@ namespace INFT3970Project.Controllers
 
         public IActionResult Index()
         {
-            //var sensors = _databaseHelper.QueryAllSensors();
-
-            //var selectlist = new List<SelectListItem>();
-            //foreach (var sensor in sensors)
-            //{
-            //    selectlist.Add(new SelectListItem { Text = sensor.Name, Value = sensor.SensorId.ToString() });
-            //}
-
-            //ViewBag.SelectList = selectlist;
-
             return View();
         }
 
@@ -46,7 +36,6 @@ namespace INFT3970Project.Controllers
                     Email = username
                 }
             };
-
             return View(userAndPasswordModel);
         }
 
@@ -105,7 +94,6 @@ namespace INFT3970Project.Controllers
                     }
                 }
             }
-
             ViewData["Message"] = "Didn't work";
             return View();
         }

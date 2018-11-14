@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using DB = INFT3970Project.Models.Database_Entities;
 
 namespace INFT3970Project.Controllers
 {

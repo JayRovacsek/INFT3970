@@ -98,7 +98,6 @@ namespace INFT3970Project.Controllers
             return View();
         }
 
-
         [HttpPost]
         public ActionResult DeleteSensor(SensorModel model)
         {
@@ -120,9 +119,6 @@ namespace INFT3970Project.Controllers
             ViewData["Message"] = "Please fill in all the details";
             return View("Manage, AddRoom");
         }
-
-
-
 
         [HttpGet]
         public IActionResult AddRoom()
@@ -167,8 +163,6 @@ namespace INFT3970Project.Controllers
             return View();
         }
 
-
-
         [HttpPost]
         public ActionResult DeleteRoom(RoomModel model)
         {
@@ -195,17 +189,11 @@ namespace INFT3970Project.Controllers
             return View("Manage, AddRoom");
         }
 
-
-
         [HttpGet]
         public IActionResult Logs()
         {
             var model = _databaseHelper.QueryAllLogs(100);
             return View(model.ToList());
         }
-
-
-
-
     }
 }

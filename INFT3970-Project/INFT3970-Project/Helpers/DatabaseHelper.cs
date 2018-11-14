@@ -1322,10 +1322,10 @@ namespace INFT3970Project.Helpers
         }
 
         //Home Page Top Temp and Huminity 
-        public async Task<IEnumerable<CurrentTempModel>> QueryCurrentAsync(int userId)
+        public async Task<IEnumerable<CurrentStatusModel>> QueryCurrentAsync(int userId)
         {
             var sensors = await QueryUserSensorsAsync(userId);
-            var results = new List<CurrentTempModel>();
+            var results = new List<CurrentStatusModel>();
 
             foreach (var sensor in sensors)
             {
@@ -1336,7 +1336,7 @@ namespace INFT3970Project.Helpers
 
                 if (humidityResults.Any() && temperatureResults.Any() && locationResults.Any())
 
-                    results.Add(new CurrentTempModel
+                    results.Add(new CurrentStatusModel
                     {
                         Humidity = humidityResults.FirstOrDefault().Humidity,
                         Temperature = temperatureResults.FirstOrDefault().Temp,

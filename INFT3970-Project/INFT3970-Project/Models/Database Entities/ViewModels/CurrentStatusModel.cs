@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace INFT3970Project.Models
 {
-    public class CurrentTempModel
+    public class CurrentStatusModel
     {
         public decimal Temperature { get; set; }
         public decimal Humidity { get; set; }
