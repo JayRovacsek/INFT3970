@@ -20,6 +20,10 @@ namespace INFT3970Project.Controllers
         {
         }
 
+        /// <summary>
+        /// Synchronous method to view index page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index()
         {
             if (User.IsInRole("User"))
@@ -29,6 +33,11 @@ namespace INFT3970Project.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Synchronous task to return userId based on username
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         [Authorize]
         public int GetUserId(string username)
         {
@@ -39,6 +48,10 @@ namespace INFT3970Project.Controllers
             }
         }
 
+        /// <summary>
+        /// Asynchronous method to logout
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
         public async Task<IActionResult> Logout()
         {
@@ -47,6 +60,11 @@ namespace INFT3970Project.Controllers
             return RedirectToAction("Index", "Login");
         }
 
+        /// <summary>
+        /// Synchronous method to determine if a user is an administrator
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [Authorize]
         public bool IsAdministrator(int userId)
         {
@@ -57,6 +75,11 @@ namespace INFT3970Project.Controllers
             }
         }
 
+        /// <summary>
+        /// Asynchronous method to login
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Login(LoginModel model)
         {
             if (!string.IsNullOrEmpty(model.Username) && !string.IsNullOrEmpty(model.Username))
@@ -116,6 +139,9 @@ namespace INFT3970Project.Controllers
             return View("Index");
         }
 
+        /// <summary>
+        /// Synchronous method to remove all cookies 
+        /// </summary>
         public void RemoveAllCookies()
         {
             foreach (var cookie in Request.Cookies)
@@ -124,12 +150,21 @@ namespace INFT3970Project.Controllers
             }
         }
 
+        /// <summary>
+        /// Synchronous method to register
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
 
+        /// <summary>
+        /// Asynchronous method to create new user based on valid model 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Register(RegisterModel model)
         {

@@ -12,6 +12,10 @@ namespace INFT3970Project.Controllers
     [Route("api/Availability")]
     public class AvailabilityController : Controller
     {
+        /// <summary>
+        /// Basic service availability controller, if available return 200
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public HttpResponseMessage Get()
         {

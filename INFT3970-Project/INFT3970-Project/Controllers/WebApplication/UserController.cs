@@ -19,11 +19,19 @@ namespace INFT3970Project.Controllers
         {
         }
 
+        /// <summary>
+        /// Synchronous method to return index view
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index()
         {
             return View();
         }
 
+        /// <summary>
+        /// Asynchronous method to update user password
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> UpdatePassword()
         {
@@ -39,6 +47,10 @@ namespace INFT3970Project.Controllers
             return View(userAndPasswordModel);
         }
 
+        /// <summary>
+        /// Asynchronous method to update user details
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> UpdateDetails()
         {
@@ -48,6 +60,11 @@ namespace INFT3970Project.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Synchronous method to update user details given valid model
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult UpdateDetails(UpdateUserDetailsModel model)
         {
@@ -70,11 +87,15 @@ namespace INFT3970Project.Controllers
                     }
                 }
             }
-
             ViewData["Message"] = "Didn't work";
             return View();
         }
 
+        /// <summary>
+        /// Synchronous method to update user password given valid model
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult UpdatePassword(UserAndPasswordModel model)
         {

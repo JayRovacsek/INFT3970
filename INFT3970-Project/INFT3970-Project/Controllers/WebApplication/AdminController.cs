@@ -19,6 +19,10 @@ namespace INFT3970Project.Controllers
         {
         }
     
+        /// <summary>
+        /// Index Page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index()
         {
             var sensors = _databaseHelper.QueryAllSensors();
@@ -34,6 +38,10 @@ namespace INFT3970Project.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Synchronous method to add a sensor
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult AddSensor()
         {
@@ -70,6 +78,11 @@ namespace INFT3970Project.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Method to handle POST route of Synchronous AddSensor method
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult AddSensor(SensorModel model)
         {
@@ -98,6 +111,11 @@ namespace INFT3970Project.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Synchronous method to delete sensor
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult DeleteSensor(SensorModel model)
         {
@@ -120,6 +138,10 @@ namespace INFT3970Project.Controllers
             return View("Manage, AddRoom");
         }
 
+        /// <summary>
+        /// Synchronous method to return view when adding a room
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult AddRoom()
         {
@@ -138,6 +160,11 @@ namespace INFT3970Project.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Synchronous method to handle POST of room model to be added
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult AddRoom(RoomModel model)
         {
@@ -163,6 +190,11 @@ namespace INFT3970Project.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Synchronous method to delete room
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult DeleteRoom(RoomModel model)
         {
@@ -189,6 +221,10 @@ namespace INFT3970Project.Controllers
             return View("Manage, AddRoom");
         }
 
+        /// <summary>
+        /// Synchronous method to view logs
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Logs()
         {

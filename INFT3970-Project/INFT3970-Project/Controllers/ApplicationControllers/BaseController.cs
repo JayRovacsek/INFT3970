@@ -14,13 +14,13 @@ namespace INFT3970Project.Controllers
         public IConfiguration configuration;
         public IHttpContextAccessor _httpContextAccessor;
         public DatabaseHelper _databaseHelper;
-        public enum ApplicationMode
-        {
-            User = 0,
-            Admin = 1,
-            Demo = 2
-        }
 
+        /// <summary>
+        /// Base configuration for all controllers
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="databaseHelper"></param>
+        /// <param name="httpContextAccessor"></param>
         public BaseController(IConfiguration configuration, DatabaseHelper databaseHelper, IHttpContextAccessor httpContextAccessor)
         {
             this.configuration = configuration;
@@ -28,11 +28,22 @@ namespace INFT3970Project.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        /// <summary>
+        /// Method to get cookie value for all controllers
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public string GetCookie(string key)
         {
             return Request.Cookies[key];
         }
 
+        /// <summary>
+        /// Method to set cookie values for all controllers
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="expireTime"></param>
         public void SetCookie(string key, string value, int? expireTime)
         {
             CookieOptions option = new CookieOptions();
@@ -43,11 +54,19 @@ namespace INFT3970Project.Controllers
             Response.Cookies.Append(key, value, option);
         }
 
+        /// <summary>
+        /// Method to remove cookie for all controllers
+        /// </summary>
+        /// <param name="key"></param>
         public void RemoveCookie(string key)
         {
             Response.Cookies.Delete(key);
         }
 
+        /// <summary>
+        /// Method to generate randomised RGB value
+        /// </summary>
+        /// <returns></returns>
         public string GetRandomColour()
         {
             var random = new Random();

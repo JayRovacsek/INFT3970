@@ -20,6 +20,10 @@ namespace INFT3970Project.Controllers
         {
         }
 
+        /// <summary>
+        /// Asynchronous method to return index page
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
         public async Task<IActionResult> Index()
         {
@@ -28,11 +32,19 @@ namespace INFT3970Project.Controllers
             return View(models);
         }
 
+        /// <summary>
+        /// Synchronous method to return about page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult About()
         {
             return View();
         }
 
+        /// <summary>
+        /// Asynchronous method to return demo page
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Demo()
         {
             try

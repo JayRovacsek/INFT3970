@@ -19,11 +19,19 @@ namespace INFT3970Project.Controllers
         {
         }
 
+        /// <summary>
+        /// Synchronous method to view index page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index()
         {
             return View();
         }
 
+        /// <summary>
+        /// Asynchronous method to view temperature page
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Temperature()
         {
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
@@ -40,6 +48,11 @@ namespace INFT3970Project.Controllers
             return View(viewModels);
         }
 
+        /// <summary>
+        /// Asynchronous method to return predictive models
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         private async Task<IEnumerable<AverageTemperatureModelWithId>> GetPredictiveTemperatureModels(int userId)
         {
             var results = new List<AverageTemperatureModelWithId>();
@@ -52,6 +65,10 @@ namespace INFT3970Project.Controllers
             return results;
         }
 
+        /// <summary>
+        /// Asynchronous method to view humidity page
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Humidity()
         {
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
@@ -66,9 +83,13 @@ namespace INFT3970Project.Controllers
             var viewModels = new Tuple<ChartDataModel, ChartDataModel>(chartData, predictiveChartData);
 
             return View(viewModels);
-            // NEEED TO FIX THE ABOVE FOR DEMO MODE.
         }
 
+        /// <summary>
+        /// Asynchronous method to return predictive models
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         private async Task<IEnumerable<AverageHumidityModelWithId>> GetPredictiveHumidityModels(int userId)
         {
             var results = new List<AverageHumidityModelWithId>();
@@ -81,6 +102,10 @@ namespace INFT3970Project.Controllers
             return results;
         }
 
+        /// <summary>
+        /// Asynchronous method to view motion page
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Motion()
         {
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
@@ -90,10 +115,12 @@ namespace INFT3970Project.Controllers
             var chartData = ConvertMotionToChart(models);
 
             return View(chartData);
-
-            // NEEED TO FIX THE ABOVE FOR DEMO MODE.
         }
 
+        /// <summary>
+        /// Asynchronous method to view combined data page
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Combined()
         {
             var userId = Convert.ToInt32(Request.Cookies["UserId"]);
@@ -130,10 +157,14 @@ namespace INFT3970Project.Controllers
                 }
 
                 return View(chartData);
-                // NEEED TO FIX THE ABOVE FOR DEMO MODE.
             }
         }
 
+        /// <summary>
+        /// Synchronous method to convert models to chart model
+        /// </summary>
+        /// <param name="models"></param>
+        /// <returns></returns>
         public ChartDataModel ConvertTemperatureToChart(IEnumerable<AverageTemperatureModelWithId> models)
         {
             var chartData = new ChartDataModel
@@ -168,6 +199,11 @@ namespace INFT3970Project.Controllers
             return chartData;
         }
 
+        /// <summary>
+        /// Synchronous method to convert models to chart model
+        /// </summary>
+        /// <param name="models"></param>
+        /// <returns></returns>
         public ChartDataModel ConvertHumidityToChart(IEnumerable<AverageHumidityModelWithId> models)
         {
             var chartData = new ChartDataModel
@@ -202,6 +238,11 @@ namespace INFT3970Project.Controllers
             return chartData;
         }
 
+        /// <summary>
+        /// Synchronous method to convert models to chart model
+        /// </summary>
+        /// <param name="models"></param>
+        /// <returns></returns>
         public ChartDataModel ConvertMotionToChart(IEnumerable<MotionCountModelWithId> models)
         {
             var chartData = new ChartDataModel
@@ -251,6 +292,14 @@ namespace INFT3970Project.Controllers
             return chartData;
         }
 
+        /// <summary>
+        /// Asynchronous method to get temperature models based on admin/non-admin
+        /// </summary>
+        /// <param name="all"></param>
+        /// <param name="demo"></param>
+        /// <param name="userId"></param>
+        /// <param name="startTime"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<AverageTemperatureModelWithId>> GetTemperatureModels(bool all, bool demo, int userId, DateTime? startTime)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
@@ -263,6 +312,14 @@ namespace INFT3970Project.Controllers
             }
         }
 
+        /// <summary>
+        /// Asynchronous method to get humidity models based on admin/non-admin
+        /// </summary>
+        /// <param name="all"></param>
+        /// <param name="demo"></param>
+        /// <param name="userId"></param>
+        /// <param name="startTime"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<AverageHumidityModelWithId>> GetHumidityModels(bool all, bool demo, int userId, DateTime? startTime)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
@@ -275,6 +332,13 @@ namespace INFT3970Project.Controllers
             }
         }
 
+        /// <summary>
+        /// Asynchronous method to get motion models based on admin/non-admin
+        /// </summary>
+        /// <param name="all"></param>
+        /// <param name="userId"></param>
+        /// <param name="startTime"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<MotionCountModelWithId>> GetMotionModels(bool all, int userId, DateTime? startTime)
         {
             using (var _databaseHelper = new DatabaseHelper(configuration))
